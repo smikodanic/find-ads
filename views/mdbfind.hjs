@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>{{title}}</title>
+    <link rel='stylesheet' href='/stylesheets/style.css'>
+  </head>
+  <body>
+    <h1>Show all users</h1>
+
+
+
+<ol>
+<li style="list-style-type:none">USER -- PASS</li>
+
+{{#items}} 
+	<li start="1">{{user}} -- {{pass}}</li>
+{{/items}}
+
+</ol>
+ 
+<br>
+<br>
+<br>
+<a href="/mdbinsert">Insert new user!</a>
+
+</body>
+</html>
