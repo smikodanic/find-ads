@@ -1,5 +1,5 @@
 /**
- * ****** Command: $casperjs classifiedads_com_links.js
+ * ****** Command: $casperjs classifiedads_com_links.js ********
  * 
  * Get all links from web page http://www.classifiedads.com/jobs-15.html
  * and othe pagination web pages
@@ -28,7 +28,6 @@ var start_page = 'http://www.classifiedads.com/jobs-15.html';
 var a_selector = '.resultitem > div > a';
 var pagination_from = 2;
 var pagination_to = 50;
-var category = 'Jobs';
 
 //variables
 var links, titles, doc, doc_arr;
@@ -52,12 +51,13 @@ function getTitles() {
 //create MongoDB document
 function createDoc() {
   doc = {
-    "category": category,
+    "category": "Jobs",
     "page": casper.getCurrentUrl(),
     "ads": {
       "link": links,
       "title": titles
-    }
+    },
+    "casperCrawlScript": "classifiedads_com_jobs.js"
   };
   return doc;
 }
