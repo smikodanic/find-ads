@@ -36,7 +36,7 @@ var links, titles, doc, doc_arr;
 function getLinks() {
   var a_tags = document.querySelectorAll('.resultitem > div > a');
   return Array.prototype.map.call(a_tags, function (elem) {
-    return elem.getAttribute('href');
+    return 'http:' + elem.getAttribute('href');
   });
 }
 

@@ -11,8 +11,13 @@ var childProcess = require('child_process');
 var MongoClient = require('mongodb').MongoClient;
 
 
-//nodeJS command line arguments
-var casperFile = process.argv[2];
+//input from command line
+if (process.argv.length < 3) {
+  console.log("ERROR: Use 3 command line parameters. ($node queueLinksToMongo.js classifiedads_com_jobs_links.js)");
+  process.exit();
+} else {
+  var casperFile = process.argv[2];
+}
 
 //CasperJS settings
 var casperBinFile = '/usr/lib/node_modules/casperjs/bin/casperjs';
