@@ -1,4 +1,4 @@
-/*jslint unparam: true*/
+/* jslint unparam: true */
 
 var express = require('express');
 var path = require('path');
