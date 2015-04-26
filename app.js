@@ -7,6 +7,7 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var ejs = require('ejs');
+var enrouten = require('express-enrouten'); //routing
 
 //session
 var session = require('express-session');
@@ -46,10 +47,23 @@ app.use(session({
   ephemeral: true //deletes the cookie when the browser is closed. Ephemeral cookies are particularly important if you your app lends itself to use on public computers.
 }));
 
+//routing
+app.use(enrouten({
+  index: 'controllers/',
+  directory: 'controllers',
+  routes: [
+    // { path: '/foo', method: 'GET', handler: require('./test') },
+    // { path: '/admin', method: 'GET', handler: require('./routes/admin'), middleware: [isAuthenticated] }
+  ]
+}));
+
+
 
 
 app.use('/', routes);
 app.use('/admin', admin_index);
+
+
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
