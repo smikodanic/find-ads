@@ -19,7 +19,7 @@ router.get('/', function (req, res) {
 
 
 /* Set session from FORM if username and password are ok */
-router.post('/login', function (req, res, next) {
+router.post('/', function (req, res, next) {
 
   var login_tf = login.checkform_user_pass(req);
 

@@ -14,7 +14,7 @@ var session = require('express-session');
 var FileStore = require('session-file-store')(session);
 
 var routes = require('./routes/index');
-var admin_index = require('./routes/admin/index');
+// var admin_index = require('./routes/admin/index');
 
 var app = express();
 
@@ -47,21 +47,22 @@ app.use(session({
   ephemeral: true //deletes the cookie when the browser is closed. Ephemeral cookies are particularly important if you your app lends itself to use on public computers.
 }));
 
-//routing
+//routing into /controllers/ dir
 app.use(enrouten({
-  index: 'controllers/',
+  index: 'controllers/index.js',
   directory: 'controllers',
   routes: [
-    // { path: '/foo', method: 'GET', handler: require('./test') },
+    // { path: '/proba', method: 'GET', handler: require('./controllers/proba.js') },
     // { path: '/admin', method: 'GET', handler: require('./routes/admin'), middleware: [isAuthenticated] }
-  ]
+  ],
+  // middleware: [middleware1, middleware2, ...etc]
 }));
 
 
 
 
 app.use('/', routes);
-app.use('/admin', admin_index);
+// app.use('/admin', admin_index);
 
 
 

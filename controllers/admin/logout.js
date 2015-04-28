@@ -3,12 +3,15 @@
 var express = require('express');
 var router = express.Router();
 var nodedump = require('nodedump').dump;
+var login = require('../../libraries/account_login.js');
 
 
+/* Login FORM */
 module.exports = function (router) {
-
   router.get('/', function (req, res, next) {
-    res.render('index', { title: 'Express from /controllers/ folder' });
-  });
 
+    login.destroy_session(req);
+    res.redirect('/admin');
+
+  });
 };
