@@ -1,0 +1,86 @@
+<%- include('./partials/01head'); -%>
+
+<body>
+
+  <div id="wrapper">
+
+    <!-- Navigation -->
+    <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+      <%- include('./partials/05top_menu'); -%>
+      <%- include('./partials/10left_menu'); -%>
+    </nav>
+
+    <div id="page-wrapper">
+
+            <div class="container-fluid">
+
+                <!-- Page Heading -->
+                <div class="row">
+                    <div class="col-lg-12">
+                        <h1 class="page-header">
+                            Adverts <small>category: <%= category %></small>
+                        </h1>
+                    </div>
+                </div>
+
+                <!-- Ads -->
+                <div class="row">
+                    <div class="col-lg-12">
+                        
+                        <table class="table table-bordered table-hover">
+
+                        <% for(var i=0; i<moDocs_arr.length; i++) { %>
+                        
+                        <tr><td>
+                          <h3><small><%= i+1+pagination.perPage*(pagination.currentPage-1) %>.</small> <%= moDocs_arr[i].content.title %></h3>
+                          <b>category: <%= moDocs_arr[i].category %></b>
+                          <br><span><%= moDocs_arr[i].content.description %></span>
+                          <br><a href="<%= moDocs_arr[i].page_url %>" target="_blank"><%= moDocs_arr[i].page_url %></a>
+                          <br><%= moDocs_arr[i].country %>, <%= moDocs_arr[i].city %>
+                          <br>Created: <%= moDocs_arr[i].date_created %>
+                          <br>Crawled: <%= moDocs_arr[i].date_crawled %>
+                        </td></tr>
+                        
+                        <% } %>
+
+                        </table>
+
+                    </div>
+                </div>
+
+                <!-- Pagination -->
+                <nav>
+                  <ul class="pagination">
+                    <li><a href="<%= pagination.pagesPreURI + '1' %>"> &laquo;</a></li>
+
+                    <% 
+                    pagination.currentPage = parseInt(pagination.currentPage); //convert string into number
+                    
+                    pagination.pages_arr.forEach(function(elem){
+                      var hclass;
+                      if (elem === pagination.currentPage) {
+                        hclass = 'class="active"';
+                      } else {
+                        hclass = '';
+                      }
+                    %>
+
+                      <li <%- hclass %>><a href="<%= pagination.pagesPreURI + elem %>"><%= elem %></a></li>
+                    
+                    <% }); %>
+
+                    <li><a href="<%= pagination.pagesPreURI + pagination.pagesTotal %>"> &raquo;</a></li>
+                  </ul>
+                </nav>
+                <!-- Pagination END -->
+
+
+                
+    </div><!-- /#page-wrapper -->
+
+    </div><!-- /#wrapper -->
+    
+    <%- include('./partials/15js_static'); -%>
+</body>
+
+</html>

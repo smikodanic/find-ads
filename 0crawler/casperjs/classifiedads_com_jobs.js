@@ -111,6 +111,7 @@ casper.then(function () {
 
   doc = {
     "page_url": casper.getCurrentUrl(),  //or put just 'page_url' variable
+    "category": "jobs",
     "content": content,
     "country": "United States",
     "city": city,
