@@ -1,0 +1,187 @@
+<%- include('../partials/01head'); -%>
+
+<body>
+
+    <div id="wrapper">
+
+        <!-- Navigation -->
+        <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+            <%- include('../partials/05top_menu'); -%>
+            <%- include('../partials/10left_menu'); -%>
+        </nav>
+
+        <div id="page-wrapper">
+
+            <div class="container-fluid">
+
+                <!-- Page Heading -->
+                <div class="row">
+                    <div class="col-lg-12">
+                        
+                        <h1 class="page-header">
+                            Tasks <small>Links</small>
+                        </h1>
+
+                        <ol class="breadcrumb">
+                          <li>Tasks</li>
+                          <li><a href="/admin/tasks/links">Links</a></li>
+                          <li><a href="/admin/tasks/links/iterateurl">Iterating URL</a></li>
+                        </ol>
+
+                    </div>
+                </div>
+                <!-- /.row -->
+
+                <div class="clearfix">&nbsp;</div>
+                <div class="row">
+
+                    <!-- table -->
+                    <div class="col-lg-5">
+                        <table class="table table-stripped table-hover table-condensed table-bordered">
+                            <tr>
+                                <th>id</th>
+                                <th>category</th>
+                                <th>name</th>
+                                <th>iteratingURL</th>
+                                <th>cron</th>
+                                <th>status</th>
+                            </tr>
+
+
+
+
+                        
+                            
+                        </table>
+                    </div>
+                    
+                    <!-- form -->
+                    <div class="col-lg-7">
+                        <form action="" method="POST" enctype="multipart/form-data" class="form-horizontal">
+                            
+                        <div class="form-group">
+                          <label for="id" class="col-sm-3  control-label">ID:</label>
+                          <div class="col-sm-2">
+                            <input type="text" name="id" id="id" value="" 
+                              class="form-control" data-toggle="tooltip" data-placement="top" title="Readonly value" readonly>
+                          </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="category" class="col-sm-3 control-label">Category:</label>
+                            <div class="col-sm-4">
+                              <select name="category" id="category" class="form-control"
+                                data-toggle="tooltip" data-placement="top" title="Select category for this task.">
+                                  <option value="0" selected>Autos</option>
+                                  <option value="4">Real Estate</option>
+                                  <option value="6">Misc</option>
+                              </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                          <label for="name" class="col-sm-3  control-label">Name:</label>
+                          <div class="col-sm-8">
+                            <input type="text" name="name" id="name" value="" 
+                              class="form-control" data-toggle="tooltip" data-placement="top" title="Task name. Dont use empty spaces. Example: adsuu_com_business">
+                          </div>
+                        </div>
+
+                        <div class="form-group">
+                          <label class="col-sm-3 control-label" for="description">Description:</label>
+                          <div class="col-sm-7" id="introup">
+                            <textarea name="description" id="description" class="form-control" rows="2"
+                              data-toggle="tooltip" data-placement="top" title="Short description of this task. Example: Grab content links from adsuu.com in business category - pagination from 1 to 25."></textarea>
+                          </div>
+                        </div>
+
+
+                        <div class="form-group">
+                          <label class="col-sm-3 control-label" for="aselector">aSelector:</label>
+                          <div class="col-sm-9" id="introup">
+                            <textarea name="aselector" id="aselector" class="form-control" rows="2"
+                              data-toggle="tooltip" data-placement="top" title="CSS selector which point to content link. Content link has final content URL. Example: div > p > a.something"></textarea>
+                          </div>
+                        </div>
+
+                        <div class="form-group">
+                          <label for="iteratingurl" class="col-sm-3  control-label">iteratingURL:</label>
+                          <div class="col-sm-5">
+                            <input type="text" name="iteratingurl" id="iteratingurl" value="" 
+                              class="form-control" data-toggle="tooltip" data-placement="top" title="Iterating URL. This URL will pass through FOR javascript loop. Example: http://www.adsuu.com/business-offer-$1/">
+                          </div>
+                        </div>
+
+                        <div class="form-group">
+                          <label for="from$1" class="col-sm-3  control-label">from$1:</label>
+                          <div class="col-sm-2">
+                            <input type="text" name="from$1" id="from$1" value="" 
+                              class="form-control" data-toggle="tooltip" data-placement="top" title="Start value of $1 iterating, loop variable. Example: 1">
+                          </div>
+                        </div>
+
+                        <div class="form-group">
+                          <label for="to$1" class="col-sm-3  control-label">to$1:</label>
+                          <div class="col-sm-2">
+                            <input type="text" name="to$1" id="to$1" value="" 
+                              class="form-control" data-toggle="tooltip" data-placement="top" title="End value of $1 iterating, loop variable. Example: 25">
+                          </div>
+                        </div>
+
+                        <div class="form-group">
+                          <label for="cron" class="col-sm-3  control-label">Cron:</label>
+                          <div class="col-sm-9">
+                            <input type="text" name="cron" id="cron" value="" 
+                              class="form-control" data-toggle="tooltip" data-placement="top" title="Cron job schedule. Example: 0 17 ? * 0,4-6">
+                          </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="status" class="col-sm-3 control-label">Status:</label>
+                            <div class="col-sm-2">
+                              <select name="status" id="status" class="form-control"
+                                data-toggle="tooltip" data-placement="top" title="If you want cron job to become active select 'On'. Otherwise select 'Off'.">
+                                  <option value="1" selected>On</option>
+                                  <option value="0">Off</option>
+                              </select>
+                            </div>
+                        </div>
+
+                        <p class="clearfix">&nbsp;</p>
+
+                        <div class="form-group">
+                          <label class="col-sm-3 control-label"></label>
+                          <div class="col-sm-5 form-group">
+                            <input type="submit" value="Update" class="btn btn-info btn-lg">
+                          </div>
+                        </div>
+
+                        </form>
+                    </div>
+
+                </div>
+                <!-- /.row -->
+
+            </div>
+            <!-- /.container-fluid -->
+
+        </div>
+        <!-- /#page-wrapper -->
+
+    </div>
+    <!-- /#wrapper -->
+    
+
+    <%- include('../partials/15js_static'); -%>
+
+<script>
+  $(document).ready(function(){
+   $("#id").focus();
+   $("input, textarea, select").tooltip();
+  });
+</script>
+
+
+</body>
+
+</html>

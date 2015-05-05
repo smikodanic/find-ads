@@ -1,5 +1,5 @@
 /**
- * ****** Command: $casperjs classifiedads_com_links.js ********
+ * ****** Command: $casperjs classifiedads_com_jobs_links.js ********
  * 
  * Get all links from web page http://www.classifiedads.com/jobs-15.html
  * and othe pagination web pages
@@ -24,12 +24,12 @@ var casper = require('casper').create({
 });
 
 //crawling settings
-var start_page = 'http://www.classifiedads.com/jobs-15.html';
-var a_selector = '.resultitem > div > a';
-var pagination_from = 2;
-var pagination_to = 50;
+var startURL = 'http://www.classifiedads.com/jobs-15.html';
+var aSelector = '.resultitem > div > a';
+var pageFrom = 2;
+var pageTo = 50;
 
-//variables
+//crawled variables
 var links, titles, doc, doc_arr;
 
 //Get ad links - a_tags array is converted into array of href values
@@ -51,7 +51,7 @@ function getTitles() {
 //create MongoDB document
 function createDoc() {
   doc = {
-    "category": "Jobs",
+    "category": "jobs",
     "page": casper.getCurrentUrl(),
     "ads": {
       "link": links,
@@ -64,7 +64,7 @@ function createDoc() {
 
 
 /***** CASPER ****/
-casper.start(start_page);
+casper.start(startURL);
 
 casper.then(function () {
   links = casper.evaluate(getLinks);
@@ -74,7 +74,7 @@ casper.then(function () {
 });
 
 var x;
-for (x = pagination_from; x <= pagination_to; x++) {
+for (x = pageFrom; x <= pageTo; x++) {
   casper.thenClick('#page' + x + 'link', function () {
     links = casper.evaluate(getLinks);
     titles = casper.evaluate(getTitles);

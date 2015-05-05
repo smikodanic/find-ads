@@ -1,13 +1,42 @@
 <!-- Sidebar Menu Items - These collapse to the responsive navigation menu on small screens -->
             <div class="collapse navbar-collapse navbar-ex1-collapse">
                 <ul class="nav navbar-nav side-nav">
-                    <li class="active">
-                        <a href="dashboard"><i class="fa fa-fw fa-dashboard"></i> Dashboard</a>
+                    
+                    <li>
+                        <a href="/admin/dashboard"><i class="fa fa-fw fa-dashboard"></i> Dashboard</a>
                     </li>
 
                     <li>
-                        <a href="javascript:;" data-toggle="collapse" data-target="#demo"><i class="fa fa-fw fa-arrows-v"></i> Adverts <i class="fa fa-fw fa-caret-down"></i></a>
-                        <ul id="demo" class="collapse">
+                        <a href="/admin/categories"><i class="fa fa-fw fa-folder-open-o"></i> Categories</a>
+                    </li>
+
+                    <li>
+                        <a href="javascript:;" data-toggle="collapse" data-target="#tasks"><i class="fa fa-fw fa-clock-o"></i> Crawling Tasks <i class="fa fa-fw fa-caret-down"></i></a>
+                        <ul id="tasks" class="collapse">
+                            <li>
+                                <a href="/admin/tasks/links">Crawl Links</a>
+                            </li>
+                            <li>
+                                <a href="/admin/tasks/content">Crawl Content</a>
+                            </li>
+                        </ul>
+                    </li>
+
+                    <li>
+                        <a href="javascript:;" data-toggle="collapse" data-target="#crawl_links"><i class="fa fa-fw fa-cogs"></i> Crawl<i class="fa fa-fw fa-caret-down"></i></a>
+                        <ul id="crawl_links" class="collapse">
+                            <li>
+                                <a href="/admin/crawl/links">Crawl Links</a>
+                            </li>
+                            <li>
+                                <a href="/admin/crawl/content">Crawl Content</a>
+                            </li>
+                        </ul>
+                    </li>
+
+                    <li>
+                        <a href="javascript:;" data-toggle="collapse" data-target="#ads"><i class="fa fa-fw fa-file"></i> Content by categories<i class="fa fa-fw fa-caret-down"></i></a>
+                        <ul id="ads" class="collapse">
                             <li>
                                 <a href="/admin/ads/all/1">All</a>
                             </li>
@@ -33,20 +62,9 @@
                     </li>
 
                     <li>
-                        <a href="bootstrap-elements.html"><i class="fa fa-fw fa-desktop"></i> Bootstrap Elements</a>
+                        <a href="bootstrap-grid.html"><i class="fa fa-fw fa-cog"></i> Settings</a>
                     </li>
 
-                    <li>
-                        <a href="bootstrap-grid.html"><i class="fa fa-fw fa-wrench"></i> Bootstrap Grid</a>
-                    </li>
-
-                    <li>
-                        <a href="blank-page.html"><i class="fa fa-fw fa-file"></i> Blank Page</a>
-                    </li>
-
-                    <li>
-                        <a href="index-rtl.html"><i class="fa fa-fw fa-dashboard"></i> RTL Dashboard</a>
-                    </li>
                 </ul>
             </div>
             <!-- /.navbar-collapse -->
