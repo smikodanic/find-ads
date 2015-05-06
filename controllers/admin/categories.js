@@ -10,7 +10,16 @@ var category_model = require('../../models/category_model');
 
 var cb_list_Render = function (res, moDocs_arr) {
   var vdata = {
-    moDocs_arr: moDocs_arr
+    moDocs_arr: moDocs_arr,
+    moDocEdit_arr: undefined
+  };
+  res.render('./admin/categories', vdata);
+};
+
+var cb_list2_Render = function (res, moDocs_arr, moDocEdit_arr) {
+  var vdata = {
+    moDocs_arr: moDocs_arr,
+    moDocEdit_arr: moDocEdit_arr
   };
   res.render('./admin/categories', vdata);
 };
@@ -41,6 +50,21 @@ module.exports = function (router) {
 
     //require model
     category_model.deleteCategory(req, res);
+
+  });
+
+
+   /* edit - update category */
+  router.get('/edit/:id', function (req, res) {
+
+    //require model
+    category_model.editCategory(req, res, cb_list2_Render);
+
+  });
+  router.post('/update/:id', function (req, res) {
+
+    //require model
+    category_model.updateCategory(req, res);
 
   });
 
