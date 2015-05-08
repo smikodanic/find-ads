@@ -97,7 +97,7 @@ module.exports.listCategories = function (res, cb_list) {
     } else {
 
       //list results
-      db.collection('category').find({}).sort({id: -1}).toArray(function (err, moDocs_arr) {
+      db.collection('category').find({}).sort({id: 1}).toArray(function (err, moDocs_arr) {
         if (err) {
           errSend_browser(err, res);
         } else {
@@ -173,7 +173,7 @@ module.exports.editCategory = function (req, res, cb_list2) {
         if (err) { errSend_browser(err, res); }
 
         //list results
-        db.collection('category').find({}).sort({id: -1}).toArray(function (err, moDocs_arr) {
+        db.collection('category').find({}).sort({id: 1}).toArray(function (err, moDocs_arr) {
           if (err) { errSend_browser(err, res); }
           cb_list2(res, moDocs_arr, moDocEdit_arr);
           db.close();

@@ -36,8 +36,9 @@
                 <div class="row">
 
                     <!-- table -->
-                    <div class="col-lg-5">
+                    <div class="col-lg-12">
                         <table class="table table-stripped table-hover table-condensed table-bordered">
+                            
                             <tr>
                                 <th>id</th>
                                 <th>category</th>
@@ -45,104 +46,143 @@
                                 <th>iteratingURL</th>
                                 <th>cron</th>
                                 <th>status</th>
+                                <th>action</th>
                             </tr>
 
+                            
+                            <% tasks.forEach(function (elem) { %>
+                            <tr style="font-size:smaller">
+                              <td><%= elem.id %></td>
+                              <td><%= elem.category %></td>
+                              <td><%= elem.name %></td>
+                              <td><%= elem.iteratingurl %></td>
+                              <td><%= elem.cron %></td>
+                              <td><%= elem.status %></td>
 
+                              <td>
+                                
+                                <a href="/admin/tasks/links/iterateurl/delete/<%= elem.id %>" class="fa fa-trash" data-toggle="tooltip" data-placement="top" title="delete"></a>
+                                <a href="/admin/tasks/links/iterateurl/edit/<%= elem.id %>" class="fa fa-pencil-square-o" data-toggle="tooltip" data-placement="top" title="edit"></a>
+                                <a href="/admin/crawl/links/iterateurl/nodehttp/<%= elem.id %>" class="fa fa-play" data-toggle="tooltip" data-placement="top" title="crawl now"></a>
+                              
+                              </td>
 
-
-                        
+                            </tr>
+                            <% }); %>
                             
                         </table>
+
+
+                        <div class="clearfix">&nbsp;</div><br>
+
+                        <!-- delete all documents -->                        
+                        <a href="/admin/tasks/links/iterateurl/delete/all" class="btn btn-danger btn-sm">Delete All</a>
+                        <a href="/admin/tasks/links/iterateurl/disable" class="btn btn-info btn-sm">Disable All</a>
+                        <a href="/admin/tasks/links/iterateurl" class="btn btn-info btn-sm">Insert New</a>
+
                     </div>
                     
+                    <div class="clearfix">&nbsp;</div><br><br>
+
                     <!-- form -->
-                    <div class="col-lg-7">
-                        <form action="" method="POST" enctype="multipart/form-data" class="form-horizontal">
+                    <div class="col-lg-8">
+
+                    <% //define form action value
+                      var act;
+                      if (task.id !== undefined) {
+                        act = '/admin/tasks/links/iterateurl/update/' + task.id;
+                      } else {
+                        act = '/admin/tasks/links/iterateurl/insert';
+                      }
+                    %>
+
+                        <form action="<%= act %>" method="POST" enctype="application/x-www-form-urlencoded" class="form-horizontal">
                             
                         <div class="form-group">
-                          <label for="id" class="col-sm-3  control-label">ID:</label>
-                          <div class="col-sm-2">
-                            <input type="text" name="id" id="id" value="" 
-                              class="form-control" data-toggle="tooltip" data-placement="top" title="Readonly value" readonly>
+                          <label for="id" class="col-sm-3  control-label" title="Readonly value">ID:</label>
+                          <div class="col-sm-3">
+                            <input type="text" name="id" id="id" value="<%= task.id %>" class="form-control" readonly>
                           </div>
                         </div>
 
                         <div class="form-group">
-                            <label for="category" class="col-sm-3 control-label">Category:</label>
+                            <label for="category" class="col-sm-3 control-label" title="Select category for this task.">Category:</label>
                             <div class="col-sm-4">
-                              <select name="category" id="category" class="form-control"
-                                data-toggle="tooltip" data-placement="top" title="Select category for this task.">
-                                  <option value="0" selected>Autos</option>
-                                  <option value="4">Real Estate</option>
-                                  <option value="6">Misc</option>
+                              <select name="category" id="category" class="form-control">
+                                    <option value="">All</option>
+
+                                  <% cats.forEach(function(elem){ %>
+                                    <option value="<%= elem.id %>" <%= (task.category == elem.id ) ? 'selected' : ''; %> ><%= elem.category %> (<%= elem.id %>)</option>
+                                  <% }); %>
                               </select>
                             </div>
                         </div>
 
                         <div class="form-group">
-                          <label for="name" class="col-sm-3  control-label">Name:</label>
+                            <label for="subcategory" class="col-sm-3 control-label" title="Select subcategory relevant to selected category.">Subcategory:</label>
+                            <div class="col-sm-4">
+                              <select name="subcategory" id="subcategory" class="form-control">
+
+                              </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                          <label for="name" class="col-sm-3  control-label" title="Task name. Dont use empty spaces. Example: adsuu_com_business">Name:</label>
                           <div class="col-sm-8">
-                            <input type="text" name="name" id="name" value="" 
-                              class="form-control" data-toggle="tooltip" data-placement="top" title="Task name. Dont use empty spaces. Example: adsuu_com_business">
+                            <input type="text" name="name" id="name" value="<%= task.name %>" class="form-control" required>
                           </div>
                         </div>
 
                         <div class="form-group">
-                          <label class="col-sm-3 control-label" for="description">Description:</label>
-                          <div class="col-sm-7" id="introup">
-                            <textarea name="description" id="description" class="form-control" rows="2"
-                              data-toggle="tooltip" data-placement="top" title="Short description of this task. Example: Grab content links from adsuu.com in business category - pagination from 1 to 25."></textarea>
+                          <label class="col-sm-3 control-label" for="description" title="Short description of this task. Example: Grab content links from adsuu.com in business category - pagination from 1 to 25.">Description:</label>
+                          <div class="col-sm-7">
+                            <textarea name="description" id="description" class="form-control" rows="2" required><%= task.description %></textarea>
                           </div>
                         </div>
 
 
                         <div class="form-group">
-                          <label class="col-sm-3 control-label" for="aselector">aSelector:</label>
-                          <div class="col-sm-9" id="introup">
-                            <textarea name="aselector" id="aselector" class="form-control" rows="2"
-                              data-toggle="tooltip" data-placement="top" title="CSS selector which point to content link. Content link has final content URL. Example: div > p > a.something"></textarea>
-                          </div>
-                        </div>
-
-                        <div class="form-group">
-                          <label for="iteratingurl" class="col-sm-3  control-label">iteratingURL:</label>
-                          <div class="col-sm-5">
-                            <input type="text" name="iteratingurl" id="iteratingurl" value="" 
-                              class="form-control" data-toggle="tooltip" data-placement="top" title="Iterating URL. This URL will pass through FOR javascript loop. Example: http://www.adsuu.com/business-offer-$1/">
-                          </div>
-                        </div>
-
-                        <div class="form-group">
-                          <label for="from$1" class="col-sm-3  control-label">from$1:</label>
-                          <div class="col-sm-2">
-                            <input type="text" name="from$1" id="from$1" value="" 
-                              class="form-control" data-toggle="tooltip" data-placement="top" title="Start value of $1 iterating, loop variable. Example: 1">
-                          </div>
-                        </div>
-
-                        <div class="form-group">
-                          <label for="to$1" class="col-sm-3  control-label">to$1:</label>
-                          <div class="col-sm-2">
-                            <input type="text" name="to$1" id="to$1" value="" 
-                              class="form-control" data-toggle="tooltip" data-placement="top" title="End value of $1 iterating, loop variable. Example: 25">
-                          </div>
-                        </div>
-
-                        <div class="form-group">
-                          <label for="cron" class="col-sm-3  control-label">Cron:</label>
+                          <label class="col-sm-3 control-label" for="aselector" title="CSS selector which point to content link. Content link has final content URL. Example: div > p > a.something">aSelector:</label>
                           <div class="col-sm-9">
-                            <input type="text" name="cron" id="cron" value="" 
-                              class="form-control" data-toggle="tooltip" data-placement="top" title="Cron job schedule. Example: 0 17 ? * 0,4-6">
+                            <textarea name="aselector" id="aselector" class="form-control" rows="2" required><%= task.aselector %></textarea>
                           </div>
                         </div>
 
                         <div class="form-group">
-                            <label for="status" class="col-sm-3 control-label">Status:</label>
+                          <label for="iteratingurl" class="col-sm-3  control-label" title="Iterating URL. This URL will pass through FOR javascript loop. Example: http://www.adsuu.com/business-offer-$1/">iteratingURL:</label>
+                          <div class="col-sm-9">
+                            <input type="text" name="iteratingurl" id="iteratingurl" value="<%= task.iteratingurl %>" class="form-control" style="font-size:smaller;" required>
+                          </div>
+                        </div>
+
+                        <div class="form-group">
+                          <label for="from$1" class="col-sm-3  control-label" title="Start value of $1 iterating, loop variable. Example: 1">from$1:</label>
+                          <div class="col-sm-2">
+                            <input type="text" name="from$1" id="from$1" value="<%= (task.id !== undefined) ? task.from$1 : 0; %>" class="form-control" required>
+                          </div>
+                        </div>
+
+                        <div class="form-group">
+                          <label for="to$1" class="col-sm-3  control-label" title="End value of $1 iterating, loop variable. Example: 25">to$1:</label>
+                          <div class="col-sm-2">
+                            <input type="text" name="to$1" id="to$1" value="<%= (task.id !== undefined) ? task.to$1 : 25; %>" class="form-control" required>
+                          </div>
+                        </div>
+
+                        <div class="form-group">
+                          <label for="cron" class="col-sm-3  control-label" title="Cron job schedule. Example: 0 17 ? * 0,4-6">Cron:</label>
+                          <div class="col-sm-9">
+                            <input type="text" name="cron" id="cron" value="<%= task.cron %>" class="form-control" required>
+                          </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="status" class="col-sm-3 control-label" title="If you want cron job to become active select 'On'. Otherwise select 'Off'.">Status:</label>
                             <div class="col-sm-2">
-                              <select name="status" id="status" class="form-control"
-                                data-toggle="tooltip" data-placement="top" title="If you want cron job to become active select 'On'. Otherwise select 'Off'.">
-                                  <option value="1" selected>On</option>
-                                  <option value="0">Off</option>
+                              <select name="status" id="status" class="form-control">
+                                  <option value="1" <%= (task.id !== undefined && task.status == 1 ) ? 'selected' : ''; %> >On</option>
+                                  <option value="0" <%= (task.id !== undefined && task.status == 0 ) ? 'selected' : ''; %> >Off</option>
                               </select>
                             </div>
                         </div>
@@ -151,9 +191,16 @@
 
                         <div class="form-group">
                           <label class="col-sm-3 control-label"></label>
-                          <div class="col-sm-5 form-group">
-                            <input type="submit" value="Update" class="btn btn-info btn-lg">
+                          <div class="col-sm-4 form-group">
+                            <input type="submit" value="<%= (task.id !== undefined) ? 'Update' : 'Insert'; %>" class="btn btn-info btn-lg">
                           </div>
+
+                          <% if (task.id !== undefined) { %>
+                          <div class="col-sm-4 form-group">
+                            <input type="submit" value="Insert Simmilar" class="btn btn-info btn-lg" formaction="/admin/tasks/links/iterateurl/insert">
+                          </div>
+                          <% } %>
+
                         </div>
 
                         </form>
@@ -175,12 +222,48 @@
     <%- include('../partials/15js_static'); -%>
 
 <script>
+/* Bootstrap tooltip activation */
   $(document).ready(function(){
-   $("#id").focus();
-   $("input, textarea, select").tooltip();
+   // $("#id").focus();
+   var options = {
+    placement: "right",
+    delay: 800
+   };
+   $("label, a.fa").tooltip(options);
   });
 </script>
 
+<script>
+/* append relevant subcategories into SELECT tag */
+  $(document).ready(function(){
+
+    //option tag for task to edit
+    var task = <%- JSON.stringify(task, null, 2) %>; //sent from links.js controller file
+    if (task.subcategory !== undefined) {
+      $('#subcategory').html('<option value="' + task.subcategory + '"> (' + task.subcategory + ') </option>');
+    }
+
+    $('#category').change(function(){
+      var val = $(this).val();
+      var cats = <%- JSON.stringify(cats, null, 2) %>; //'cats' comes from links_iterateurl.ejs
+      
+      $('#subcategory > option').remove();
+
+      // console.log(JSON.stringify(cats[val].subcats, null, 2));
+      if (cats[val] !== undefined) {
+        cats[val].subcats.forEach(function (elem, index) {
+
+          $('#subcategory').append('<option value="' + index + '">' + elem + '(' + index + ')' + '</option>');
+          // console.log(elem);
+        });
+      }
+
+      $('#subcategory').prepend('<option value="" selected>All</option>');
+
+    });
+
+  });
+</script>
 
 </body>
 

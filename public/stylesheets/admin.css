@@ -8,3 +8,11 @@ table tr > th {
 	color: #f0f0f0;
 	text-align: center;
 }
+
+a.fa {
+	color: #FC7F07;
+	margin-left:10px;
+}
+a.fa:hover {
+	color: #028504;
+}

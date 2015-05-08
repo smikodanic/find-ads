@@ -1,10 +1,11 @@
 /*jslint unparam: true*/
 
+require('rootpath')(); //enable requiring modules from application root folder
 var express = require('express');
 var router = express.Router();
 var nodedump = require('nodedump').dump;
-var login = require('../../libraries/account_login.js');
-var category_model = require('../../models/category_model');
+var login = require('libraries/account_login.js');
+var category_model = require('models/category_model');
 
 
 
