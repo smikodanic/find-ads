@@ -4,7 +4,6 @@
  * For example: http://old.adsuu.com/business-offer-$1/
  */
 require('rootpath')(); //enable requiring modules from application's root folder
-var category_model = require('models/category_model');
 var task_model = require('models/task_model');
 
 var http = require('http');
@@ -12,16 +11,14 @@ var MongoClient = require('mongodb').MongoClient;
 var nodedump = require('nodedump').dump;
 var url = require('url');
 var cheerio = require('cheerio');
+var logg = require('libraries/logging.js');
+
+var igniter = require('0crawler/igniter');
 
 
 //settings
 var taskCollection = 'tasks_LinkIterate';
-
-/* Send error to browser or console */
-var errSend_browser = function (err, res) {
-  // console.log('nodehttp_crawler.js:' + err);
-  res.send('nodehttp_crawler.js:' + err).end();
-};
+var crawlInterval = 3000;
 
 
 // HTTP client created by NodeJS module - http.request()
@@ -39,13 +36,13 @@ var httpClient = function (res, moTask, db) {
       'User-Agent': 'Mozilla/5.0 (X11; Ubuntu; Linux i686; rv:36.0) Gecko/20100101 Firefox/36.0',
       'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
       'Accept-Language': 'en-US,en;q=0.5',
-      'Accept-Encoding': 'gzip, deflate'
+      // 'Accept-Encoding': 'gzip, deflate'
     }
   };
 
-  // HTTP request using NodeJS 'http' module
+  // HTTP request using NodeJS 'http' module (http.request)
   var req2 = http.request(options, function (res2) {
-      if (res2.statusCode !== 200) { errSend_browser('Page not found: ' + options.hostname + options.path, res); }
+      if (res2.statusCode !== 200) { logg.me('error', __filename + ':43 Page not found: ' + options.hostname + options.path, null); }
 
       //get htmlDoc from chunks of data
       var htmlDoc = '';
@@ -63,6 +60,8 @@ var httpClient = function (res, moTask, db) {
           "links": []
         };
 
+        res.write("------------ Page: " + options.hostname + options.path + "-------------- \n");
+
         //get array of links using cherrio module
         $ = cheerio.load(htmlDoc);
 
@@ -77,14 +76,19 @@ var httpClient = function (res, moTask, db) {
             "href": href
           });
 
+          res.write("----- " + href + " --- " + tekst + "\n");
+
           //debug
           // console.log(JSON.stringify(insMoDoc, null, 2));
           // console.log("\n");
         });
 
+        res.write("\n\n");
+
+
         //insert into mongoDb
         db.collection('linkQueue_LinkIterate').insert(insMoDoc, function (err) {
-          if (err) { errSend_browser(err, res); }
+          if (err) { logg.me('error', __filename + ':85 ' + err, res); }
           // db.close();
         });
 
@@ -93,7 +97,7 @@ var httpClient = function (res, moTask, db) {
     });
 
   req2.on('error', function (err) {
-    errSend_browser(err, res);
+    logg.me('error', __filename + ':94 ' + err, res);
   });
 
   req2.end();
@@ -101,6 +105,7 @@ var httpClient = function (res, moTask, db) {
 
 
 
+//outputing crawling results to browser, console or null
 
 
 
@@ -109,48 +114,6 @@ var httpClient = function (res, moTask, db) {
 
 module.exports.crawl = function (req, res) {
 
-  //id from req e.g. from URI
-  var task_id = parseInt(req.params.task_id, 10); //use parseint to convert string into number
-
-  var selector = {"id": task_id};
-
-  MongoClient.connect("mongodb://localhost:27017/crawler", function (err, db) {
-    if (err) { errSend_browser(err, res); }
-
-    db.collection(taskCollection).find(selector).toArray(function (err, moTask_arr) { //get task data from 'task_id'
-      if (err) { errSend_browser(err, res); }
-
-      //MongoDB doc object
-      var moTask = moTask_arr[0];
-
-      //iterating through task URLs
-      var i = moTask.from$1;
-      var intID = setInterval(function () {
-
-        if (i <= moTask.to$1) {
-
-          //http://www.adsuu.com/business-offer-$1/ -> http://www.adsuu.com/business-offer-1/
-          moTask.iteratingurl2 = moTask.iteratingurl.replace('$1', i);
-
-          httpClient(res, moTask, db);
-
-        } else {
-          clearInterval(intID); //stop crawling
-
-          setTimeout(function () {
-            console.log('CRAWLING FINISHED: ' + moTask.name);
-            res.send('CRAWLING FINISHED: ' + moTask.name).end();
-          }, 3000);
-
-        }
-
-        i++;
-
-
-      }, 1800);
-
-    });
-
-  });
+  
 
 };

@@ -46,7 +46,7 @@
                                 <th>iteratingURL</th>
                                 <th>cron</th>
                                 <th>status</th>
-                                <th>action</th>
+                                <th style="width:100px">action</th>
                             </tr>
 
                             
@@ -63,7 +63,7 @@
                                 
                                 <a href="/admin/tasks/links/iterateurl/delete/<%= elem.id %>" class="fa fa-trash" data-toggle="tooltip" data-placement="top" title="delete"></a>
                                 <a href="/admin/tasks/links/iterateurl/edit/<%= elem.id %>" class="fa fa-pencil-square-o" data-toggle="tooltip" data-placement="top" title="edit"></a>
-                                <a href="/admin/crawl/links/iterateurl/nodehttp/<%= elem.id %>" class="fa fa-play" data-toggle="tooltip" data-placement="top" title="crawl now"></a>
+                                <a href="/admin/crawl/links/iterateurl/nodehttp/<%= elem.id %>" class="fa fa-play crawl-start" data-toggle="tooltip" data-placement="top" title="crawl now" data-taskid="<%= elem.id %>"></a>
                               
                               </td>
 
@@ -85,7 +85,7 @@
                     <div class="clearfix">&nbsp;</div><br><br>
 
                     <!-- form -->
-                    <div class="col-lg-8">
+                    <div class="col-lg-12 well">
 
                     <% //define form action value
                       var act;
@@ -205,6 +205,17 @@
 
                         </form>
                     </div>
+                    <!--  form end -->
+
+                    <div class="col-sm-12 lightbox">
+                      <span class="fa fa-times-circle close"></span>
+                      Console: 
+                      <br>
+                      <iframe src="" frameborder="1" class="crawl-console">
+                        
+                      </iframe>
+                      
+                    </div>
 
                 </div>
                 <!-- /.row -->
@@ -260,6 +271,56 @@
 
       $('#subcategory').prepend('<option value="" selected>All</option>');
 
+    });
+
+  });
+</script>
+
+<script>
+
+  //lightbox (pop up window)
+  var lightbox = function () {
+    
+    //width and height of browser's window
+    var bw = $(window).width();
+    var bh = $(window).height();
+
+    //colorize DIV background
+    var cssOpt = {
+      "background-color": "rgba(255,0,0,0.4)",
+      "width": bw + "px !important",
+      "height": bh + 'px !important',
+      "border": "5px solid Brown",
+      "position": "fixed",
+      "top": "0px",
+      "left": "0px",
+      "z-index": 20000
+    }
+    $('.lightbox').show(1000)
+      .css(cssOpt);
+    
+
+
+    console.log(bw + ' , ' + bh);
+  };
+
+  //start crawling with console (iframe) output
+  $(document).ready(function () {
+    $('.lightbox').hide();
+
+    $('.crawl-start').on('click', function (event) {
+      event.preventDefault();
+      
+      lightbox();
+
+      //start crawling by adding URL into iframe's SRC attribute
+      var taskID = $(this).attr('data-taskid');
+      $('.crawl-console').attr('src', 'http://localhost:3000/admin/crawl/links/iterateurl/nodehttp/' + taskID);
+    });
+
+    //close lightbox console
+    $('.lightbox .close').on('click', function() {
+      $('.lightbox').hide();
     });
 
   });

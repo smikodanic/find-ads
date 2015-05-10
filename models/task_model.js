@@ -3,11 +3,7 @@
  */
 
 var MongoClient = require('mongodb').MongoClient;
-
-/* Send error to browser */
-var errSend_browser = function (err, res) {
-  res.send('category_model.js -:' + err).end();
-};
+var logg = require('libraries/logging.js');
 
 
 module.exports.insertTask = function (req, res, collName) {
@@ -23,42 +19,32 @@ module.exports.insertTask = function (req, res, collName) {
 
 
   MongoClient.connect("mongodb://localhost:27017/crawler", function (err, db) {
+    if (err) { logg.me('error', __filename + ':21 ' + err, res); }
 
-    if (err) {
-      errSend_browser(err, res);
-    } else {
+    if (insDoc !== null) {
 
-      if (insDoc !== null) {
-        db.collection(collName).find().sort({id: -1}).limit(1).toArray(function (err, moDocs_arr) { //find max ID
+      db.collection(collName).find().sort({id: -1}).limit(1).toArray(function (err, moDocs_arr) { //find max ID
+        if (err) { logg.me('error', __filename + ':25 ' + err, res); }
 
-          if (err) { errSend_browser(err, res); }
+        //define new insDoc.id from max id value
+        if (moDocs_arr[0] !== undefined) {
+          insDoc.id = moDocs_arr[0].id + 1;
+        } else {
+          insDoc.id = 0;
+        }
 
-          //define new insDoc.id from max id value
-          if (moDocs_arr[0] !== undefined) {
-            insDoc.id = moDocs_arr[0].id + 1;
-          } else {
-            insDoc.id = 0;
-          }
+        db.collection(collName).insert(insDoc, function (err) {
+          if (err) { logg.me('error', __filename + ':21 ' + err, res); }
 
-          db.collection(collName).insert(insDoc, function (err) {
-            if (err) {
-              //show error if exists
-              errSend_browser(err, res);
-            } else {
-              //on successful insertion do redirection
-              res.redirect('/admin/tasks/links/iterateurl');
-            }
-
-            db.close();
-          });
-
+          //on successful insertion do redirection
+          res.redirect('/admin/tasks/links/iterateurl');
+          db.close();
         });
 
-      } else {
-        res.send('Cannot insert empty doc!');
-      }
-
-    } //else end
+      });
+    } else {
+      res.send('Cannot insert empty doc!');
+    }
 
   }); //connect
 
@@ -68,15 +54,14 @@ module.exports.insertTask = function (req, res, collName) {
 module.exports.listTasks = function (res, cb_list, collName) {
 
   MongoClient.connect("mongodb://localhost:27017/crawler", function (err, db) {
-
-    if (err) { errSend_browser(err, res); }
+    if (err) { logg.me('error', __filename + ':57 ' + err, res); }
 
     //list results
     db.collection(collName).find({}).sort({id: 1}).toArray(function (err, moTasksDocs_arr) {
-      if (err) { errSend_browser(err, res); }
+      if (err) { logg.me('error', __filename + ':61 ' + err, res); }
 
       db.collection('category').find({}).sort({id: 1}).toArray(function (err, moCatsDocs_arr) {
-        if (err) { errSend_browser(err, res); }
+        if (err) { logg.me('error', __filename + ':64 ' + err, res); }
 
         cb_list(res, moTasksDocs_arr, moCatsDocs_arr);
         db.close();
@@ -107,13 +92,13 @@ module.exports.deleteTask = function (req, res, collName) {
   }
 
   MongoClient.connect("mongodb://localhost:27017/crawler", function (err, db) {
-    if (err) { errSend_browser(err, res); }
+    if (err) { logg.me('error', __filename + ':95 ' + err, res); }
 
     db.collection(collName).remove(selector, options, function (err, status) {
-      if (err) { errSend_browser(err, res); }
+      if (err) { logg.me('error', __filename + ':98 ' + err, res); }
 
       res.redirect('/admin/tasks/links/iterateurl');
-      console.log('\nDeleted records: ' + status);
+      logg.me('error', __filename + ':21 Deleted records:' + status, null);
       db.close();
     });
 
@@ -131,16 +116,16 @@ module.exports.editTask = function (req, res, cb_list2, collName) {
   var selector = {"id": id_req};
 
   MongoClient.connect("mongodb://localhost:27017/crawler", function (err, db) {
-    if (err) { errSend_browser(err, res); }
+    if (err) { logg.me('error', __filename + ':119 ' + err, res); }
 
     db.collection(collName).find(selector).toArray(function (err, moTaskEdit_arr) { //get current task (by 'id') to edit
-      if (err) { errSend_browser(err, res); }
+      if (err) { logg.me('error', __filename + ':122 ' + err, res); }
 
       db.collection(collName).find({}).sort({id: 1}).toArray(function (err, moTasksDocs_arr) { //list tasks
-        if (err) { errSend_browser(err, res); }
+        if (err) { logg.me('error', __filename + ':125 ' + err, res); }
 
         db.collection('category').find({}).sort({id: 1}).toArray(function (err, moCatsDocs_arr) { //list categories & subcategories in SELECT
-          if (err) { errSend_browser(err, res); }
+          if (err) { logg.me('error', __filename + ':128 ' + err, res); }
 
           cb_list2(res, moTaskEdit_arr, moTasksDocs_arr, moCatsDocs_arr);
           db.close();
@@ -172,13 +157,13 @@ module.exports.updateTask = function (req, res, collName) {
   }
 
   MongoClient.connect("mongodb://localhost:27017/crawler", function (err, db) {
-    if (err) { errSend_browser(err, res); }
+    if (err) { logg.me('error', __filename + ':160 ' + err, res); }
 
     db.collection(collName).update(selector, newDoc, function (err, status) {
-      if (err) { errSend_browser(err, res); }
+      if (err) { logg.me('error', __filename + ':163 ' + err, res); }
 
       res.redirect('/admin/tasks/links/iterateurl/edit/' + id_req);
-      console.log('\nUpdated records: ' + status);
+      logg.me('error', __filename + ':166 Updated records: ' + status, null);
       db.close();
     });
 
@@ -194,13 +179,13 @@ module.exports.disableTasks = function (res, collName) {
   var update = {$set: {"status": 0}};
 
   MongoClient.connect("mongodb://localhost:27017/crawler", function (err, db) {
-    if (err) { errSend_browser(err, res); }
+    if (err) { logg.me('error', __filename + ':182 ' + err, res); }
 
     db.collection(collName).update(selector, update, function (err, status) {
-      if (err) { errSend_browser(err, res); }
+      if (err) { logg.me('error', __filename + ':185 ' + err, res); }
 
       res.redirect('/admin/tasks/links/iterateurl');
-      console.log('\nUpdated records: ' + status);
+      logg.me('error', __filename + ':166 Updated records: ' + status, null);
       db.close();
     });
 

@@ -19,6 +19,7 @@
     "morgan": "~1.5.1",
     "rootpath": "^0.1.2",
     "serve-favicon": "~2.2.0",
-    "session-file-store": "0.0.3"
+    "session-file-store": "0.0.3",
+    "winston": "^1.0.0"
   }
 }

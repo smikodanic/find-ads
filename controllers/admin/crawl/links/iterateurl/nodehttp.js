@@ -5,7 +5,8 @@ var express = require('express');
 var router = express.Router();
 var nodedump = require('nodedump').dump;
 var login = require('libraries/account_login.js');
-var nodehttp_crawler = require('0crawler/links/iterateurl/nodehttp_crawler');
+var logg = require('libraries/logging.js');
+var crawl = require('0crawler/ignitURLiteration');
 
 var cb_list_Render = function (res, moTasksDocs_arr, moCatsDocs_arr) {
   var vdata = {
@@ -50,7 +51,7 @@ module.exports = function (router) {
     var sess_tf = login.checksess_user_pass(req);
 
     if (sess_tf) {
-      nodehttp_crawler.crawl(req, res);
+      crawl.start(req, res);
     } else {
       res.redirect('/admin');
     }

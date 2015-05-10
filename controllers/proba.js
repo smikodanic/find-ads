@@ -24,4 +24,12 @@ module.exports = function (router) {
     res.send(nodedump(x)); // String: par
   });
 
+  /**
+   * winston logger testing
+   * http://localhost:3000/proba/winston
+   */
+  router.get('/primjer', function (req, res) {
+    res.send('PROBA primjer'); // 
+  });
+
 };

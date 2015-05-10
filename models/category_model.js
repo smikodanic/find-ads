@@ -3,11 +3,8 @@
  */
 
 var MongoClient = require('mongodb').MongoClient;
+var logg = require('libraries/logging.js');
 
-/* Send error to browser */
-var errSend_browser = function (err, res) {
-  res.send('category_model.js -:' + err);
-};
 
 /* Some corrections of strings in Array*/
 var korektor = function (arr) {
@@ -47,41 +44,33 @@ module.exports.insertCategory = function (req, res) {
 
   MongoClient.connect("mongodb://localhost:27017/crawler", function (err, db) {
 
-    if (err) {
-      errSend_browser(err, res);
-    } else {
+    if (err) { logg.me('error', __filename + ':47 ' + err, res); }
 
-      if (insDoc !== null) {
-        db.collection('category').find().sort({id: -1}).limit(1).toArray(function (err, moDocs_arr) { //find max ID
+    if (insDoc !== null) {
 
-          if (err) { errSend_browser(err, res); }
+      db.collection('category').find().sort({id: -1}).limit(1).toArray(function (err, moDocs_arr) { //find max ID
+        if (err) { logg.me('error', __filename + ':52 ' + err, res); }
 
-          //define new insDoc.id from max id value
-          if (moDocs_arr[0] !== undefined) {
-            insDoc.id = moDocs_arr[0].id + 1;
-          } else {
-            insDoc.id = 0;
-          }
+        //define new insDoc.id from max id value
+        if (moDocs_arr[0] !== undefined) {
+          insDoc.id = moDocs_arr[0].id + 1;
+        } else {
+          insDoc.id = 0;
+        }
 
-          db.collection('category').insert(insDoc, function (err) {
-            if (err) {
-              //show error if exists
-              errSend_browser(err, res);
-            } else {
-              //on successful insertion do redirection
-              res.redirect('/admin/categories/');
-            }
+        db.collection('category').insert(insDoc, function (err) {
+          if (err) { logg.me('error', __filename + ':47 ' + err, res); }
 
-            db.close();
-          });
-
+          //on successful insertion do redirection
+          res.redirect('/admin/categories/');
+          db.close();
         });
 
-      } else {
-        res.send('Cannot insert empty doc!');
-      }
+      });
 
-    } //else end
+    } else {
+      res.send('Cannot insert empty doc!');
+    }
 
   }); //connect
 
@@ -92,21 +81,15 @@ module.exports.listCategories = function (res, cb_list) {
 
   MongoClient.connect("mongodb://localhost:27017/crawler", function (err, db) {
 
-    if (err) {
-      errSend_browser(err, res);
-    } else {
+    if (err) { logg.me('error', __filename + ':84 ' + err, res); }
 
-      //list results
-      db.collection('category').find({}).sort({id: 1}).toArray(function (err, moDocs_arr) {
-        if (err) {
-          errSend_browser(err, res);
-        } else {
-          cb_list(res, moDocs_arr);
-          db.close();
-        }
-      });
+    //list results
+    db.collection('category').find({}).sort({id: 1}).toArray(function (err, moDocs_arr) {
+      if (err) { logg.me('error', __filename + ':88 ' + err, res); }
 
-    } //else
+      cb_list(res, moDocs_arr);
+      db.close();
+    });
 
   }); //connect
 
@@ -131,24 +114,16 @@ module.exports.deleteCategory = function (req, res) {
   }
 
   MongoClient.connect("mongodb://localhost:27017/crawler", function (err, db) {
+    if (err) { logg.me('error', __filename + ':117 ' + err, res); }
 
-    if (err) {
-      errSend_browser(err, res);
-    } else {
+    db.collection('category').remove(selector, options, function (err, status) {
+      if (err) { logg.me('error', __filename + ':120 ' + err, res); }
 
-      db.collection('category').remove(selector, options, function (err, status) {
-        if (err) {
-          errSend_browser(err, res);
-        } else {
-          res.redirect('/admin/categories/');
-          console.log('\nDeleted records: ' + status);
-        }
+      res.redirect('/admin/categories/');
 
-        db.close();
-      });
-
-
-    } //else
+      logg.me('info', __filename + ':124 Deleted records:' + status, null);
+      db.close();
+    });
 
   }); //connect
 
@@ -164,23 +139,20 @@ module.exports.editCategory = function (req, res, cb_list2) {
   var selector = {"id": id_req};
 
   MongoClient.connect("mongodb://localhost:27017/crawler", function (err, db) {
+    if (err) { logg.me('error', __filename + ':142 ' + err, res); }
 
-    if (err) {
-      errSend_browser(err, res);
-    } else {
+    db.collection('category').find(selector).toArray(function (err, moDocEdit_arr) {
+      if (err) { logg.me('error', __filename + ':145 ' + err, res); }
 
-      db.collection('category').find(selector).toArray(function (err, moDocEdit_arr) {
-        if (err) { errSend_browser(err, res); }
+      //list results
+      db.collection('category').find({}).sort({id: 1}).toArray(function (err, moDocs_arr) {
+        if (err) { logg.me('error', __filename + ':149 ' + err, res); }
 
-        //list results
-        db.collection('category').find({}).sort({id: 1}).toArray(function (err, moDocs_arr) {
-          if (err) { errSend_browser(err, res); }
-          cb_list2(res, moDocs_arr, moDocEdit_arr);
-          db.close();
-        });
+        cb_list2(res, moDocs_arr, moDocEdit_arr);
+        db.close();
       });
 
-    } //else
+    });
 
   }); //connect
 
@@ -215,19 +187,15 @@ module.exports.updateCategory = function (req, res) {
   }
 
   MongoClient.connect("mongodb://localhost:27017/crawler", function (err, db) {
+    if (err) { logg.me('error', __filename + ':190 ' + err, res); }
 
-    if (err) {
-      errSend_browser(err, res);
-    } else {
+    db.collection('category').update(selector, newDoc, function (err, status) {
+      if (err) { logg.me('error', __filename + ':193 ' + err, res); }
 
-      db.collection('category').update(selector, newDoc, function (err, status) {
-        if (err) { errSend_browser(err, res); }
-        res.redirect('/admin/categories/edit/' + id_req);
-        console.log('\nUpdated records: ' + status);
-        db.close();
-      });
-
-    } //else
+      res.redirect('/admin/categories/edit/' + id_req);
+      logg.me('info', __filename + ':197 Updated records:' + status, null);
+      db.close();
+    });
 
   }); //connect
 
