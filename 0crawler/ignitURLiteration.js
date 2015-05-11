@@ -5,7 +5,6 @@ var httpClient = require('0crawler/httpClient_node');
 
 //settings
 var taskCollection = 'tasks_LinkIterate';
-var crawlInterval = 3000;
 
 
 module.exports.start = function (req, res) {
@@ -24,7 +23,11 @@ module.exports.start = function (req, res) {
       //MongoDB doc object
       var moTask = moTask_arr[0];
 
-      //iterating through task URLs
+      //crawl first pagination page - defined by 'firstURL' variable
+      moTask.iteratingurl2 = moTask.firsturl;
+      httpClient.node(res, moTask, db);
+
+      //iterating through pagination URLs changing variable $1 - defined by 'iteratingURL' variable
       var i = moTask.from$1;
       var intID = setInterval(function () {
 
@@ -46,7 +49,7 @@ module.exports.start = function (req, res) {
         i++;
 
 
-      }, crawlInterval);
+      }, moTask.crawlInterval);
 
     });
 

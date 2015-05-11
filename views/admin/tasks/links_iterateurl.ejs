@@ -150,7 +150,14 @@
                         </div>
 
                         <div class="form-group">
-                          <label for="iteratingurl" class="col-sm-3  control-label" title="Iterating URL. This URL will pass through FOR javascript loop. Example: http://www.adsuu.com/business-offer-$1/">iteratingURL:</label>
+                          <label for="firsturl" class="col-sm-3  control-label" title="This URL will not pass through FOR javascript loop. Example: http://www.adsuu.com/business-offer/">firstURL:</label>
+                          <div class="col-sm-9">
+                            <input type="text" name="firsturl" id="firsturl" value="<%= task.firsturl %>" class="form-control" style="font-size:smaller;" required>
+                          </div>
+                        </div>
+
+                        <div class="form-group">
+                          <label for="iteratingurl" class="col-sm-3  control-label" title="Iterating URL. This URL will pass through FOR javascript loop iterating $1 variable. Example: http://www.adsuu.com/business-offer-$1/">iteratingURL:</label>
                           <div class="col-sm-9">
                             <input type="text" name="iteratingurl" id="iteratingurl" value="<%= task.iteratingurl %>" class="form-control" style="font-size:smaller;" required>
                           </div>
@@ -175,6 +182,14 @@
                           <div class="col-sm-9">
                             <input type="text" name="cron" id="cron" value="<%= task.cron %>" class="form-control" required>
                           </div>
+                        </div>
+
+                        <div class="form-group">
+                          <label for="crawlInterval" class="col-sm-3  control-label" title="Set the crawling interval between two crawlings in miliseconds. It's crawling speed.">crawlInterval:</label>
+                          <div class="col-sm-2">
+                            <input type="text" name="crawlInterval" id="crawlInterval" value="<%= (task.id !== undefined) ? task.crawlInterval : 3000; %>" class="form-control" required>
+                          </div>
+                          <label class="control-label">ms</label>
                         </div>
 
                         <div class="form-group">
