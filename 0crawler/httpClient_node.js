@@ -1,7 +1,9 @@
 require('rootpath')();
 var url = require('url');
 var http = require('http');
-var logg = require('libraries/logging.js');
+var logg = require('libraries/logging');
+var tekstmod = require('libraries/tekstmod');
+var urlmod = require('libraries/urlmod');
 var cheerio = require('cheerio');
 
 
@@ -41,7 +43,7 @@ module.exports.node = function (res, moTask, db) {
         //doc to be inserted into mongoDB
         var insMoDoc = {
           "task_id": moTask.id,
-          "page": options.hostname + options.path,
+          "page": pageURL,
           "links": []
         };
 
@@ -52,8 +54,14 @@ module.exports.node = function (res, moTask, db) {
 
         var href, tekst;
         $(moTask.aselector).each(function () {
-          tekst = $(this).text();
+          tekst = $(this).children().remove().end().text(); //get text from A tag without children tag texts
           href = $(this).attr('href');
+
+          //prettify tekst
+          tekst = tekstmod.strongtrim(tekst);
+
+          //correct url (relative convert to absolute)
+          href = urlmod.toAbsolute(moTask.iteratingurl2, href);
 
           // fill insMoDoc.link array
           insMoDoc.links.push({
@@ -61,7 +69,7 @@ module.exports.node = function (res, moTask, db) {
             "href": href
           });
 
-          res.write("----- " + href + " --- " + tekst + "\n");
+          res.write("-----  " + href + " --- " + tekst + "\n");
 
           //debug
           // console.log(JSON.stringify(insMoDoc, null, 2));

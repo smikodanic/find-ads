@@ -42,8 +42,9 @@ module.exports.start = function (req, res) {
 
           clearInterval(intID); //stop crawling
 
-          logg.me('info', __filename + ':141 FINISHED with crawl task: ' + moTask.name, res);
-          // res.redirect('/admin/tasks/links/iterateurl');
+          // logg.me('info', __filename + ':141 FINISHED with crawl task: ' + moTask.name, res);
+          console.log('Crawl task finished: ' + moTask.name);
+          res.end();
         }
 
         i++;
