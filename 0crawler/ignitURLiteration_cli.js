@@ -32,4 +32,4 @@ var cb_outResults_null = {
 };
 
 
-crawl.start(task_id, cb_outResults_null);
+crawl.start(task_id, cb_outResults);

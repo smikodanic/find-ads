@@ -14,6 +14,7 @@ module.exports.node = function (db, moTask, cb_outResults) {
   //MongoDB collection name
   var collName = 'linkQueue_' + moTask.name;
 
+
   var url_obj = url.parse(moTask.iteratingurl2);
 
   //HTTP client options
@@ -48,10 +49,11 @@ module.exports.node = function (db, moTask, cb_outResults) {
         var insMoDoc = {
           "task_id": moTask.id,
           "page": pageURL,
+          "dateTime": timeLib.nowLocale(),
           "links": []
         };
 
-        cb_outResults.send('Page: ' + pageURL + ' (' + timeLib.nowLocale() + ') ' + '\n');
+        cb_outResults.send('Page: ' + pageURL + ' [' + timeLib.nowLocale() + '] ' + '\n');
 
         //get array of links using cherrio module
         $ = cheerio.load(htmlDoc);
@@ -79,10 +81,30 @@ module.exports.node = function (db, moTask, cb_outResults) {
         cb_outResults.send('\n\n');
 
 
-        //insert into database
-        db.collection(collName).insert(insMoDoc, function (err) {
-          if (err) { logg.me('error', __filename + ':87 ' + err); }
-          db.close();
+        /* insert into MongoDB */
+        db.collection(collName).createIndex({page: 1}, {unique: true, sparse: true}, function (err) { //create unique index to prevent duplicated documents
+          if (err) { logg.me('error', __filename + ':86 ' + err); }
+
+          db.collection(collName).find({"page": pageURL}).toArray(function (err, moTask2_arr) { //check if collection already exists
+            if (err) { logg.me('error', __filename + ':89 ' + err); }
+
+            //if collection already exists do UPDATE
+            if (moTask2_arr.length !== 0) {
+
+              db.collection(collName).update({"page": pageURL}, insMoDoc, function (err) {
+                if (err) { logg.me('error', __filename + ':95 ' + err); }
+              });
+
+            } else { //if collection doesn't exist do INSERT
+
+              db.collection(collName).insert(insMoDoc, function (err) {
+                if (err) { logg.me('error', __filename + ':101 ' + err); }
+              });
+
+            }
+
+          });
+
         });
 
       });
@@ -90,7 +112,7 @@ module.exports.node = function (db, moTask, cb_outResults) {
     });
 
   req2.on('error', function (err) {
-    logg.me('error', __filename + ':94 ' + err);
+    logg.me('error', __filename + ':115 ' + err);
   });
 
   req2.end();

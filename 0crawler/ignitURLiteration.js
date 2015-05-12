@@ -37,8 +37,10 @@ module.exports.start = function (task_id, cb_outResults) {
 
           clearInterval(intID); //stop crawling
 
-          // logg.me('info', __filename + ':141 FINISHED with crawl task: ' + moTask.name, res);
-          console.log('Crawl task finished: ' + moTask.name + '\n');
+          db.close();
+
+          var timeElapsed = (i * moTask.crawlInterval) / 1000;
+          console.log('Crawl task finished: ' + moTask.name + ' (Time elapsed:' + timeElapsed + 'sec)\n');
           cb_outResults.end();
         }
 
