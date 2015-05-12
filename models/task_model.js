@@ -163,7 +163,7 @@ module.exports.updateTask = function (req, res, collName) {
       if (err) { logg.me('error', __filename + ':163 ' + err, res); }
 
       res.redirect('/admin/tasks/links/iterateurl/edit/' + id_req);
-      logg.me('error', __filename + ':166 Updated records: ' + status, null);
+      logg.me('info', __filename + ':166 Updated records: ' + status, null);
       db.close();
     });
 

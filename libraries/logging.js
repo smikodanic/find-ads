@@ -30,21 +30,16 @@ var logger = new (winston.Logger)({
   ]
 });
 
-module.exports.me = function (logLevel, message, res) {
+module.exports.me = function (logLevel, message) {
 
   if (dev_pro === 'dev') { //development mode: logging to file and console
 
     logger.add(winston.transports.Console);
     logger.log(logLevel, message);
 
-    if (res !== null) { res.send(message); } //send error to browser window
-
   } else { //production mode: logging only to file
 
     logger.log(logLevel, message);
-
-    if (res !== null) { res.send(message); }
-
   }
 
 };

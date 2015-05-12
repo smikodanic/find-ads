@@ -50,8 +50,23 @@ module.exports = function (router) {
     //check username and password
     var sess_tf = login.checksess_user_pass(req);
 
+    //id from req e.g. from URI
+    var task_id = parseInt(req.params.task_id, 10); //use parseint to convert string into number
+
+    //callback: output crawling results to browser
+    var cb_outResults = {
+      send: function (rezult) {
+        res.write(rezult);
+      },
+      end: function () {
+        res.end();
+      }
+    };
+
+
+
     if (sess_tf) {
-      crawl.start(req, res);
+      crawl.start(task_id, cb_outResults);
     } else {
       res.redirect('/admin');
     }

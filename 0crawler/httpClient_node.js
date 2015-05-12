@@ -1,14 +1,18 @@
 require('rootpath')();
 var url = require('url');
 var http = require('http');
+var cheerio = require('cheerio');
 var logg = require('libraries/logging');
 var tekstmod = require('libraries/tekstmod');
 var urlmod = require('libraries/urlmod');
-var cheerio = require('cheerio');
+var timeLib = require('libraries/timeLib');
 
 
 // HTTP client created by NodeJS module - http.request()
-module.exports.node = function (res, moTask, db) {
+module.exports.node = function (db, moTask, cb_outResults) {
+
+  //MongoDB collection name
+  var collName = 'linkQueue_' + moTask.name;
 
   var url_obj = url.parse(moTask.iteratingurl2);
 
@@ -30,7 +34,7 @@ module.exports.node = function (res, moTask, db) {
 
   // HTTP request using NodeJS 'http' module (http.request)
   var req2 = http.request(options, function (res2) {
-      if (res2.statusCode !== 200) { logg.me('error', __filename + ':43 Page not found: ' + pageURL, null); }
+      if (res2.statusCode !== 200) { logg.me('error', __filename + ':36 Page not found: ' + pageURL, null); }
 
       //get htmlDoc from chunks of data
       var htmlDoc = '';
@@ -47,7 +51,7 @@ module.exports.node = function (res, moTask, db) {
           "links": []
         };
 
-        res.write('Page: ' + pageURL + " -------------- \n");
+        cb_outResults.send('Page: ' + pageURL + ' (' + timeLib.nowLocale() + ') ' + '\n');
 
         //get array of links using cherrio module
         $ = cheerio.load(htmlDoc);
@@ -69,20 +73,16 @@ module.exports.node = function (res, moTask, db) {
             "href": href
           });
 
-          res.write("-----  " + href + " --- " + tekst + "\n");
-
-          //debug
-          // console.log(JSON.stringify(insMoDoc, null, 2));
-          // console.log("\n");
+          cb_outResults.send('-----  ' + href + ' --- ' + tekst + '\n');
         });
 
-        res.write("\n\n");
+        cb_outResults.send('\n\n');
 
 
-        //insert into mongoDb
-        db.collection('linkQueue_LinkIterate').insert(insMoDoc, function (err) {
-          if (err) { logg.me('error', __filename + ':85 ' + err, res); }
-          // db.close();
+        //insert into database
+        db.collection(collName).insert(insMoDoc, function (err) {
+          if (err) { logg.me('error', __filename + ':87 ' + err); }
+          db.close();
         });
 
       });
@@ -90,7 +90,7 @@ module.exports.node = function (res, moTask, db) {
     });
 
   req2.on('error', function (err) {
-    logg.me('error', __filename + ':94 ' + err, res);
+    logg.me('error', __filename + ':94 ' + err);
   });
 
   req2.end();
