@@ -31,4 +31,18 @@ module.exports = function (router) {
 
   });
 
+
+  router.get('/results', function (req, res) {
+
+    //check if username and password are good in session storage
+    var sess_tf = login.checksess_user_pass(req);
+
+    if (sess_tf) {
+      res.render('admin/crawllinks/results');
+    } else {
+      res.redirect('/admin');
+    }
+
+  });
+
 };
