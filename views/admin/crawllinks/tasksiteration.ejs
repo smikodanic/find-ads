@@ -1,4 +1,4 @@
-<%- include('../partials/01head'); -%>
+<%- include('../0partials/01head'); -%>
 
 <body>
 
@@ -6,8 +6,8 @@
 
         <!-- Navigation -->
         <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
-            <%- include('../partials/05top_menu'); -%>
-            <%- include('../partials/10left_menu'); -%>
+            <%- include('../0partials/05top_menu'); -%>
+            <%- include('../0partials/10left_menu'); -%>
         </nav>
 
         <div id="page-wrapper">
@@ -19,14 +19,17 @@
                     <div class="col-lg-12">
                         
                         <h1 class="page-header">
-                            Tasks <small>Links</small>
+                            Iterate Pagination
                         </h1>
 
                         <ol class="breadcrumb">
-                          <li>Tasks</li>
-                          <li><a href="/admin/tasks/links">Links</a></li>
-                          <li><a href="/admin/tasks/links/iterateurl">Iterating URL</a></li>
+                          <li>Crawl Links</li>
+                          <li><a href="/admin/crawllinks/tasks">Crawling Tasks</a></li>
+                          <li><a href="/admin/crawllinks/tasksiteration">Iterate Pagination</a></li>
                         </ol>
+
+                        This method is using iteration through pagination links to extract content links.
+                        <br>Create new tasks, delete, edit, test or start strawling here.
 
                     </div>
                 </div>
@@ -61,9 +64,9 @@
 
                               <td>
                                 
-                                <a href="/admin/tasks/links/iterateurl/delete/<%= elem.id %>" class="fa fa-trash" data-toggle="tooltip" data-placement="top" title="delete"></a>
-                                <a href="/admin/tasks/links/iterateurl/edit/<%= elem.id %>" class="fa fa-pencil-square-o" data-toggle="tooltip" data-placement="top" title="edit"></a>
-                                <a href="/admin/crawl/links/iterateurl/nodehttp/<%= elem.id %>" class="fa fa-play crawl-start" data-toggle="tooltip" data-placement="top" title="crawl now" data-taskid="<%= elem.id %>"></a>
+                                <a href="/admin/crawllinks/tasksiteration/delete/<%= elem.id %>" class="fa fa-trash" data-toggle="tooltip" data-placement="top" title="delete"></a>
+                                <a href="/admin/crawllinks/tasksiteration/edit/<%= elem.id %>" class="fa fa-pencil-square-o" data-toggle="tooltip" data-placement="top" title="edit"></a>
+                                <a href="/admin/crawllinks/tasksiteration/start/<%= elem.id %>" class="fa fa-play crawl-start" data-toggle="tooltip" data-placement="top" title="crawl now" data-taskid="<%= elem.id %>"></a>
                               
                               </td>
 
@@ -76,9 +79,9 @@
                         <div class="clearfix">&nbsp;</div><br>
 
                         <!-- delete all documents -->                        
-                        <a href="/admin/tasks/links/iterateurl/delete/all" class="btn btn-danger btn-sm">Delete All</a>
-                        <a href="/admin/tasks/links/iterateurl/disable" class="btn btn-info btn-sm">Disable All</a>
-                        <a href="/admin/tasks/links/iterateurl" class="btn btn-info btn-sm">Insert New</a>
+                        <a href="/admin/crawllinks/tasksiteration/delete/all" class="btn btn-danger btn-sm">Delete All</a>
+                        <a href="/admin/crawllinks/tasksiteration/disable" class="btn btn-info btn-sm">Disable All</a>
+                        <a href="/admin/crawllinks/tasksiteration" class="btn btn-info btn-sm">Insert New</a>
 
                     </div>
                     
@@ -90,9 +93,9 @@
                     <% //define form action value
                       var act;
                       if (task.id !== undefined) {
-                        act = '/admin/tasks/links/iterateurl/update/' + task.id;
+                        act = '/admin/crawllinks/tasksiteration/update/' + task.id;
                       } else {
-                        act = '/admin/tasks/links/iterateurl/insert';
+                        act = '/admin/crawllinks/tasksiteration/insert';
                       }
                     %>
 
@@ -212,7 +215,7 @@
 
                           <% if (task.id !== undefined) { %>
                           <div class="col-sm-4 form-group">
-                            <input type="submit" value="Insert Simmilar" class="btn btn-info btn-lg" formaction="/admin/tasks/links/iterateurl/insert">
+                            <input type="submit" value="Insert Simmilar" class="btn btn-info btn-lg" formaction="/admin/crawllinks/tasksiteration/insert">
                           </div>
                           <% } %>
 
@@ -245,7 +248,7 @@
     <!-- /#wrapper -->
     
 
-    <%- include('../partials/15js_static'); -%>
+    <%- include('../0partials/15js_static'); -%>
 
 <script>
 /* Bootstrap tooltip activation */

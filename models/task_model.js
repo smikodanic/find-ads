@@ -37,7 +37,7 @@ module.exports.insertTask = function (req, res, collName) {
           if (err) { logg.me('error', __filename + ':21 ' + err, res); }
 
           //on successful insertion do redirection
-          res.redirect('/admin/tasks/links/iterateurl');
+          res.redirect('/admin/crawllinks/tasksiteration');
           db.close();
         });
 
@@ -97,8 +97,8 @@ module.exports.deleteTask = function (req, res, collName) {
     db.collection(collName).remove(selector, options, function (err, status) {
       if (err) { logg.me('error', __filename + ':98 ' + err, res); }
 
-      res.redirect('/admin/tasks/links/iterateurl');
-      logg.me('error', __filename + ':21 Deleted records:' + status, null);
+      res.redirect('/admin/crawllinks/tasksiteration');
+      logg.me('error', __filename + ':101 Deleted records:' + status, null);
       db.close();
     });
 
@@ -162,8 +162,8 @@ module.exports.updateTask = function (req, res, collName) {
     db.collection(collName).update(selector, newDoc, function (err, status) {
       if (err) { logg.me('error', __filename + ':163 ' + err, res); }
 
-      res.redirect('/admin/tasks/links/iterateurl/edit/' + id_req);
-      logg.me('info', __filename + ':166 Updated records: ' + status, null);
+      res.redirect('/admin/crawllinks/tasksiteration/edit/' + id_req);
+      // logg.me('info', __filename + ':166 Updated records: ' + status, null);
       db.close();
     });
 
@@ -177,14 +177,17 @@ module.exports.disableTasks = function (res, collName) {
 
   var selector = {};
   var update = {$set: {"status": 0}};
+  var options = {
+    multi: true //update multiple documents
+  };
 
   MongoClient.connect("mongodb://localhost:27017/crawler", function (err, db) {
     if (err) { logg.me('error', __filename + ':182 ' + err, res); }
 
-    db.collection(collName).update(selector, update, function (err, status) {
+    db.collection(collName).update(selector, update, options, function (err, status) {
       if (err) { logg.me('error', __filename + ':185 ' + err, res); }
 
-      res.redirect('/admin/tasks/links/iterateurl');
+      res.redirect('/admin/crawllinks/tasksiteration');
       logg.me('error', __filename + ':166 Updated records: ' + status, null);
       db.close();
     });

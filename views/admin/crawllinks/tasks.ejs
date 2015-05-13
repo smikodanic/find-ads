@@ -1,4 +1,4 @@
-<%- include('../partials/01head'); -%>
+<%- include('../0partials/01head'); -%>
 
 <body>
 
@@ -6,8 +6,8 @@
 
         <!-- Navigation -->
         <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
-            <%- include('../partials/05top_menu'); -%>
-            <%- include('../partials/10left_menu'); -%>
+            <%- include('../0partials/05top_menu'); -%>
+            <%- include('../0partials/10left_menu'); -%>
         </nav>
 
         <div id="page-wrapper">
@@ -18,22 +18,22 @@
                 <div class="row">
                     <div class="col-lg-12">
                         <h1 class="page-header">
-                            Tasks <small>Links</small>
+                            Crawling Tasks <small>Links</small>
                         </h1>
                         
                         <ol class="breadcrumb">
-                          <li>Tasks</li>
-                          <li><a href="/admin/tasks/links">Links</a></li>
+                          <li>Crawl Links</li>
+                          <li><a href="/admin/crawllinks/tasks">Crawling Tasks</a></li>
                         </ol>
 
                         <br><br>
-                        Define tasks for extracting content links and cron job interval for those tasks.
+                        Select one of those methods to extract content links.
                         
                         <br><br>
-                        Group of tasks:
+                        Crawl methods:
                         <ol>
-                            <li><a href="/admin/tasks/links/iterateurl">Iterate by URL</a> - iterate through group of pagination URLs</li>
-                            <li><a href="/admin/tasks/links/clickselector">Click on pagination</a> - simulate click on pagination link</li>
+                            <li><a href="/admin/crawllinks/tasksiteration">Iterate pagination</a> - iterate through pagination links</li>
+                            <li><a href="/admin/tasks/links/clickpagination">Click on pagination</a> - simulate click on pagination link (made in CasperJS)</li>
                             <li><a href="/admin/tasks/links/custom">Custom scripts (plugins)</a> - create custom CasperJS script</li>
                         </ol>
 
@@ -51,7 +51,7 @@
     </div>
     <!-- /#wrapper -->
     
-    <%- include('../partials/15js_static'); -%>
+    <%- include('../0partials/15js_static'); -%>
 
 <script>
 

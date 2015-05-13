@@ -13,7 +13,7 @@ var cb_list_Render = function (res, moTasksDocs_arr, moCatsDocs_arr) {
     tasks: moTasksDocs_arr,
     cats: moCatsDocs_arr
   };
-  res.render('./admin/tasks/links_iterateurl', vdata);
+  res.render('./admin/crawllinks/tasksiteration', vdata);
 };
 
 var cb_list2_Render = function (res, moTaskEdit_arr, moTasksDocs_arr, moCatsDocs_arr) {
@@ -22,28 +22,15 @@ var cb_list2_Render = function (res, moTaskEdit_arr, moTasksDocs_arr, moCatsDocs
     tasks: moTasksDocs_arr, //list tasks
     cats: moCatsDocs_arr //list categories & subcategories in SELECT tags
   };
-  res.render('./admin/tasks/links_iterateurl', vdata);
+  res.render('./admin/crawllinks/tasksiteration', vdata);
 };
 
 
 
 module.exports = function (router) {
 
+
   router.get('/', function (req, res) {
-
-    //check if username and password are good in session storage
-    var sess_tf = login.checksess_user_pass(req);
-
-    if (sess_tf) {
-      res.render('./admin/tasks/links');
-    } else {
-      res.redirect('/admin');
-    }
-
-  });
-
-
-  router.get('/iterateurl', function (req, res) {
 
     //check if username and password are good in session storage
     var sess_tf = login.checksess_user_pass(req);
@@ -58,7 +45,7 @@ module.exports = function (router) {
 
 
   //insert into MongoDB
-  router.post('/iterateurl/insert', function (req, res) {
+  router.post('/insert', function (req, res) {
 
     //check if username and password are good in session storage
     var sess_tf = login.checksess_user_pass(req);
@@ -73,7 +60,7 @@ module.exports = function (router) {
 
 
   //delete task from MongoDB
-  router.get('/iterateurl/delete/:id', function (req, res) {
+  router.get('/delete/:id', function (req, res) {
 
     //check if username and password are good in session storage
     var sess_tf = login.checksess_user_pass(req);
@@ -88,7 +75,7 @@ module.exports = function (router) {
 
 
   //edit task
-  router.get('/iterateurl/edit/:id', function (req, res) {
+  router.get('/edit/:id', function (req, res) {
 
     //check if username and password are good in session storage
     var sess_tf = login.checksess_user_pass(req);
@@ -103,7 +90,7 @@ module.exports = function (router) {
 
 
   //update task
-  router.post('/iterateurl/update/:id', function (req, res) {
+  router.post('/update/:id', function (req, res) {
 
     //check if username and password are good in session storage
     var sess_tf = login.checksess_user_pass(req);
@@ -117,7 +104,7 @@ module.exports = function (router) {
   });
 
   //disable all tasks
-  router.get('/iterateurl/disable', function (req, res) {
+  router.get('/disable', function (req, res) {
 
     //check if username and password are good in session storage
     var sess_tf = login.checksess_user_pass(req);
