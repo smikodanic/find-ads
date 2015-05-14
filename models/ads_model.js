@@ -30,7 +30,11 @@ module.exports.list_ads = function (req, res, cb_list) {
           console.log('MongoDB ErrCount: ' + err);
         } else {
 
-          var pagination_obj = pagination.paginator(req, countNum);
+          /* create pagination object which is sent to view file */
+          var pagesPreURI = '/admin/ads/' + req.params.category + '/'; // /admin/ads/12/2 --- pagination page = 2
+          var perPage = 4; //show results per page
+          var spanNum = 4; //show pagination numbers. Must be even number (paran broj)
+          var pagination_obj = pagination.paginator(req, countNum, pagesPreURI, perPage, spanNum);
 
           //list results
           db.collection('ads').find(query).skip(pagination_obj.skipNum).limit(pagination_obj.perPage).toArray(function (err, moDocs_arr) {

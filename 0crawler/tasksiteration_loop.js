@@ -3,16 +3,19 @@ var logg = require('libraries/logging.js');
 var MongoClient = require('mongodb').MongoClient;
 var httpClient = require('0crawler/httpClient_node');
 
+var settings = require('settings/admin.js');
+var dbName = settings.mongo.dbName;
+var collName = settings.mongo.dbColl_tasks1;
 
 
 module.exports.start = function (task_id, cb_outResults) {
 
   var selector = {"id": task_id};
 
-  MongoClient.connect("mongodb://localhost:27017/crawler", function (err, db) {
+  MongoClient.connect(dbName, function (err, db) {
     if (err) { logg.me('error', __filename + ':116 ' + err); }
 
-    db.collection('tasks_LinkIterate').find(selector).toArray(function (err, moTask_arr) { //get task data using 'task_id'
+    db.collection(collName).find(selector).toArray(function (err, moTask_arr) { //get task data using 'task_id'
       if (err) { logg.me('error', __filename + ':119 ' + err); }
 
       //MongoDB doc object

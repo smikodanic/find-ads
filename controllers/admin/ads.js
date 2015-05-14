@@ -26,7 +26,7 @@ var cb_list_Render = function (category, res, moDocs_arr, pagination_obj) {
 /* Ads Listing */
 module.exports = function (router) {
 
-  router.get('/:category/:currentPage', function (req, res, next) {
+  router.get('/:category/:currentPage?', function (req, res, next) {
 
     //check if username and password are good in session storage
     var sess_tf = login.checksess_user_pass(req);

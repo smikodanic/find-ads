@@ -2,11 +2,17 @@
  * crawler.category model
  */
 
+require('rootpath')();
 var MongoClient = require('mongodb').MongoClient;
 var logg = require('libraries/logging.js');
 
+//mongo parameters
+var settings = require('settings/admin.js');
+var dbName = settings.mongo.dbName;
+var collName = settings.mongo.dbColl_tasks1;
+var collName_cat = settings.mongo.dbColl_category;
 
-module.exports.insertTask = function (req, res, collName) {
+module.exports.insertTask = function (req, res) {
 
   //define document to be inserted
   var insDoc;
@@ -18,13 +24,13 @@ module.exports.insertTask = function (req, res, collName) {
   }
 
 
-  MongoClient.connect("mongodb://localhost:27017/crawler", function (err, db) {
-    if (err) { logg.me('error', __filename + ':21 ' + err, res); }
+  MongoClient.connect(dbName, function (err, db) {
+    if (err) { logg.me('error', __filename + ':28 ' + err); }
 
     if (insDoc !== null) {
 
       db.collection(collName).find().sort({id: -1}).limit(1).toArray(function (err, moDocs_arr) { //find max ID
-        if (err) { logg.me('error', __filename + ':25 ' + err, res); }
+        if (err) { logg.me('error', __filename + ':33 ' + err); }
 
         //define new insDoc.id from max id value
         if (moDocs_arr[0] !== undefined) {
@@ -34,11 +40,12 @@ module.exports.insertTask = function (req, res, collName) {
         }
 
         db.collection(collName).insert(insDoc, function (err) {
-          if (err) { logg.me('error', __filename + ':21 ' + err, res); }
+          if (err) { logg.me('error', __filename + ':43 ' + err); }
+
+          db.close();
 
           //on successful insertion do redirection
           res.redirect('/admin/crawllinks/tasksiteration');
-          db.close();
         });
 
       });
@@ -51,17 +58,17 @@ module.exports.insertTask = function (req, res, collName) {
 };
 
 
-module.exports.listTasks = function (res, cb_list, collName) {
+module.exports.listTasks = function (res, cb_list) {
 
-  MongoClient.connect("mongodb://localhost:27017/crawler", function (err, db) {
-    if (err) { logg.me('error', __filename + ':57 ' + err, res); }
+  MongoClient.connect(dbName, function (err, db) {
+    if (err) { logg.me('error', __filename + ':63 ' + err); }
 
     //list results
     db.collection(collName).find({}).sort({id: 1}).toArray(function (err, moTasksDocs_arr) {
-      if (err) { logg.me('error', __filename + ':61 ' + err, res); }
+      if (err) { logg.me('error', __filename + ':67 ' + err); }
 
-      db.collection('category').find({}).sort({id: 1}).toArray(function (err, moCatsDocs_arr) {
-        if (err) { logg.me('error', __filename + ':64 ' + err, res); }
+      db.collection(collName_cat).find({}).sort({id: 1}).toArray(function (err, moCatsDocs_arr) {
+        if (err) { logg.me('error', __filename + ':70 ' + err); }
 
         cb_list(res, moTasksDocs_arr, moCatsDocs_arr);
         db.close();
@@ -75,7 +82,7 @@ module.exports.listTasks = function (res, cb_list, collName) {
 
 
 
-module.exports.deleteTask = function (req, res, collName) {
+module.exports.deleteTask = function (req, res) {
 
   //id from req e.g. from URI
   var id_req = parseInt(req.params.id, 10); //use parseint to convert string into number
@@ -91,15 +98,15 @@ module.exports.deleteTask = function (req, res, collName) {
     options = {};
   }
 
-  MongoClient.connect("mongodb://localhost:27017/crawler", function (err, db) {
-    if (err) { logg.me('error', __filename + ':95 ' + err, res); }
+  MongoClient.connect(dbName, function (err, db) {
+    if (err) { logg.me('error', __filename + ':101 ' + err); }
 
     db.collection(collName).remove(selector, options, function (err, status) {
-      if (err) { logg.me('error', __filename + ':98 ' + err, res); }
+      if (err) { logg.me('error', __filename + ':104 ' + err); }
 
-      res.redirect('/admin/crawllinks/tasksiteration');
-      logg.me('error', __filename + ':101 Deleted records:' + status, null);
+      // logg.me('info', __filename + ':107 Deleted records:' + status);
       db.close();
+      res.redirect('/admin/crawllinks/tasksiteration');
     });
 
   }); //connect
@@ -108,24 +115,24 @@ module.exports.deleteTask = function (req, res, collName) {
 
 
 
-module.exports.editTask = function (req, res, cb_list2, collName) {
+module.exports.editTask = function (req, res, cb_list2) {
 
   //id from req e.g. from URI
   var id_req = parseInt(req.params.id, 10); //use parseint to convert string into number
 
   var selector = {"id": id_req};
 
-  MongoClient.connect("mongodb://localhost:27017/crawler", function (err, db) {
-    if (err) { logg.me('error', __filename + ':119 ' + err, res); }
+  MongoClient.connect(dbName, function (err, db) {
+    if (err) { logg.me('error', __filename + ':125 ' + err); }
 
     db.collection(collName).find(selector).toArray(function (err, moTaskEdit_arr) { //get current task (by 'id') to edit
-      if (err) { logg.me('error', __filename + ':122 ' + err, res); }
+      if (err) { logg.me('error', __filename + ':128 ' + err); }
 
       db.collection(collName).find({}).sort({id: 1}).toArray(function (err, moTasksDocs_arr) { //list tasks
-        if (err) { logg.me('error', __filename + ':125 ' + err, res); }
+        if (err) { logg.me('error', __filename + ':131 ' + err); }
 
         db.collection('category').find({}).sort({id: 1}).toArray(function (err, moCatsDocs_arr) { //list categories & subcategories in SELECT
-          if (err) { logg.me('error', __filename + ':128 ' + err, res); }
+          if (err) { logg.me('error', __filename + ':134 ' + err); }
 
           cb_list2(res, moTaskEdit_arr, moTasksDocs_arr, moCatsDocs_arr);
           db.close();
@@ -140,7 +147,7 @@ module.exports.editTask = function (req, res, cb_list2, collName) {
 };
 
 
-module.exports.updateTask = function (req, res, collName) {
+module.exports.updateTask = function (req, res) {
 
   //id from req e.g. from URI
   var id_req = parseInt(req.params.id, 10); //use parseint to convert string into number
@@ -156,15 +163,15 @@ module.exports.updateTask = function (req, res, collName) {
     newDoc = null;
   }
 
-  MongoClient.connect("mongodb://localhost:27017/crawler", function (err, db) {
-    if (err) { logg.me('error', __filename + ':160 ' + err, res); }
+  MongoClient.connect(dbName, function (err, db) {
+    if (err) { logg.me('error', __filename + ':166 ' + err); }
 
     db.collection(collName).update(selector, newDoc, function (err, status) {
-      if (err) { logg.me('error', __filename + ':163 ' + err, res); }
+      if (err) { logg.me('error', __filename + ':169 ' + err); }
 
-      res.redirect('/admin/crawllinks/tasksiteration/edit/' + id_req);
-      // logg.me('info', __filename + ':166 Updated records: ' + status, null);
+      logg.me('info', __filename + ':172 Updated records: ' + status);
       db.close();
+      res.redirect('/admin/crawllinks/tasksiteration/edit/' + id_req);
     });
 
   }); //connect
@@ -172,7 +179,7 @@ module.exports.updateTask = function (req, res, collName) {
 };
 
 
-module.exports.disableTasks = function (res, collName) {
+module.exports.disableTasks = function (res) {
 
 
   var selector = {};
@@ -181,15 +188,15 @@ module.exports.disableTasks = function (res, collName) {
     multi: true //update multiple documents
   };
 
-  MongoClient.connect("mongodb://localhost:27017/crawler", function (err, db) {
-    if (err) { logg.me('error', __filename + ':182 ' + err, res); }
+  MongoClient.connect(dbName, function (err, db) {
+    if (err) { logg.me('error', __filename + ':191 ' + err); }
 
     db.collection(collName).update(selector, update, options, function (err, status) {
-      if (err) { logg.me('error', __filename + ':185 ' + err, res); }
+      if (err) { logg.me('error', __filename + ':194 ' + err); }
 
-      res.redirect('/admin/crawllinks/tasksiteration');
-      logg.me('error', __filename + ':166 Updated records: ' + status, null);
+      logg.me('info', __filename + ':197 Updated records: ' + status);
       db.close();
+      res.redirect('/admin/crawllinks/tasksiteration');
     });
 
   }); //connect

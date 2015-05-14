@@ -1,14 +1,19 @@
 /*jslint unparam: true*/
 
 /**
- * Start crawling from command line: $node ignitURLiteration_cli.js 3
+ * Start crawling from command line: $node tasksiteration_start_cli.js 3
  * Usefull for cron job.
  */
 require('rootpath')(); //enable requireing modules from application root folder
-var crawl = require('0crawler/ignitURLiteration');
+var crawloop = require('0crawler/tasksiteration_loop');
 
-//id from req e.g. from command line process.argv
-var task_id = parseInt(process.argv[2], 10); //use parseint to convert string into number
+//id from from command line process.argv
+if (process.argv.length < 3) {
+  console.log("ERROR: Use 3 command line parameters like: $node tasksiteration_start_cli.js 3 \n");
+  process.exit();
+} else {
+  var task_id = parseInt(process.argv[2], 10); //use parseint to convert string into number
+}
 
 //callback: output crawling results to console
 var cb_outResults = {
@@ -32,4 +37,4 @@ var cb_outResults_null = {
 };
 
 
-crawl.start(task_id, cb_outResults);
+crawloop.start(task_id, cb_outResults);

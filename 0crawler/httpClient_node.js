@@ -6,6 +6,7 @@ var logg = require('libraries/logging');
 var tekstmod = require('libraries/tekstmod');
 var urlmod = require('libraries/urlmod');
 var timeLib = require('libraries/timeLib');
+var links_model = require('models/links_model');
 
 
 // HTTP client created by NodeJS module - http.request()
@@ -14,8 +15,9 @@ module.exports.node = function (db, moTask, cb_outResults) {
   //MongoDB collection name
   var collName = 'linkQueue_' + moTask.name;
 
-
+  //vars
   var url_obj = url.parse(moTask.iteratingurl2);
+  var pageURL = url_obj.protocol + '//' + url_obj.hostname + url_obj.path;
 
   //HTTP client options
   var options = {
@@ -31,11 +33,10 @@ module.exports.node = function (db, moTask, cb_outResults) {
     }
   };
 
-  var pageURL = options.hostname + options.path;
 
   // HTTP request using NodeJS 'http' module (http.request)
   var req2 = http.request(options, function (res2) {
-      if (res2.statusCode !== 200) { logg.me('error', __filename + ':36 Page not found: ' + pageURL, null); }
+      if (res2.statusCode !== 200) { logg.me('error', __filename + ':38 Page not found: ' + pageURL, null); }
 
       //get htmlDoc from chunks of data
       var htmlDoc = '';
@@ -48,7 +49,7 @@ module.exports.node = function (db, moTask, cb_outResults) {
         //doc to be inserted into mongoDB
         var insMoDoc = {
           "task_id": moTask.id,
-          "page": pageURL,
+          "pageURL": pageURL,
           "dateTime": timeLib.nowLocale(),
           "links": []
         };
@@ -81,31 +82,8 @@ module.exports.node = function (db, moTask, cb_outResults) {
         cb_outResults.send('\n\n');
 
 
-        /* insert into MongoDB */
-        db.collection(collName).createIndex({page: 1}, {unique: true, sparse: true}, function (err) { //create unique index to prevent duplicated documents
-          if (err) { logg.me('error', __filename + ':86 ' + err); }
-
-          db.collection(collName).find({"page": pageURL}).toArray(function (err, moTask2_arr) { //check if collection already exists
-            if (err) { logg.me('error', __filename + ':89 ' + err); }
-
-            //if collection already exists do UPDATE
-            if (moTask2_arr.length !== 0) {
-
-              db.collection(collName).update({"page": pageURL}, insMoDoc, function (err) {
-                if (err) { logg.me('error', __filename + ':95 ' + err); }
-              });
-
-            } else { //if collection doesn't exist do INSERT
-
-              db.collection(collName).insert(insMoDoc, function (err) {
-                if (err) { logg.me('error', __filename + ':101 ' + err); }
-              });
-
-            }
-
-          });
-
-        });
+        //insert into MongoDB
+        links_model.insertLinks(pageURL, db, collName, insMoDoc);
 
       });
 

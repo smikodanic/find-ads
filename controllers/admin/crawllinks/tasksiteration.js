@@ -1,11 +1,11 @@
-/*jslint unparam: true*/
-
+require('rootpath')(); //enable requireing modules from application root folder
 var express = require('express');
 var router = express.Router();
-var nodedump = require('nodedump').dump;
-var login = require('../../../libraries/account_login.js');
-var category_model = require('../../../models/category_model');
-var task_model = require('../../../models/task_model');
+// var nodedump = require('nodedump').dump;
+var login = require('libraries/account_login.js');
+var logg = require('libraries/logging.js');
+var task_model = require('models/task_model');
+var crawloop = require('0crawler/tasksiteration_loop');
 
 var cb_list_Render = function (res, moTasksDocs_arr, moCatsDocs_arr) {
   var vdata = {
@@ -36,7 +36,7 @@ module.exports = function (router) {
     var sess_tf = login.checksess_user_pass(req);
 
     if (sess_tf) {
-      task_model.listTasks(res, cb_list_Render, 'tasks_LinkIterate');
+      task_model.listTasks(res, cb_list_Render);
     } else {
       res.redirect('/admin');
     }
@@ -51,7 +51,7 @@ module.exports = function (router) {
     var sess_tf = login.checksess_user_pass(req);
 
     if (sess_tf) {
-      task_model.insertTask(req, res, 'tasks_LinkIterate');
+      task_model.insertTask(req, res);
     } else {
       res.redirect('/admin');
     }
@@ -66,7 +66,7 @@ module.exports = function (router) {
     var sess_tf = login.checksess_user_pass(req);
 
     if (sess_tf) {
-      task_model.deleteTask(req, res, 'tasks_LinkIterate');
+      task_model.deleteTask(req, res);
     } else {
       res.redirect('/admin');
     }
@@ -81,7 +81,7 @@ module.exports = function (router) {
     var sess_tf = login.checksess_user_pass(req);
 
     if (sess_tf) {
-      task_model.editTask(req, res, cb_list2_Render, 'tasks_LinkIterate');
+      task_model.editTask(req, res, cb_list2_Render);
     } else {
       res.redirect('/admin');
     }
@@ -96,7 +96,7 @@ module.exports = function (router) {
     var sess_tf = login.checksess_user_pass(req);
 
     if (sess_tf) {
-      task_model.updateTask(req, res, 'tasks_LinkIterate');
+      task_model.updateTask(req, res);
     } else {
       res.redirect('/admin');
     }
@@ -110,7 +110,38 @@ module.exports = function (router) {
     var sess_tf = login.checksess_user_pass(req);
 
     if (sess_tf) {
-      task_model.disableTasks(res, 'tasks_LinkIterate');
+      task_model.disableTasks(res);
+    } else {
+      res.redirect('/admin');
+    }
+
+  });
+
+
+  /**
+   * start crawling task from browser
+   * To start crawling tasks from command line use: 
+   */
+  router.get('/start/:task_id', function (req, res) {
+
+    //check username and password
+    var sess_tf = login.checksess_user_pass(req);
+
+    //id from req e.g. from URI
+    var task_id = parseInt(req.params.task_id, 10); //use parseint to convert string into number
+
+    //callback: output crawling results to browser
+    var cb_outResults = {
+      send: function (rezult) {
+        res.write(rezult);
+      },
+      end: function () {
+        res.end();
+      }
+    };
+
+    if (sess_tf) {
+      crawloop.start(task_id, cb_outResults);
     } else {
       res.redirect('/admin');
     }
