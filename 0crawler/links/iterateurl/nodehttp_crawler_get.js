@@ -5,7 +5,7 @@
  */
 require('rootpath')(); //enable requiring modules from application's root folder
 var category_model = require('models/category_model');
-var task_model = require('models/task_model');
+var taskLink_model = require('models/taskLink_model');
 
 var http = require('http');
 

@@ -4,7 +4,7 @@
  * For example: http://old.adsuu.com/business-offer-$1/
  */
 require('rootpath')(); //enable requiring modules from application's root folder
-var task_model = require('models/task_model');
+var taskLink_model = require('models/taskLink_model');
 
 var http = require('http');
 var MongoClient = require('mongodb').MongoClient;
@@ -101,19 +101,4 @@ var httpClient = function (res, moTask, db) {
   });
 
   req2.end();
-};
-
-
-
-//outputing crawling results to browser, console or null
-
-
-
-
-
-
-module.exports.crawl = function (req, res) {
-
-  
-
 };

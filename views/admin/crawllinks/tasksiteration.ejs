@@ -44,12 +44,12 @@
                             
                             <tr>
                                 <th>id</th>
-                                <th>category</th>
+                                <th>cat.</th>
                                 <th>name</th>
                                 <th>iteratingURL</th>
                                 <th>cron</th>
                                 <th>status</th>
-                                <th style="width:100px">action</th>
+                                <th style="width:130px">action</th>
                             </tr>
 
                             
@@ -67,6 +67,7 @@
                                 <a href="/admin/crawllinks/tasksiteration/delete/<%= elem.id %>" class="fa fa-trash" data-toggle="tooltip" data-placement="top" title="delete"></a>
                                 <a href="/admin/crawllinks/tasksiteration/edit/<%= elem.id %>" class="fa fa-pencil-square-o" data-toggle="tooltip" data-placement="top" title="edit"></a>
                                 <a href="/admin/crawllinks/tasksiteration/start/<%= elem.id %>" class="fa fa-play crawl-start" data-toggle="tooltip" data-placement="top" title="crawl now" data-taskid="<%= elem.id %>"></a>
+                                <a href="/admin/crawllinks/resultsiteration/?q=&taskName=<%= elem.name %>&currentPage=1" class="fa fa-eye" data-toggle="tooltip" data-placement="top" title="see results" data-taskid="<%= elem.id %>"></a>
                               
                               </td>
 

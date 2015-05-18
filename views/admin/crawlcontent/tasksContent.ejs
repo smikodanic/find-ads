@@ -1,0 +1,318 @@
+<%- include('../0partials/01head'); -%>
+
+<body>
+
+    <div id="wrapper">
+
+        <!-- Navigation -->
+        <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+            <%- include('../0partials/05top_menu'); -%>
+            <%- include('../0partials/10left_menu'); -%>
+        </nav>
+
+        <div id="page-wrapper">
+
+            <div class="container-fluid">
+
+                <!-- Page Heading -->
+                <div class="row">
+                    <div class="col-lg-12">
+                        
+                        <h1 class="page-header">
+                            Content Tasks
+                        </h1>
+
+                        <ol class="breadcrumb">
+                          <li>Crawl Content</li>
+                          <li><a href="/admin/crawlcontent/tasks">Content Tasks</a></li>
+                        </ol>
+
+                        Tasks for extracting content from queued links.
+
+                    </div>
+                </div>
+                <!-- /.row -->
+
+                <div class="clearfix">&nbsp;</div>
+                <div class="row">
+
+                    <!-- table -->
+                    <div class="col-lg-12">
+                        <table class="table table-stripped table-hover table-condensed table-bordered">
+                            
+                            <tr>
+                                <th title="content task ID">id</th>
+                                <th title="content task name">name</th>
+                                <th title="linkQueue collection">link queue</th>
+                                <th>cron</th>
+                                <th title="cron job status: on or off">status</th>
+                                <th style="width:130px">action</th>
+                            </tr>
+
+
+                            <% tasks.forEach(function (elem) { %>
+                            <tr style="font-size:smaller">
+                              <td><%= elem.id %></td>
+                              <td><%= elem.name %></td>
+                              <td><%= elem.linkQueue %></td>
+                              <td><%= elem.cron %></td>
+                              <td><%= elem.status %></td>
+
+                              <td>
+                                
+                                <a href="/admin/crawlcontent/tasks/delete/<%= elem.id %>" class="fa fa-trash" data-toggle="tooltip" data-placement="top" title="delete"></a>
+                                <a href="/admin/crawlcontent/tasks/edit/<%= elem.id %>" class="fa fa-pencil-square-o" data-toggle="tooltip" data-placement="top" title="edit"></a>
+                                <a href="/admin/crawlcontent/tasks/start/<%= elem.id %>" class="fa fa-play crawl-start" data-toggle="tooltip" data-placement="top" title="crawl now" data-taskid="<%= elem.id %>"></a>
+                                <a href="/admin/crawlcontent/results/?q=&taskName=<%= elem.name %>&currentPage=1" class="fa fa-eye" data-toggle="tooltip" data-placement="top" title="see results" data-taskid="<%= elem.id %>"></a>
+                              
+                              </td>
+
+                            </tr>
+                            <% }); %>
+
+                        </table>
+
+
+                        <div class="clearfix">&nbsp;</div><br>
+
+                        <!-- delete all documents -->                        
+                        <a href="/admin/crawlcontent/tasks/delete/all" class="btn btn-danger btn-sm">Delete All</a>
+                        <a href="/admin/crawlcontent/tasks/disable" class="btn btn-info btn-sm">Disable All</a>
+                        <a href="/admin/crawlcontent/tasks" class="btn btn-info btn-sm">Insert New</a>
+
+                    </div>
+
+
+                    <div class="clearfix">&nbsp;</div><br><br>
+
+
+
+                    <!-- form -->
+                    <div class="col-lg-12 well">
+
+
+
+                        <form action="/admin/crawlcontent/tasks/insert" method="POST" enctype="application/x-www-form-urlencoded" class="form-horizontal">
+                            
+                        <div class="form-group">
+                          <label for="id" class="col-sm-3  control-label" title="Readonly value">ID:</label>
+                          <div class="col-sm-2">
+                            <input type="text" name="id" id="id" value="" class="form-control" readonly>
+                          </div>
+                        </div>
+
+
+                        <div class="form-group">
+                            <label for="linkQueue" class="col-sm-3 control-label" title="Select linkQueue for this task.">Link Queue:</label>
+                            <div class="col-sm-4">
+                              <select name="linkQueue" id="linkQueue" class="form-control">
+                                  <option value=""></option>
+
+                                <% linkQueue_colls.forEach(function(elem){ %>
+                                  <option value="<%= elem.collectionName %>" ><%= elem.collectionName %></option>
+                                <% }); %>
+
+                              </select>
+                            </div>
+                            <div class="col-sm-5">
+                              <p id="linkResults"></p>
+                            </div>
+                        </div>
+
+
+                        <div class="form-group">
+                          <label for="name" class="col-sm-3 control-label" title="Task name for extracting content.">Name:</label>
+                          <div class="col-sm-7">
+                            <input type="text" name="name" id="name" value="" class="form-control" required>
+                          </div>
+                        </div>
+
+                        <div class="form-group">
+                          <label class="col-sm-3 control-label" for="description" title="Short description of this task. Example: Grab content links from adsuu.com in business category - pagination from 1 to 25.">Description:</label>
+                          <div class="col-sm-7">
+                            <textarea name="description" id="description" class="form-control" rows="2" required></textarea>
+                          </div>
+                        </div>
+
+                        <div class="form-group">
+                          <label for="cron" class="col-sm-3  control-label" title="Cron job schedule. Example: 0 17 ? * 0,4-6">Cron:</label>
+                          <div class="col-sm-9">
+                            <input type="text" name="cron" id="cron" value="" class="form-control" required>
+                          </div>
+                        </div>
+
+                        <div class="form-group">
+                          <label for="crawlInterval" class="col-sm-3 control-label" title="Set the crawling interval between two crawlings in miliseconds. It's crawling speed.">crawlInterval:</label>
+                          <div class="col-sm-2">
+                            <input type="text" name="crawlInterval" id="crawlInterval" value="" class="form-control" required>
+                          </div>
+                          <label class="control-label">ms</label>
+                        </div>
+
+                        <div class="form-group">
+                          <label for="status" class="col-sm-3 control-label" title="If you want cron job to become active select 'On'. Otherwise select 'Off'.">Status:</label>
+                          <div class="col-sm-2">
+                            <select name="status" id="status" class="form-control">
+                              <option value="1" <%= (task.id !== undefined && task.status == 1 ) ? 'selected' : ''; %> >On</option>
+                              <option value="0" <%= (task.id !== undefined && task.status == 0 ) ? 'selected' : ''; %> >Off</option>
+                            </select>
+                          </div>
+                        </div>
+
+                        <!-- selectors -->
+                        <div class="col-sm-12 well"  id="selectors">
+
+                          <div class="form-group">
+                            <label for="" class="col-sm-3 control-label" title="Define CSS selectors in name=value pair.">Selectors:</label>
+                            <div class="col-sm-2">
+                              <button class="btn btn-default" title="Add new name=value pair" id="addSel">Add new</button>
+                            </div>
+                          </div>                          
+                          
+                          <div class="form-group">
+                            <div class="col-sm-2 col-sm-offset-3">
+                              <input type="text" name="selectorName[]" value="" class="form-control" placeholder="name" required>
+                            </div>
+                            <div class="col-sm-6">
+                              <input type="text" name="selectorValue[]" value="" class="form-control" placeholder="value" required>
+                            </div>
+                            <div class="col-sm-1">
+                              <label for="" class="col-sm-3 control-label fa fa-times-circle remSel" title="Delete this selector"></label>
+                            </div>
+                          </div>
+  
+                          <div class="form-group">                          
+                            <div class="col-sm-2   col-sm-offset-3">
+                              <input type="text" name="selectorName[]" value="" class="form-control" placeholder="name" required>
+                            </div>
+                            <div class="col-sm-6">
+                              <input type="text" name="selectorValue[]" value="" class="form-control" placeholder="value" required>
+                            </div>
+                            <div class="col-sm-1">
+                              <label for="" class="col-sm-3 control-label fa fa-times-circle remSel" title="Delete this selector"></label>
+                            </div>
+                          </div>
+
+                          <div class="form-group">                          
+                            <div class="col-sm-2   col-sm-offset-3">
+                              <input type="text" name="selectorName[]" value="" class="form-control" placeholder="name" required>
+                            </div>
+                            <div class="col-sm-6">
+                              <input type="text" name="selectorValue[]" value="" class="form-control" placeholder="value" required>
+                            </div>
+                            <div class="col-sm-1">
+                              <label for="" class="col-sm-3 control-label fa fa-times-circle remSel" title="Delete this selector"></label>
+                            </div>
+                          </div>
+                          
+                        </div>
+                        <!-- selectors end -->
+                        
+
+                        <div class="clearfix">&nbsp;</div>
+                        <br>
+
+                        <div class="form-group">
+                          <div class="col-sm-4 col-sm-offset-2">
+                            <input type="submit" value="Insert" class="btn btn-info btn-lg">
+                          </div>
+                        </div>
+
+                        </form>
+                    </div>
+                    <!--  form end -->
+
+                    <div class="col-sm-12 lightbox">
+                      <span class="fa fa-times-circle close"></span>
+                      Console: 
+                      <br>
+                      <iframe src="" frameborder="1" class="crawl-console">
+                        
+                      </iframe>
+                      
+                    </div>
+
+                </div>
+                <!-- /.row -->
+
+            </div>
+            <!-- /.container-fluid -->
+
+        </div>
+        <!-- /#page-wrapper -->
+
+    </div>
+    <!-- /#wrapper -->
+    
+
+    <%- include('../0partials/15js_static'); -%>
+
+<script>
+/* Bootstrap tooltip activation */
+  $(document).ready(function(){
+   // $("#id").focus();
+   var options = {
+    placement: "right",
+    delay: 800
+   };
+   $("label, a.fa, button").tooltip(options);
+  });
+</script>
+
+<script>
+  //Adding new selector e.g. name=value pair
+  $('#addSel').on('click', function (event) {
+    event.preventDefault();
+    
+    var htmlCode = '\
+    <div class="form-group">\
+      <div class="col-sm-2   col-sm-offset-3">\
+        <input type="text" name="selectorName[]" value="" class="form-control" placeholder="name" required>\
+      </div>\
+      <div class="col-sm-6">\
+        <input type="text" name="selectorValue[]" value="" class="form-control" placeholder="value" required>\
+      </div>\
+      <div class="col-sm-1">\
+        <label for="" class="col-sm-3 control-label fa fa-times-circle remSel" title="Delete this selector"></label>\
+      </div>\
+    </div>';
+
+    $('#selectors').append(htmlCode);
+  });
+
+
+
+  //removing selector e.g. name=value pair
+  $(document).on('click', '.remSel', function () { //works on dynamically created .remSel elements
+    $(this).parents().eq(1).remove();
+    console.log('okk');
+  });
+
+</script>
+
+
+<script>
+//show link to link crawling results
+$('#linkQueue').change(function () {
+
+  var linkQueue_val = $(this).val();
+
+  if (linkQueue_val !== '') {
+    var taskName = linkQueue_val.replace('linkQueue_', '');
+    $('#linkResults')
+      .html('<a href="/admin/crawllinks/resultsiteration/?q=&taskName=' + taskName + '&currentPage=1" target="_blank">Preview links for <b>' + taskName + '</b> task!</a>')
+      .hide()
+      .fadeIn(1500);
+
+    //set name value
+    $('#name').val(taskName);
+  } else {
+    $('#linkResults').fadeOut(1500);
+  }
+
+});
+</script>
+
+</body>
+
+</html>

@@ -14,7 +14,8 @@ module.exports = {
   mongo: {
     dbName: 'mongodb://localhost:27017/crawler',
     dbColl_category: 'category',
-    dbColl_tasks1: 'tasks_iteratePagination'
+    dbColl_tasks1: 'taskLink_iterate',
+    dbColl_tasksCnt: 'contentTasks'
   }
 
 };

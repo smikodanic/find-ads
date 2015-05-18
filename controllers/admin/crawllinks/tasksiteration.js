@@ -3,8 +3,7 @@ var express = require('express');
 var router = express.Router();
 // var nodedump = require('nodedump').dump;
 var login = require('libraries/account_login.js');
-var logg = require('libraries/logging.js');
-var task_model = require('models/task_model');
+var taskLink_model = require('models/taskLink_model');
 var crawloop = require('0crawler/tasksiteration_loop');
 
 var cb_list_Render = function (res, moTasksDocs_arr, moCatsDocs_arr) {
@@ -36,7 +35,7 @@ module.exports = function (router) {
     var sess_tf = login.checksess_user_pass(req);
 
     if (sess_tf) {
-      task_model.listTasks(res, cb_list_Render);
+      taskLink_model.listTasks(res, cb_list_Render);
     } else {
       res.redirect('/admin');
     }
@@ -51,7 +50,7 @@ module.exports = function (router) {
     var sess_tf = login.checksess_user_pass(req);
 
     if (sess_tf) {
-      task_model.insertTask(req, res);
+      taskLink_model.insertTask(req, res);
     } else {
       res.redirect('/admin');
     }
@@ -66,7 +65,7 @@ module.exports = function (router) {
     var sess_tf = login.checksess_user_pass(req);
 
     if (sess_tf) {
-      task_model.deleteTask(req, res);
+      taskLink_model.deleteTask(req, res);
     } else {
       res.redirect('/admin');
     }
@@ -81,7 +80,7 @@ module.exports = function (router) {
     var sess_tf = login.checksess_user_pass(req);
 
     if (sess_tf) {
-      task_model.editTask(req, res, cb_list2_Render);
+      taskLink_model.editTask(req, res, cb_list2_Render);
     } else {
       res.redirect('/admin');
     }
@@ -96,7 +95,7 @@ module.exports = function (router) {
     var sess_tf = login.checksess_user_pass(req);
 
     if (sess_tf) {
-      task_model.updateTask(req, res);
+      taskLink_model.updateTask(req, res);
     } else {
       res.redirect('/admin');
     }
@@ -110,7 +109,7 @@ module.exports = function (router) {
     var sess_tf = login.checksess_user_pass(req);
 
     if (sess_tf) {
-      task_model.disableTasks(res);
+      taskLink_model.disableTasks(res);
     } else {
       res.redirect('/admin');
     }

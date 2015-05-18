@@ -18,7 +18,6 @@ module.exports.insertTask = function (req, res) {
   var insDoc;
   if (req.body.name !== '' && req.body.iteratingurl !== '') {
     insDoc = req.body;
-    insDoc.id = parseInt(req.body.id, 10); //convert 'id' from string into number
   } else {
     insDoc = null;
   }
@@ -101,12 +100,25 @@ module.exports.deleteTask = function (req, res) {
   MongoClient.connect(dbName, function (err, db) {
     if (err) { logg.me('error', __filename + ':101 ' + err); }
 
-    db.collection(collName).remove(selector, options, function (err, status) {
-      if (err) { logg.me('error', __filename + ':104 ' + err); }
+    db.collection(collName).find(selector).toArray(function (err, moTasksDocs_arr) { // get task name to define linkQueue_* collection
+      if (err) { logg.me('error', __filename + ':105 ' + err); }
 
-      // logg.me('info', __filename + ':107 Deleted records:' + status);
-      db.close();
-      res.redirect('/admin/crawllinks/tasksiteration');
+      //get collection name
+      var collName_linkQueue = 'linkQueue_' + moTasksDocs_arr[0].name;
+
+      db.collection(collName_linkQueue).drop(function (err) { //delete linkQueue_* collection where links are stored
+        if (err) { logg.me('error', __filename + ':110 ' + err); }
+
+        db.collection(collName).remove(selector, options, function (err, status) { //delete task document
+          if (err) { logg.me('error', __filename + ':105 ' + err); }
+
+          // logg.me('info', __filename + ':110 Deleted records:' + status);
+          db.close();
+          res.redirect('/admin/crawllinks/tasksiteration');
+        });
+
+      });
+
     });
 
   }); //connect
@@ -169,7 +181,7 @@ module.exports.updateTask = function (req, res) {
     db.collection(collName).update(selector, newDoc, function (err, status) {
       if (err) { logg.me('error', __filename + ':169 ' + err); }
 
-      logg.me('info', __filename + ':172 Updated records: ' + status);
+      // logg.me('info', __filename + ':172 Updated records: ' + status);
       db.close();
       res.redirect('/admin/crawllinks/tasksiteration/edit/' + id_req);
     });

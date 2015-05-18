@@ -41,3 +41,12 @@ iframe.crawl-console {
 	opacity: 1;
 	z-index: 20001;
 }
+
+/* remove selector's name=value pair */
+.remSel {
+	color: #FD5D5D;
+	cursor: pointer;
+}
+.remSel:hover {
+	color: #FF0B0B;
+}
