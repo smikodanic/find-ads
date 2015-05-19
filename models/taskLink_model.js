@@ -49,7 +49,7 @@ module.exports.insertTask = function (req, res) {
 
       });
     } else {
-      res.send('Cannot insert empty doc!');
+      res.send('Cannot insert empty doc! <script>setTimeout(function(){window.location.href="/admin/crawlcontent/tasks"}, 1500);</script>');
     }
 
   }); //connect

@@ -92,12 +92,26 @@
 
                         <span class="fa fa-times-circle close lightbox-close"></span>
 
-                        <form action="/admin/crawlcontent/tasks/insert" method="POST" enctype="application/x-www-form-urlencoded" class="form-horizontal">
+
+                        <% //define form action value
+                          var act, tit;
+                          if (task.id !== undefined) {
+                            act = '/admin/crawlcontent/tasks/update/' + task.id;
+                            tit = 'Edit Task';
+                          } else {
+                            act = '/admin/crawlcontent/tasks/insert';
+                            tit = 'Insert New Task';
+                          }
+                      %>
+
+                        <h3><%= tit %></h3>
+
+                        <form action="<%= act %>" method="POST" enctype="application/x-www-form-urlencoded" class="form-horizontal">
                             
                         <div class="form-group">
                           <label for="id" class="col-sm-3 control-label" title="Task id number. Readonly value.">ID:</label>
                           <div class="col-sm-2">
-                            <input type="text" name="id" id="id" value="" class="form-control" readonly>
+                            <input type="text" name="id" id="id" value="<%= task.id %>" class="form-control" readonly>
                           </div>
                         </div>
 
@@ -109,7 +123,7 @@
                                   <option value=""></option>
 
                                 <% linkQueue_colls.forEach(function(elem){ %>
-                                  <option value="<%= elem.collectionName %>" ><%= elem.collectionName %></option>
+                                  <option value="<%= elem.collectionName %>" <%= (elem.collectionName === task.linkQueue) ? 'selected' : '' %> ><%= elem.collectionName %></option>
                                 <% }); %>
 
                               </select>
@@ -123,28 +137,28 @@
                         <div class="form-group">
                           <label for="name" class="col-sm-3 control-label" title="Task name for extracting content.">Name:</label>
                           <div class="col-sm-7">
-                            <input type="text" name="name" id="name" value="" class="form-control" required>
+                            <input type="text" name="name" id="name" value="<%= task.name %>" class="form-control" required>
                           </div>
                         </div>
 
                         <div class="form-group">
                           <label class="col-sm-3 control-label" for="description" title="Short description of this task. Example: Grab content links from adsuu.com in business category - pagination from 1 to 25.">Description:</label>
                           <div class="col-sm-7">
-                            <textarea name="description" id="description" class="form-control" rows="2" required></textarea>
+                            <textarea name="description" id="description" class="form-control" rows="2" required><%= task.description %></textarea>
                           </div>
                         </div>
 
                         <div class="form-group">
                           <label for="cron" class="col-sm-3  control-label" title="Cron job schedule. Example: 0 17 ? * 0,4-6">Cron:</label>
                           <div class="col-sm-9">
-                            <input type="text" name="cron" id="cron" value="" class="form-control" required>
+                            <input type="text" name="cron" id="cron" value="<%= task.cron %>" class="form-control" required>
                           </div>
                         </div>
 
                         <div class="form-group">
                           <label for="crawlInterval" class="col-sm-3 control-label" title="Set the crawling interval between two crawlings in miliseconds. It's crawling speed.">crawlInterval:</label>
                           <div class="col-sm-2">
-                            <input type="text" name="crawlInterval" id="crawlInterval" value="" class="form-control" required>
+                            <input type="text" name="crawlInterval" id="crawlInterval" value="<%= task.crawlInterval %>" class="form-control" required>
                           </div>
                           <label class="control-label">ms</label>
                         </div>
@@ -169,6 +183,13 @@
                             </div>
                           </div>                          
                           
+
+
+
+                          <% // INSERT
+                           if (task.id === undefined) { 
+                          %>
+
                           <div class="form-group">
                             <div class="col-sm-2 col-sm-offset-3">
                               <input type="text" name="selectorName[]" value="title" class="form-control" placeholder="name" required>
@@ -204,18 +225,52 @@
                               <label for="" class="col-sm-3 control-label fa fa-times-circle remSel" title="Delete this selector"></label>
                             </div>
                           </div>
-                          
+
+                          <% 
+                            } else {
+                              var propArr, selectorName, selectorValue;
+                              task.selectors.forEach(function (elem) {
+                                propArr = Object.keys(elem); //get array of 'elem' object properties
+                                selectorName = propArr[0];
+
+                                selectorValue = elem[selectorName];
+                          %>
+
+                          <div class="form-group">                          
+                            <div class="col-sm-2   col-sm-offset-3">
+                              <input type="text" name="selectorName[]" value="<%= selectorName %>" class="form-control" required>
+                            </div>
+                            <div class="col-sm-6">
+                              <input type="text" name="selectorValue[]" value="<%= selectorValue %>" class="form-control" required>
+                            </div>
+                            <div class="col-sm-1">
+                              <label for="" class="col-sm-3 control-label fa fa-times-circle remSel" title="Delete this selector"></label>
+                            </div>
+                          </div>
+
+                          <%
+                              }); //forEach end
+                            } //else end
+                          %>
+
                         </div>
                         <!-- selectors end -->
                         
 
                         <div class="clearfix">&nbsp;</div>
-                        <br>
 
                         <div class="form-group">
-                          <div class="col-sm-4 col-sm-offset-2">
-                            <input type="submit" value="Insert" class="btn btn-info btn-lg">
+                          
+                          <div class="col-sm-4 col-sm-offset-3">
+                            <input type="submit" value="<%= (task.id !== undefined) ? 'Update' : 'Insert'; %>" class="btn btn-info btn-lg">
                           </div>
+
+                          <% if (task.id !== undefined) { %>
+                            <div class="col-sm-4">
+                              <input type="submit" value="Insert Simmilar" class="btn btn-info btn-lg" formaction="/admin/crawlcontent/tasks/insert">
+                            </div>
+                          <% } %>
+
                         </div>
 
                         </form>
@@ -350,7 +405,7 @@ var lightbox = function (sel) {
 
 $(document).ready(function () {
   
-  /* Show form for inserting/updating a task */
+  /* Show form for inserting task */
   var sel1 = "#lightbox-form"; //selector to be affected by lightbox function
   $(sel1).hide();
   $('#insertTask').click(function (event) {
@@ -370,9 +425,23 @@ $(document).ready(function () {
   });
 
 
+  /* Show form for editing/updating task */
+  //change URL
+  $('.editTask').click(function (event) {
+    event.preventDefault(); //prevent A tag behaviour
+    var href = $(this).attr('href');
+    window.location.href = href;
+  });
+  //show form in lightbox if URL contains word 'edit'
+  if (window.location.href.indexOf('edit') !== -1 ) { 
+    lightbox(sel1);
+  }
+
+
   /* hide lightbox */
     $('.lightbox-close').on('click', function() {
       $(this).parent().fadeOut();
+      window.location.href = '/admin/crawlcontent/tasks'; //reset URL
     });
 });
 
