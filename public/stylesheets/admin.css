@@ -32,15 +32,40 @@ iframe.crawl-console {
 	background-color: #f0f0f0;
 }
 
+
+
 /* lightbox */
+.lightbox {
+	background-color: rgba(100,100,100,0.95);
+  border: 5px solid #E0DEDC;
+  z-index: 20000;
+  padding: 20px !important;
+  margin-top: 50px;
+  padding: 20px;
+}
 .lightbox .close {
 	font-size: 24px;
-	font-weight: bold;
-	color: #000;
+	color: #f0f0f0;
 	float: right;
-	opacity: 1;
-	z-index: 20001;
 }
+.lightbox .close:hover {
+	color: #eee;
+}
+.lightbox form label:not(.remSel) {
+	color: #f0f0f0;
+	opacity: 1;
+}
+.lightbox #linkResults > a {
+	color: #6FC5FF;
+	opacity: 1;
+	margin-top: 5px;
+}
+.lightbox #linkResults > a:hover {
+	color: #C8E8FF;
+}
+
+
+
 
 /* remove selector's name=value pair */
 .remSel {

@@ -112,4 +112,36 @@ module.exports.insertTask = function (req, res) {
 };
 
 
+module.exports.deleteTask = function (req, res) {
+
+  //id from req e.g. from URI
+  var id_req = parseInt(req.params.id, 10); //use parseint to convert string into number
+
+  //define selector and deleting options
+  var selector, options;
+  if (req.params.id === 'all') {
+    selector = {};
+    options = {};
+  } else {
+    // selector = {id: id_req};
+    selector = {"id": id_req};
+    options = {};
+  }
+
+  MongoClient.connect(dbName, function (err, db) {
+    if (err) { logg.me('error', __filename + ':132 ' + err); }
+
+    db.collection(collName_tasksCnt).remove(selector, options, function (err) { //delete task document
+      if (err) { logg.me('error', __filename + ':105 ' + err); }
+
+      // logg.me('info', __filename + ':110 Deleted records:' + status);
+      db.close();
+      res.redirect('/admin/crawlcontent/tasks');
+    });
+
+  }); //connect
+
+};
+
+
 
