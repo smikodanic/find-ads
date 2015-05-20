@@ -68,7 +68,7 @@
                                 
                                 <a href="/admin/crawlcontent/tasks/delete/<%= elem.id %>" class="fa fa-trash deleteTask" title="delete"></a>
                                 <a href="/admin/crawlcontent/tasks/edit/<%= elem.id %>" class="fa fa-pencil-square-o editTask" title="edit"></a>
-                                <a href="/admin/crawlcontent/tasks/start/<%= elem.id %>" class="fa fa-play crawl-start" title="crawl now" data-taskid="<%= elem.id %>"></a>
+                                <a href="/admin/crawlcontent/tasks/start/<%= elem.id %>" class="fa fa-play crawlStart" title="crawl now" data-taskid="<%= elem.id %>"></a>
                                 <a href="/admin/crawlcontent/results/?q=&amp;taskName=<%= elem.name %>&amp;currentPage=1" class="fa fa-eye" title="see results" data-taskid="<%= elem.id %>"></a>
                               
                               </td>
@@ -152,6 +152,28 @@
                           <div class="col-sm-7">
                             <textarea name="description" id="description" class="form-control" rows="2" required><%= task.description %></textarea>
                           </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="category" class="col-sm-3 control-label" title="Select category for this task.">Category:</label>
+                            <div class="col-sm-4">
+                              <select name="category" id="category" class="form-control">
+                                    <option value="">All</option>
+
+                                  <% cats.forEach(function(elem){ %>
+                                    <option value="<%= elem.id %>" <%= (task.category == elem.id ) ? 'selected' : ''; %> ><%= elem.category %> (<%= elem.id %>)</option>
+                                  <% }); %>
+                              </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="subcategory" class="col-sm-3 control-label" title="Select subcategory relevant to selected category.">Subcategory:</label>
+                            <div class="col-sm-4">
+                              <select name="subcategory" id="subcategory" class="form-control">
+
+                              </select>
+                            </div>
                         </div>
 
                         <div class="form-group">
@@ -289,17 +311,25 @@
                 <!-- delete task -->
                 <div class="row">
                   <div class="col-sm-4 col-sm-offset-4 lightbox" id="lightbox-delete">
-
-                        <span class="fa fa-times-circle close lightbox-close"></span>
-                        <p>Do you want to delete this task?</p>
-                        <br>
-                        <a href="" id="deleteTaskYes" class="btn btn-danger">Yes</a>
-                        <button id="deleteTaskNo" class="btn btn-warning lightbox-close">No, thanks</button>
+                    <span class="fa fa-times-circle close lightbox-close"></span>
+                    <p>Do you want to delete this task?</p>
+                    <br>
+                    <a href="" id="deleteTaskYes" class="btn btn-danger">Yes</a>
+                    <button id="deleteTaskNo" class="btn btn-warning lightbox-close">No, thanks</button>
+                  </div>
                 </div>
                 <!-- delete task end -->
 
-            </div>
-            <!-- /.container-fluid -->
+
+                <!-- lightbox crawling console -->
+                <div class="row">
+                  <div class="col-sm-12 lightbox" id="lightbox-console">
+                    <span class="fa fa-times-circle close lightbox-close"></span>
+                    <h3>Crawl results</h3>
+                    <iframe src="" frameborder="1"></iframe>
+                  </div>
+                </div>
+                <!-- lightbox crawling console end-->
 
         </div>
         <!-- /#page-wrapper -->
@@ -363,7 +393,7 @@ $(document).ready(function(){
 
 
 <script>
-//show link to link crawling results
+//show link to crawling results
 $('#linkQueue').change(function () {
 
   var linkQueue_val = $(this).val();
@@ -382,6 +412,39 @@ $('#linkQueue').change(function () {
   }
 
 });
+</script>
+
+
+<script>
+/* append relevant subcategories into SELECT tag */
+  $(document).ready(function(){
+
+    //option tag for task to edit
+    var task = <%- JSON.stringify(task, null, 2) %>; //sent from links.js controller file
+    if (task.subcategory !== undefined) {
+      $('#subcategory').html('<option value="' + task.subcategory + '"> (' + task.subcategory + ') </option>');
+    }
+
+    $('#category').change(function(){
+      var val = $(this).val();
+      var cats = <%- JSON.stringify(cats, null, 2) %>; //'cats' comes from links_iterateurl.ejs
+      
+      $('#subcategory > option').remove();
+
+      // console.log(JSON.stringify(cats[val].subcats, null, 2));
+      if (cats[val] !== undefined) {
+        cats[val].subcats.forEach(function (elem, index) {
+
+          $('#subcategory').append('<option value="' + index + '">' + elem + '(' + index + ')' + '</option>');
+          // console.log(elem);
+        });
+      }
+
+      $('#subcategory').prepend('<option value="" selected>All</option>');
+
+    });
+
+  });
 </script>
 
 
@@ -460,12 +523,27 @@ $(document).ready(function () {
     lightbox(sel1);
   }
 
+  /* Show crawl console */
+  var sel3 = '#lightbox-console';
+  $(sel3).hide();
+  $('.crawlStart').click(function (event) {
+    event.preventDefault(); //prevent A tag behaviour
+    
+    lightbox(sel3);
+
+    //start crawling by adding URL into iframe's SRC attribute
+    var taskID = $(this).attr('data-taskid');
+    $('.lightbox > iframe').attr('src', '/admin/crawlcontent/tasks/start/' + taskID);
+  });
+
+
 
   /* hide lightbox */
-    $('.lightbox-close').on('click', function() {
-      $(this).parent().fadeOut();
-      window.location.href = '/admin/crawlcontent/tasks'; //reset URL
-    });
+  $('.lightbox-close').on('click', function () {
+    $(this).parent().fadeOut();
+    window.location.href = '/admin/crawlcontent/tasks'; //reset URL
+  });
+
 });
 
 </script>

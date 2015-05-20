@@ -32,10 +32,9 @@ var logger = new (winston.Logger)({
 
 module.exports.me = function (logLevel, message) {
 
-  if (dev_pro === 'dev') { //development mode: logging to file and console
+  if (dev_pro === 'dev') { //development mode: logging to console
 
-    logger.add(winston.transports.Console);
-    logger.log(logLevel, message);
+    winston.log(logLevel, message);
 
   } else { //production mode: logging only to file
 

@@ -40,10 +40,10 @@ var createSelectors = function (req) {
 module.exports.listTasks = function (res, cb_list) {
 
   MongoClient.connect(dbName, function (err, db) {
-    if (err) { logg.me('error', __filename + ':18 ' + err); }
+    if (err) { logg.me('error', __filename + ':43 ' + err); }
 
     db.collections(function (err, colls) { //get all collections from database
-      if (err) { logg.me('error', __filename + ':21 ' + err); }
+      if (err) { logg.me('error', __filename + ':46 ' + err); }
 
       //filtering only linkQueue_* collections from array
       var linkQueue_colls = colls.filter(function (elem) {
@@ -51,11 +51,16 @@ module.exports.listTasks = function (res, cb_list) {
         return reg.test(elem.collectionName); //returns true or false
       });
 
-      db.collection(collName_tasksCnt).find({}).sort({id: 1}).toArray(function (err, moTasksDocs_arr) {
-        if (err) { logg.me('error', __filename + ':30 ' + err); }
+      db.collection(collName_tasksCnt).find({}).sort({id: 1}).toArray(function (err, moTasksDocs_arr) { //content tasks
+        if (err) { logg.me('error', __filename + ':55 ' + err); }
 
-        cb_list(res, linkQueue_colls, moTasksDocs_arr);
-        db.close();
+        db.collection(collName_cat).find({}).sort({id: 1}).toArray(function (err, moCatsDocs_arr) { //categories
+          if (err) { logg.me('error', __filename + ':58 ' + err); }
+
+          cb_list(res, linkQueue_colls, moTasksDocs_arr, moCatsDocs_arr);
+          db.close();
+        });
+
       });
 
     });
@@ -185,8 +190,13 @@ module.exports.editTask = function (req, res, cb_list2) {
         db.collection(collName_tasksCnt).find(selector).toArray(function (err, moTaskEdit_arr) { //get current task (by 'id') to edit that task
           if (err) { logg.me('error', __filename + ':170 ' + err); }
 
-          cb_list2(res, linkQueue_colls, moTasksDocs_arr, moTaskEdit_arr);
-          db.close();
+          db.collection(collName_cat).find({}).sort({id: 1}).toArray(function (err, moCatsDocs_arr) {
+            if (err) { logg.me('error', __filename + ':194 ' + err); }
+
+            cb_list2(res, linkQueue_colls, moTasksDocs_arr, moCatsDocs_arr, moTaskEdit_arr);
+            db.close();
+          });
+
         });
 
       });
