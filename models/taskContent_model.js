@@ -240,3 +240,27 @@ module.exports.updateTask = function (req, res) {
   }); //connect
 
 };
+
+
+module.exports.disableTasks = function (res) {
+
+  var selectorDB = {};
+  var update = {$set: {"status": 0}};
+  var options = {
+    multi: true //update multiple documents
+  };
+
+  MongoClient.connect(dbName, function (err, db) {
+    if (err) { logg.me('error', __filename + ':254 ' + err); }
+
+    db.collection(collName_tasksCnt).update(selectorDB, update, options, function (err, status) {
+      if (err) { logg.me('error', __filename + ':257 ' + err); }
+
+      // logg.me('info', __filename + ':197 Updated records: ' + status);
+      db.close();
+      res.redirect('/admin/crawlcontent/tasks');
+    });
+
+  }); //connect
+
+};

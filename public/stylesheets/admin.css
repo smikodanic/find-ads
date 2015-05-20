@@ -64,10 +64,6 @@ iframe.crawl-console {
 	color: #C8E8FF;
 }
 
-input[readonly], input[readonly="readonly"] {
-	background-color: #eee;
-}
-
 
 /* remove selector's name=value pair */
 .remSel {

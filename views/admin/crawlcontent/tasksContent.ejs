@@ -44,6 +44,7 @@
                                 <th title="content task ID">id</th>
                                 <th title="content task name">name</th>
                                 <th title="linkQueue collection">link queue</th>
+                                <th title="CSS selectors for extracting data">extract data</th>
                                 <th>cron</th>
                                 <th title="cron job status: on or off">status</th>
                                 <th style="width:130px">action</th>
@@ -55,6 +56,11 @@
                               <td><%= elem.id %></td>
                               <td><%= elem.name %></td>
                               <td><%= elem.linkQueue %></td>
+                              <td>
+                                <% elem.selectors.forEach(function (elem) { %>
+                                  <%= Object.keys(elem) %> ,
+                                <% }); %>
+                              </td>
                               <td><%= elem.cron %></td>
                               <td><%= elem.status %></td>
 
@@ -76,7 +82,7 @@
                         <div class="clearfix">&nbsp;</div><br>
 
                         <!-- delete all documents -->                        
-                        <a href="/admin/crawlcontent/tasks/delete/all" class="btn btn-danger btn-sm">Delete All</a>
+                        <a href="/admin/crawlcontent/tasks/delete/all" class="btn btn-danger btn-sm"  id="deleteAll">Delete All</a>
                         <a href="/admin/crawlcontent/tasks/disable" class="btn btn-info btn-sm">Disable All</a>
                         <a href="/admin/crawlcontent/tasks" class="btn btn-info btn-sm" id="insertTask">Insert New</a>
 
@@ -285,7 +291,7 @@
                   <div class="col-sm-4 col-sm-offset-4 lightbox" id="lightbox-delete">
 
                         <span class="fa fa-times-circle close lightbox-close"></span>
-                        Do you want to delete this task?
+                        <p>Do you want to delete this task?</p>
                         <br>
                         <a href="" id="deleteTaskYes" class="btn btn-danger">Yes</a>
                         <button id="deleteTaskNo" class="btn btn-warning lightbox-close">No, thanks</button>
@@ -414,13 +420,30 @@ $(document).ready(function () {
   });
 
 
-  /* Show delete buttons */
+  /* Show delete one task buttons */
   var sel2 = "#lightbox-delete"; //selector to be affected by lightbox function
   $(sel2).hide();
   $('.deleteTask').click(function (event) {
     event.preventDefault(); //prevent A tag behaviour
+    
     var href = $(this).attr('href');
     $('#deleteTaskYes').attr('href', href);
+    
+    lightbox(sel2);
+  });
+
+
+  /* Show delete all tasks buttons */
+  var sel2 = "#lightbox-delete"; //selector to be affected by lightbox function
+  $(sel2).hide();
+  $('#deleteAll').click(function (event) {
+    event.preventDefault(); //prevent A tag behaviour
+    
+    var href = $(this).attr('href');
+    $('#deleteTaskYes').attr('href', href);
+
+    $(sel2 + '>p').text('Do you want to delete all tasks?');
+    
     lightbox(sel2);
   });
 
