@@ -21,7 +21,22 @@ var createSelectors = function (req) {
   req.body.selectorName.forEach(function (elem, key) {
 
     if (elem !== '') {
-      selector_str = '{"type": "' + req.body.selectorType[key] + '", "name": "' + req.body.selectorName[key] + '", "value": "' + req.body.selectorValue[key] + '"}';
+
+      //input 
+      var selType =  req.body.selectorType[key];
+      var selName =  req.body.selectorName[key];
+      
+      //creating selvalue string to be JSON.parsed later
+      var selValue;
+      if (req.body.selectorValue[key].indexOf(',') !== -1) {
+        var selValue_arr = req.body.selectorValue[key].split(',');
+        selValue = '["' + selValue_arr[0].trim() + '", "' + selValue_arr[1].trim() + '"]';
+      } else {
+        selValue =  '"' + req.body.selectorValue[key] + '"';
+      }
+
+
+      selector_str = '{"type": "' + selType + '", "name": "' + selName + '", "value": ' + selValue + '}';
       selector_obj = JSON.parse(selector_str);
 
       selectors.push(selector_obj);

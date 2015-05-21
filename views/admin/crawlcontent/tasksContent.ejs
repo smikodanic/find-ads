@@ -271,6 +271,7 @@
                                 <option value="html">html</option>
                                 <option value="href">url or href attribute</option>
                                 <option value="src">image or src attribute</option>
+                                <option value="attr">any HTML attribute</option>
                               </select>
                             </div>
                             <div class="col-sm-2">
@@ -291,6 +292,7 @@
                                 <option value="html">html</option>
                                 <option value="href">url or href attribute</option>
                                 <option value="src">image or src attribute</option>
+                                <option value="attr">any HTML attribute</option>
                               </select>
                             </div>
                             <div class="col-sm-2">
@@ -311,6 +313,7 @@
                                 <option value="html">html</option>
                                 <option value="href">url or href attribute</option>
                                 <option value="src">image or src attribute</option>
+                                <option value="attr">any HTML attribute</option>
                               </select>
                             </div>                         
                             <div class="col-sm-2">
@@ -341,6 +344,7 @@
                                 <option value="html" <%= (selType === 'html') ? 'selected' : '' %> >html</option>
                                 <option value="href" <%= (selType === 'href') ? 'selected' : '' %> >url or href attribute</option>
                                 <option value="src" <%= (selType === 'src') ? 'selected' : '' %> >image or src attribute</option>
+                                <option value="attr" <%= (selType === 'attr') ? 'selected' : '' %> >any HTML attribute</option>
                               </select>
                             </div>
                             <div class="col-sm-2">
@@ -634,6 +638,19 @@ $(document).ready(function () {
 
 });
 
+</script>
+
+<script>
+//fill form field if selector type is 'attr'
+var selVal;
+$('select[name="selectorType[]"]').change(function () {
+  selVal = $(this).val();
+
+  if (selVal === 'attr') {
+    $(this).parents('.form-group').find('input[name="selectorValue[]"]').val('CSSselector, attributeName');
+  }
+
+});
 </script>
 
 

@@ -37,10 +37,10 @@ module.exports.start = function (task_id, cb_outResults) {
 
 
         /* Get link by link and extracting content. Inserting extracted content into MongoDB collection. */
-        var i = 0;
+        var i = 1;
         var intID = setInterval(function () {
 
-          if (i < linksAll_arr.length) {
+          if (i <= linksAll_arr.length) {
 
             // console.log(i + '. ' + linksAll_arr[i].tekst + ' ' + linksAll_arr[i].href);
 
@@ -50,7 +50,7 @@ module.exports.start = function (task_id, cb_outResults) {
               //get http client script: httpClient_noderequest.js in /0crawler/crawlercontent/httpclient/ directory
               var httpClient = require('0crawler/crawlcontent/httpclient/' + moTask.httpclientScript);
 
-              httpClient.node(db, moTask, linksAll_arr[i], cb_outResults);
+              httpClient.node(db, moTask, linksAll_arr[i], i, cb_outResults);
 
             } else {
 

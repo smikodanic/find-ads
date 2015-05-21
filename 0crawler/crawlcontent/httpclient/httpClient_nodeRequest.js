@@ -16,7 +16,7 @@ var collName_cnt = settings.mongo.dbColl_cnt; //'content' collection
 
 
 // HTTP client created by NodeJS module - http.request()
-module.exports.node = function (db, moTask, link, cb_outResults) {
+module.exports.node = function (db, moTask, link, i, cb_outResults) {
 
   //vars
   var url_obj = url.parse(link.href);
@@ -70,7 +70,7 @@ module.exports.node = function (db, moTask, link, cb_outResults) {
             "content": [] //array of objects
           };
 
-          var showRez = '[' + timeLib.nowLocale() + ']' + '\n Page: ' + pageURL + '\n';
+          var showRez = i + '. Page: ' + pageURL + '\n';
           cb_outResults.send(showRez);
           // console.log(showRez);
 
@@ -93,6 +93,8 @@ module.exports.node = function (db, moTask, link, cb_outResults) {
               extractedData = $(elem.value).attr('href');
             } else if (elem.type === 'src') {
               extractedData = $(elem.value).attr('src');
+            } else { //elem.tyle === 'attr'
+              extractedData = $(elem.value[0]).attr(elem.value[1]);
             }
 
             //prettify tekst
@@ -114,7 +116,7 @@ module.exports.node = function (db, moTask, link, cb_outResults) {
 
           insMoDoc.content = content_arr; //fill extracted data into 'content' property
 
-          cb_outResults.send('\n\n');
+          cb_outResults.send('[' + timeLib.nowLocale() + ']\n\n');
 
           /**
            * ------- MODEL: insert into MongoDB --------
