@@ -13,7 +13,7 @@ var collName_tasksCnt = settings.mongo.dbColl_tasksCnt;
 var collName_cat = settings.mongo.dbColl_category;
 
 /**
- * Create selectors array
+ * Create CSS selectors array
  */
 var createSelectors = function (req) {
   var selectors = [], selector_str, selector_obj;
@@ -21,7 +21,7 @@ var createSelectors = function (req) {
   req.body.selectorName.forEach(function (elem, key) {
 
     if (elem !== '') {
-      selector_str = '{"' + elem + '": "' + req.body.selectorValue[key] + '"}';
+      selector_str = '{"type": "' + req.body.selectorType[key] + '", "name": "' + req.body.selectorName[key] + '", "value": "' + req.body.selectorValue[key] + '"}';
       selector_obj = JSON.parse(selector_str);
 
       selectors.push(selector_obj);
@@ -88,7 +88,8 @@ module.exports.insertTask = function (req, res) {
   if (req.body.name !== '') {
     insDoc = req.body;
 
-    //removing selectorName and selectorValue arrays and replacing it with selectors array
+    //removing selectorType, selectorName and selectorValue arrays and replacing it with selectors array
+    delete insDoc.selectorType;
     delete insDoc.selectorName;
     delete insDoc.selectorValue;
     insDoc.selectors = selectors;
@@ -96,7 +97,7 @@ module.exports.insertTask = function (req, res) {
   } else {
     insDoc = null;
   }
-  console.log(JSON.stringify(insDoc, null, 2));
+  // console.log(JSON.stringify(insDoc, null, 2));
 
 
   MongoClient.connect(dbName, function (err, db) {
@@ -228,7 +229,8 @@ module.exports.updateTask = function (req, res) {
     //convert 'id' from string into number
     newDoc.id = parseInt(req.body.id, 10);
 
-    //removing selectorName and selectorValue arrays and replacing it with selectors array
+    //removing selectorType, selectorName and selectorValue arrays and replacing it with selectors array
+    delete newDoc.selectorType;
     delete newDoc.selectorName;
     delete newDoc.selectorValue;
     newDoc.selectors = selectors;

@@ -15,6 +15,7 @@
     "express": "~4.11.1",
     "express-enrouten": "^1.2.0",
     "express-session": "^1.11.1",
+    "follow-redirects": "0.0.3",
     "less-middleware": "1.0.x",
     "morgan": "~1.5.1",
     "rootpath": "^0.1.2",

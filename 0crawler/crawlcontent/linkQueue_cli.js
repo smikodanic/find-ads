@@ -1,14 +1,16 @@
-/*jslint unparam: true*/
-
 /**
- * Start crawling from command line: $node tasksiteration_start_cli.js 3
- * Usefull for cron job.
+ * Start crawling from command line: $node linkQueue_cli.js 2
+ * where 2 is the task ID from 'contentTasks' collection
+ * Usefull for CRON JOB.
  */
-require('rootpath')(); //enable requireing modules from application root folder
+
+
+require('rootpath')();
+var crawloop = require('0crawler/crawlcontent/pooling/linkQueue');
 
 //id from from command line process.argv
 if (process.argv.length < 3) {
-  console.log("ERROR: Use 3 command line parameters like: $node tasksiteration_start_cli.js 3 \n");
+  console.log("ERROR: Use 3 command line parameters like: $node linkQueue_cli.js 2 \n");
   process.exit();
 } else {
   var task_id = parseInt(process.argv[2], 10); //use parseint to convert string into number
@@ -37,5 +39,4 @@ var cb_outResults_null = {
 
 
 //start crawling from command line
-var crawloop = require('0crawler/tasksiteration_loop');
 crawloop.start(task_id, cb_outResults);

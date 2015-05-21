@@ -44,7 +44,7 @@
                                 <th title="content task ID">id</th>
                                 <th title="content task name">name</th>
                                 <th title="linkQueue collection">link queue</th>
-                                <th title="CSS selectors for extracting data">extract data</th>
+                                <th title="CSS selectors for extracting data">extracted data</th>
                                 <th>cron</th>
                                 <th title="cron job status: on or off">status</th>
                                 <th style="width:130px">action</th>
@@ -58,7 +58,7 @@
                               <td><%= elem.linkQueue %></td>
                               <td>
                                 <% elem.selectors.forEach(function (elem) { %>
-                                  <%= Object.keys(elem) %> ,
+                                  <%= elem.name %>,
                                 <% }); %>
                               </td>
                               <td><%= elem.cron %></td>
@@ -176,15 +176,15 @@
                             </div>
                         </div>
 
-                        <div class="form-group">
-                          <label for="cron" class="col-sm-3  control-label" title="Cron job schedule. Example: 0 17 ? * 0,4-6">Cron:</label>
-                          <div class="col-sm-9">
-                            <input type="text" name="cron" id="cron" value="<%= task.cron %>" class="form-control" required>
-                          </div>
+
+                        <!-- crawl settings -->
+                        <div class="col-sm-5 col-sm-offset-1">
+                          <h4>Crawl settings</h4>
                         </div>
+                        <div class="clearfix">&nbsp;</div>
 
                         <div class="form-group">
-                          <label for="crawlInterval" class="col-sm-3 control-label" title="Set the crawling interval between two crawlings in miliseconds. It's crawling speed.">crawlInterval:</label>
+                          <label for="crawlInterval" class="col-sm-3 control-label" title="Set the crawling interval between two crawlings in miliseconds. It's crawling speed.">Crawl Interval:</label>
                           <div class="col-sm-2">
                             <input type="text" name="crawlInterval" id="crawlInterval" value="<%= task.crawlInterval %>" class="form-control" required>
                           </div>
@@ -192,7 +192,50 @@
                         </div>
 
                         <div class="form-group">
-                          <label for="status" class="col-sm-3 control-label" title="If you want cron job to become active select 'On'. Otherwise select 'Off'.">Status:</label>
+                          <label for="poolScript" class="col-sm-3 control-label" title="Select script which will call links to be crawled.">Pooling Script:</label>
+                          <div class="col-sm-4">
+                            <select name="poolScript" id="poolScript" class="form-control">
+
+                                <% poolingFiles.forEach(function(elem){ %>
+                                <option value="<%= elem %>" <%= (task.poolScript == elem ) ? 'selected' : ''; %> ><%= elem %></option>
+                                <% }); %>
+
+                            </select>
+                          </div>
+                        </div>
+
+                        <div class="form-group">
+                          <label for="httpclientScript" class="col-sm-3 control-label" title="Select script where HTTP Client is defined.">HTTP Client Script:</label>
+                          <div class="col-sm-4">
+                            <select name="httpclientScript" id="httpclientScript" class="form-control">
+
+                                <% httpclientFiles.forEach(function(elem){ %>
+                                <option value="<%= elem %>" <%= (task.httpclientScript == elem ) ? 'selected' : ''; %> ><%= elem %></option>
+                                <% }); %>
+
+                            </select>
+                          </div>
+                        </div>
+                        <!-- crawl settings END -->
+
+
+
+
+                        <!-- cron settings -->
+                        <div class="col-sm-5 col-sm-offset-1">
+                          <h4>Cron settings</h4>
+                        </div>
+                        <div class="clearfix">&nbsp;</div>
+
+                        <div class="form-group">
+                          <label for="cron" class="col-sm-3  control-label" title="Cron job schedule. Example: 0 17 ? * 0,4-6">Cron:</label>
+                          <div class="col-sm-8">
+                            <input type="text" name="cron" id="cron" value="<%= task.cron %>" class="form-control" required>
+                          </div>
+                        </div>
+
+                        <div class="form-group">
+                          <label for="status" class="col-sm-3 control-label" title="If you want cron job to become active select 'On'. Otherwise select 'Off'.">Cron Status:</label>
                           <div class="col-sm-2">
                             <select name="status" id="status" class="form-control">
                               <option value="1" <%= (task.id !== undefined && task.status == 1 ) ? 'selected' : ''; %> >On</option>
@@ -200,6 +243,9 @@
                             </select>
                           </div>
                         </div>
+                        <!-- cron settings END -->
+                        
+
 
                         <!-- selectors -->
                         <div class="col-sm-12"  id="selectors">
@@ -214,15 +260,23 @@
 
 
 
-                          <% // INSERT
+                          <% //when INSERT NEW TASK
                            if (task.id === undefined) { 
                           %>
 
                           <div class="form-group">
                             <div class="col-sm-2 col-sm-offset-3">
+                              <select name="selectorType[]" class="form-control">
+                                <option value="text">text</option>
+                                <option value="html">html</option>
+                                <option value="href">url or href attribute</option>
+                                <option value="src">image or src attribute</option>
+                              </select>
+                            </div>
+                            <div class="col-sm-2">
                               <input type="text" name="selectorName[]" value="title" class="form-control" placeholder="name" required>
                             </div>
-                            <div class="col-sm-6">
+                            <div class="col-sm-4">
                               <input type="text" name="selectorValue[]" value="" class="form-control" placeholder="value" required>
                             </div>
                             <div class="col-sm-1">
@@ -231,10 +285,18 @@
                           </div>
   
                           <div class="form-group">                          
-                            <div class="col-sm-2   col-sm-offset-3">
+                            <div class="col-sm-2 col-sm-offset-3">
+                              <select name="selectorType[]" class="form-control">
+                                <option value="text">text</option>
+                                <option value="html">html</option>
+                                <option value="href">url or href attribute</option>
+                                <option value="src">image or src attribute</option>
+                              </select>
+                            </div>
+                            <div class="col-sm-2">
                               <input type="text" name="selectorName[]" value="description" class="form-control" placeholder="name" required>
                             </div>
-                            <div class="col-sm-6">
+                            <div class="col-sm-4">
                               <input type="text" name="selectorValue[]" value="" class="form-control" placeholder="value" required>
                             </div>
                             <div class="col-sm-1">
@@ -242,11 +304,19 @@
                             </div>
                           </div>
 
-                          <div class="form-group">                          
-                            <div class="col-sm-2   col-sm-offset-3">
+                          <div class="form-group"> 
+                            <div class="col-sm-2 col-sm-offset-3">
+                              <select name="selectorType[]" class="form-control">
+                                <option value="text">text</option>
+                                <option value="html">html</option>
+                                <option value="href">url or href attribute</option>
+                                <option value="src">image or src attribute</option>
+                              </select>
+                            </div>                         
+                            <div class="col-sm-2">
                               <input type="text" name="selectorName[]" value="price" class="form-control" placeholder="name" required>
                             </div>
-                            <div class="col-sm-6">
+                            <div class="col-sm-4">
                               <input type="text" name="selectorValue[]" value="" class="form-control" placeholder="value" required>
                             </div>
                             <div class="col-sm-1">
@@ -255,21 +325,29 @@
                           </div>
 
                           <% 
-                            } else {
+                            } else { //when UPDATE TASK
                               var propArr, selectorName, selectorValue;
-                              task.selectors.forEach(function (elem) {
-                                propArr = Object.keys(elem); //get array of 'elem' object properties
-                                selectorName = propArr[0];
+                              task.selectors.forEach(function (elem, key) {
 
-                                selectorValue = elem[selectorName];
+                                selType = elem.type;
+                                selName = elem.name;
+                                selValue = elem.value;
                           %>
 
                           <div class="form-group">                          
-                            <div class="col-sm-2   col-sm-offset-3">
-                              <input type="text" name="selectorName[]" value="<%= selectorName %>" class="form-control" required>
+                            <div class="col-sm-2 col-sm-offset-3">
+                              <select name="selectorType[]" class="form-control">
+                                <option value="text" <%= (selType === 'text') ? 'selected' : '' %> >text</option>
+                                <option value="html" <%= (selType === 'html') ? 'selected' : '' %> >html</option>
+                                <option value="href" <%= (selType === 'href') ? 'selected' : '' %> >url or href attribute</option>
+                                <option value="src" <%= (selType === 'src') ? 'selected' : '' %> >image or src attribute</option>
+                              </select>
                             </div>
-                            <div class="col-sm-6">
-                              <input type="text" name="selectorValue[]" value="<%= selectorValue %>" class="form-control" required>
+                            <div class="col-sm-2">
+                              <input type="text" name="selectorName[]" value="<%= selName %>" class="form-control" required>
+                            </div>
+                            <div class="col-sm-4">
+                              <input type="text" name="selectorValue[]" value="<%= selValue %>" class="form-control" required>
                             </div>
                             <div class="col-sm-1">
                               <label for="" class="col-sm-3 control-label fa fa-times-circle remSel" title="Delete this selector"></label>
@@ -367,10 +445,18 @@ $(document).ready(function(){
     
     var htmlCode = '\
     <div class="form-group">\
-      <div class="col-sm-2   col-sm-offset-3">\
+      <div class="col-sm-2 col-sm-offset-3">\
+        <select name="selectorType[]" class="form-control">\
+          <option value="text">text</option>\
+          <option value="html">html</option>\
+          <option value="href">url or href attribute</option>\
+          <option value="src">image or src attribute</option>\
+        </select>\
+      </div>\
+      <div class="col-sm-2">\
         <input type="text" name="selectorName[]" value="" class="form-control" placeholder="name" required>\
       </div>\
-      <div class="col-sm-6">\
+      <div class="col-sm-4">\
         <input type="text" name="selectorValue[]" value="" class="form-control" placeholder="value" required>\
       </div>\
       <div class="col-sm-1">\
@@ -385,7 +471,9 @@ $(document).ready(function(){
 
   //removing selector e.g. name=value pair
   $(document).on('click', '.remSel', function () { //works on dynamically created .remSel elements
-    $(this).parents().eq(1).remove();
+    $(this).parents().eq(1).fadeOut(1200, function () { //fadeOut HTML tag
+      $(this).remove(); //remove HTML tag
+    });
     console.log('okk');
   });
 

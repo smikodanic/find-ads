@@ -1,6 +1,8 @@
 require('rootpath')();
 var url = require('url');
-var http = require('http');
+// var http = require('http'); //not recommended because this module not follow redirects 301, 302
+var http = require('follow-redirects').http;
+var https = require('follow-redirects').https;
 var cheerio = require('cheerio');
 var logg = require('libraries/logging');
 var tekstmod = require('libraries/tekstmod');
@@ -19,6 +21,8 @@ module.exports.node = function (db, moTask, link, cb_outResults) {
   //vars
   var url_obj = url.parse(link.href);
   var pageURL = url_obj.protocol + '//' + url_obj.hostname + url_obj.path;
+  // console.log('title: ' + link.tekst);
+  // console.log('pageURL: ' + pageURL);
 
   //HTTP client options
   var options = {
@@ -26,6 +30,7 @@ module.exports.node = function (db, moTask, link, cb_outResults) {
     port: 80,
     path: url_obj.path,
     method: 'GET',
+    maxRedirects: 3,
     headers: {
       'User-Agent': 'Mozilla/5.0 (X11; Ubuntu; Linux i686; rv:36.0) Gecko/20100101 Firefox/36.0',
       'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
@@ -37,9 +42,13 @@ module.exports.node = function (db, moTask, link, cb_outResults) {
 
   // HTTP request using NodeJS 'http' module (http.request)
   var req2 = http.request(options, function (res2) {
+      console.log(res2.statusCode + ' pageURL: ' + pageURL);
+      // console.log(JSON.stringify(res2.headers, null, 2) + "\n-----------------------------------\n");
+
       if (res2.statusCode !== 200) {
-        logg.me('error', __filename + ':40 Page doesnt exist: ' + pageURL, null);
+        logg.me('error', __filename + ':49 Page doesnt exist: ' + pageURL, null);
       } else { //prevent to crawl non-existing pages
+
 
         //get htmlDoc from chunks of data
         var htmlDoc = '';
@@ -58,38 +67,54 @@ module.exports.node = function (db, moTask, link, cb_outResults) {
             "crawlDateTime": timeLib.nowLocale(),
             "category": parseInt(moTask.category, 10),
             "subcategory": parseInt(moTask.subcategory, 10),
-            "content": {}
+            "content": [] //array of objects
           };
 
-
-          cb_outResults.send('<p style="font:14px Verdana;color:#f0f0f0;">Page: ' + pageURL + ' [' + timeLib.nowLocale() + '] ' + '</p>\n');
+          var showRez = '[' + timeLib.nowLocale() + ']' + '\n Page: ' + pageURL + '\n';
+          cb_outResults.send(showRez);
+          // console.log(showRez);
 
           /* extract data by selectors defined in 'contentTasks' e.g. inside moTask object */
           $ = cheerio.load(htmlDoc); //load cheerio
 
 
-          var content = {};
+          var content_arr = [], cont_obj, extractedData;
           moTask.selectors.forEach(function (elem) { //iterate through CSS selectors
 
-            var prop;
-            for (prop in elem) {
-              if (elem.hasOwnProperty(prop)) {
+            /*
+             * extract data from pageURL using CSS selectors: text, html, image or URL
+             * elem.value is CSS selector from MongoDB 'contentTask' collection
+             */
+            if (elem.type === 'text') {
+              extractedData = $(elem.value).text();
+            } else if (elem.type === 'html') {
+              extractedData = $(elem.value).html();
+            } else if (elem.type === 'href') {
+              extractedData = $(elem.value).attr('href');
+            } else if (elem.type === 'src') {
+              extractedData = $(elem.value).attr('src');
+            }
 
-                //extract data from pageURL using CSS selectors
-                content[prop] = $(elem[prop]).text();
+            //prettify tekst
+            extractedData = tekstmod.strongtrim(extractedData);
 
-                //prettify tekst
-                content[prop] = tekstmod.strongtrim(content[prop]);
+            //create content object
+            cont_obj = {
+              type: elem.type,
+              name: elem.name,
+              extracteddata: extractedData
+            };
 
-                cb_outResults.send('<p style="font:12px Verdana;color:#f0f0f0;">-----  ' + prop + ': ' + content[prop] + '</p>\n');
-              }
-            }//for
+            //push content object into array
+            content_arr.push(cont_obj);
+
+            cb_outResults.send('-----  ' + elem.name + ': ' + extractedData + '\n');
 
           });
 
-          insMoDoc.content = content; //fill extracted data into 'content' property
+          insMoDoc.content = content_arr; //fill extracted data into 'content' property
 
-          cb_outResults.send('\n\n<br><br>');
+          cb_outResults.send('\n\n');
 
           /**
            * ------- MODEL: insert into MongoDB --------

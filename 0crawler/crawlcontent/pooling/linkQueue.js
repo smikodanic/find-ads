@@ -1,7 +1,10 @@
+/**
+ * Get links from MongoDB 'linkQueue_*' and sending to httpClient
+ */
+
 require('rootpath')(); //enable requiring modules from application's root folder
 var logg = require('libraries/logging.js');
 var MongoClient = require('mongodb').MongoClient;
-var httpClient = require('0crawler/crawlcontent_clientNode');
 
 var settings = require('settings/admin.js');
 var dbName = settings.mongo.dbName;
@@ -40,7 +43,19 @@ module.exports.start = function (task_id, cb_outResults) {
           if (i < linksAll_arr.length) {
 
             // console.log(i + '. ' + linksAll_arr[i].tekst + ' ' + linksAll_arr[i].href);
-            httpClient.node(db, moTask, linksAll_arr[i], cb_outResults);
+
+            //call httpClient only if URL has http://
+            if (linksAll_arr[i].href.indexOf('http://') !== -1) {
+
+              //get http client script: httpClient_noderequest.js in /0crawler/crawlercontent/httpclient/ directory
+              var httpClient = require('0crawler/crawlcontent/httpclient/' + moTask.httpclientScript);
+
+              httpClient.node(db, moTask, linksAll_arr[i], cb_outResults);
+
+            } else {
+
+              logg.me('info', __filename + ':48 Bad URL to httpClient: ' + linksAll_arr[i].href);
+            }
 
           } else {
 
@@ -56,7 +71,6 @@ module.exports.start = function (task_id, cb_outResults) {
           i++;
 
         }, moTask.crawlInterval);
-
 
 
       });
