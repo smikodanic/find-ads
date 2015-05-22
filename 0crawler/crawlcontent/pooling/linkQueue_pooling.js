@@ -1,5 +1,7 @@
 /**
  * Get links from MongoDB 'linkQueue_*' and sending to httpClient
+ * Pooling links defined by setInterval()
+ * Pooling interval in miliseconds defined by moTask.poolInterval
  */
 
 require('rootpath')(); //enable requiring modules from application's root folder
@@ -11,6 +13,7 @@ var dbName = settings.mongo.dbName;
 var collName_tasksCnt = settings.mongo.dbColl_tasksCnt;
 
 
+/* start pooling links from linkQueue_* collection */
 module.exports.start = function (task_id, cb_outResults) {
 
   var selector = {"id": task_id};
@@ -70,10 +73,45 @@ module.exports.start = function (task_id, cb_outResults) {
 
           i++;
 
-        }, moTask.crawlInterval);
+        }, moTask.poolInterval);
 
 
       });
+
+    });
+
+  });
+};
+
+
+/**
+ * Test only one URL
+ * @param  {string} url           - URL to be tested: http://www.adsuu.com/3-nodejs/
+ * @param  {number} task_id       - task ID from contentTasks collection
+ * @param  {function} cb_outResults - callback which displays results with res.write() or console.log()
+ * @return {undefined}               - no return
+ */
+module.exports.testOneURL = function (url, task_id, cb_outResults) {
+
+  var selector = {"id": task_id};
+
+  MongoClient.connect(dbName, function (err, db) { //mongoDB connection
+    if (err) { logg.me('error', __filename + ':99 ' + err); }
+
+    db.collection(collName_tasksCnt).find(selector).toArray(function (err, moTask_arr) { //get task data using 'task_id' from 'contentTasks'
+      if (err) { logg.me('error', __filename + ':102 ' + err); }
+
+      //MongoDB doc object
+      var moTask = moTask_arr[0];
+
+      //define link object
+      var link = {
+        href: url
+      };
+
+      //get http client script: httpClient_noderequest.js in /0crawler/crawlercontent/httpclient/ directory
+      var httpClient = require('0crawler/crawlcontent/httpclient/' + moTask.httpclientScript);
+      httpClient.node(db, moTask, link, 1, cb_outResults);
 
     });
 

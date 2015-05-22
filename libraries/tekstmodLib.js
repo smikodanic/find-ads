@@ -8,10 +8,18 @@
  * @return string - modified string is returned
  */
 module.exports.strongtrim = function (str) {
-  str = str.trim();
-  str = str.replace("\t", " ");
-  str = str.replace(/\t/g, '');
-  str = str.replace(/\n/g, '');
-  str = str.replace(/\r/g, '');
+
+  if (str !== undefined) {
+
+    str = str.trim();
+    str = str.replace("\t", " ");
+    str = str.replace(/\t/g, '');
+    str = str.replace(/\n/g, '');
+    str = str.replace(/\r/g, '');
+
+  } else {
+    str = null;
+  }
+
   return str;
 };

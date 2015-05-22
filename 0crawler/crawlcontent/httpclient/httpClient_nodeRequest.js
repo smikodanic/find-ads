@@ -5,14 +5,13 @@ var http = require('follow-redirects').http;
 var https = require('follow-redirects').https;
 var cheerio = require('cheerio');
 var logg = require('libraries/logging');
-var tekstmod = require('libraries/tekstmod');
+var tekstmod = require('libraries/tekstmodLib');
 var urlmod = require('libraries/urlmod');
 var timeLib = require('libraries/timeLib');
 var content_model = require('models/content_model');
 
 var settings = require('settings/admin.js');
 var dbName = settings.mongo.dbName;
-var collName_cnt = settings.mongo.dbColl_cnt; //'content' collection
 
 
 // HTTP client created by NodeJS module - http.request()
@@ -122,7 +121,7 @@ module.exports.node = function (db, moTask, link, i, cb_outResults) {
            * ------- MODEL: insert into MongoDB --------
            * Checks if pageURL already wxists in DB - prevent duplication
            */
-          content_model.insertContent(pageURL, db, collName_cnt, insMoDoc);
+          content_model.insertContent(pageURL, db, moTask.contentCollection, insMoDoc);
 
         });
 

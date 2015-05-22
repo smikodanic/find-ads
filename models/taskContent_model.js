@@ -107,6 +107,7 @@ module.exports.insertTask = function (req, res) {
     delete insDoc.selectorType;
     delete insDoc.selectorName;
     delete insDoc.selectorValue;
+    delete insDoc.suggestCollection
     insDoc.selectors = selectors;
 
   } else {
@@ -248,6 +249,7 @@ module.exports.updateTask = function (req, res) {
     delete newDoc.selectorType;
     delete newDoc.selectorName;
     delete newDoc.selectorValue;
+    delete newDoc.suggestCollection
     newDoc.selectors = selectors;
   } else {
     newDoc = null;

@@ -1,7 +1,6 @@
 /**
- * Start crawling from command line: $node linkQueue_cli.js 2
- * where 2 is the task ID from 'contentTasks' collection
- * Usefull for CRON JOB.
+ * Test /crawlcontent/pooling/linkQueue_pooling.js for just one URL.
+ * Start crawling from command line: $node linkQueue_cli_testOneURL.js 1 http://old.adsuu.com/142802-webdevelopment/
  */
 
 
@@ -16,13 +15,13 @@ var collName_tasksCnt = settings.mongo.dbColl_tasksCnt;
 
 
 //id from from command line process.argv
-if (process.argv.length < 3) {
-  console.log("ERROR: Use 3 command line parameters like: $node linkQueue_cli.js 2 \n");
+if (process.argv.length < 4) {
+  console.log("ERROR: Use 4 command line parameters like: $node linkQueue_cli_testOneURL.js 1 http://old.adsuu.com/142802-webdevelopment/ \n");
   process.exit();
 } else {
-  var task_id = parseInt(process.argv[2], 10); //use parseint to convert string into number
+  var task_id = parseInt(process.argv[2], 10);  //use parseint to convert string into number
+  var url = process.argv[3];
 }
-
 
 
 
@@ -57,7 +56,7 @@ MongoClient.connect(dbName, function (err, db) { // Connect to MongoDB 'contentT
     if (err) { logg.me('error', __filename + ':56 ' + err); }
 
     var poolContentlinks = require('0crawler/crawlcontent/pooling/' + contentTasks_arr[0].poolScript);
-    poolContentlinks.start(task_id, cb_outResults);
+    poolContentlinks.testOneURL(url, task_id, cb_outResults);
 
     db.close(); //close DB connection
   });
