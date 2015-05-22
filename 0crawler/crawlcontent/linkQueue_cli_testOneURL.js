@@ -1,4 +1,6 @@
 /**
+ * This file must have X (executing) permission.
+ * 
  * Test /crawlcontent/pooling/linkQueue_pooling.js for just one URL.
  * Start crawling from command line: $node linkQueue_cli_testOneURL.js 1 http://old.adsuu.com/142802-webdevelopment/
  */
@@ -24,7 +26,6 @@ if (process.argv.length < 4) {
 }
 
 
-
 //callback: output crawling results to console
 var cb_outResults = {
   send: function (rezult) {
@@ -44,7 +45,6 @@ var cb_outResults_null = {
     process.exit();
   }
 };
-
 
 
 

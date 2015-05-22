@@ -8,6 +8,7 @@
 
 module.exports = {
 
+  nodeBinFile: '/usr/bin/node',
   username: 'admin',
   password: 'astra',
   logging: 'pro',

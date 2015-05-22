@@ -66,7 +66,7 @@ module.exports.start = function (task_id, cb_outResults) {
 
             db.close();
 
-            var timeElapsed = (i * moTask.crawlInterval) / 1000;
+            var timeElapsed = (i * moTask.poolInterval) / 1000;
             console.log('Crawl content finished: ' + moTask.name + ' (Time elapsed:' + timeElapsed + 'sec)\n');
             cb_outResults.end();
           }
@@ -109,9 +109,30 @@ module.exports.testOneURL = function (url, task_id, cb_outResults) {
         href: url
       };
 
-      //get http client script: httpClient_noderequest.js in /0crawler/crawlercontent/httpclient/ directory
-      var httpClient = require('0crawler/crawlcontent/httpclient/' + moTask.httpclientScript);
-      httpClient.node(db, moTask, link, 1, cb_outResults);
+      //calling once
+      var i = 1;
+      var intID = setInterval(function () {
+
+        if (i === 1) {
+
+          //get http client script: httpClient_noderequest.js in /0crawler/crawlercontent/httpclient/ directory
+          var httpClient = require('0crawler/crawlcontent/httpclient/' + moTask.httpclientScript);
+          httpClient.node(db, moTask, link, 1, cb_outResults);
+
+        } else {
+          clearInterval(intID); //stop crawling
+
+          db.close();
+
+          var timeElapsed = (i * moTask.poolInterval) / 1000;
+          console.log('Crawl content finished: ' + moTask.name + ' (Time elapsed:' + timeElapsed + 'sec)\n');
+          cb_outResults.end();
+        }
+
+        i++;
+
+      }, moTask.poolInterval);
+
 
     });
 

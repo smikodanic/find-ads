@@ -178,7 +178,7 @@ module.exports = function (router) {
 
           var poolContentlinks = require('0crawler/crawlcontent/pooling/' + contentTasks_arr[0].poolScript);
           poolContentlinks.start(task_id, cb_outResults);
-          
+
           db.close(); //close DB connection
         });
 
@@ -193,4 +193,8 @@ module.exports = function (router) {
   });
 
 
-};
+
+
+
+
+}; //module end
