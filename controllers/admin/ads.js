@@ -4,7 +4,7 @@ require('rootpath')(); //enable requireing modules from application root folder
 var express = require('express');
 var router = express.Router();
 var nodedump = require('nodedump').dump;
-var login = require('libraries/account_login.js');
+var login = require('libraries/accountLoginLib.js');
 
 /* CALLBACK VARIATIONS */
 var cb_list_Console = function (res, moDocs_arr) {

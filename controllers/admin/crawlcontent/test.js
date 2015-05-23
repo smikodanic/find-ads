@@ -2,7 +2,7 @@ require('rootpath')(); //enable requireing modules from application root folder
 var express = require('express');
 var router = express.Router();
 var childProcess = require('child_process');
-var login = require('libraries/account_login.js');
+var login = require('libraries/accountLoginLib.js');
 
 //settings
 var settings = require('settings/admin.js');
