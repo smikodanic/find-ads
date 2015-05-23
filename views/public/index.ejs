@@ -31,8 +31,6 @@
 
 
 
-
-
 <script>
 //blink effect
 setInterval(function () {
@@ -44,6 +42,18 @@ setInterval(function () {
 
 //input field focus
 $('#q').focus();
+</script>
+
+<script>
+//add background body
+$(document).ready(function () {
+  setTimeout(function () {
+    $('body').hide();
+    $('body').fadeIn(1000, function () {
+      $('body').addClass('add-bkg');
+    });
+  }, 3000);
+});
 </script>
 
 
