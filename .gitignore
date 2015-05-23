@@ -1,3 +1,4 @@
 /tmp/*
 /tmp/sessions/*
 /tmp/logs/*
+exceptions.log
