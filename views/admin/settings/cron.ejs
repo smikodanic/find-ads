@@ -69,14 +69,16 @@
                     <pre><%= cronProcs %></pre>
                 </div>
                 <!-- Cron procs end -->
+                
+                <div class="clearfix">&nbsp;</div>
+                <br><br>
 
-
-                <!-- Forever procs -->
+                <!-- PM2 procs -->
                 <div class="col-sm-12">
-                    <h4>Forever processes <small>($forever list)</small></h4>
-                    <pre style="min-height:100px"><%= foreverProcs.replace(/(\[32m)|(\[39m)|(\[37m)|(\[90m)|(\[35m)|(\[33m)/g, '') %></pre>
+                    <h4>PM2 processes <small>($pm2 list)</small></h4>
+                    <pre style="min-height:100px"><%= pm2Procs.replace(/(\[32m)|(\[39m)|(\[37m)|(\[90m)|(\[35m)|(\[33m)/g, '') %></pre>
                 </div>
-                <!-- Forever procs end -->
+                <!-- PM2 procs end -->
 
 
             </div>

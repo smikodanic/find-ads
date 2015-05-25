@@ -7,11 +7,11 @@ var cron = require('libraries/cronLib.js');
 
 
 /* view render, callback function*/
-var cb_render = function (res, cronProcesses, foreverProcesses) {
+var cb_render = function (res, cronProcesses, pm2Processes) {
 
   var vdata = {
     cronProcs: cronProcesses,
-    foreverProcs: foreverProcesses
+    pm2Procs: pm2Processes
   };
 
   res.set('Content-Type', 'text/html');
