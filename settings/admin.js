@@ -12,6 +12,7 @@ module.exports = {
   username: 'admin',
   password: 'astra',
   logging: 'pro',
+  cronInitFile: '1cron/cronInit.js',
   mongo: {
     dbName: 'mongodb://localhost:27017/crawler',
     dbColl_category: 'category',

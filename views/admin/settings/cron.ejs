@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <%- include('../0partials/01head'); -%>
+
+    
+    <!-- Bootstrap Switch -->
+    <link href="/bootstrap/switch/bootstrap-switch.min.css" rel="stylesheet">
+    <script src="/bootstrap/switch/bootstrap-switch.min.js"></script>
+    <script>
+    $(document).ready(function(){
+        //initialize bootstrap-switch (on, off switch)
+        $('#cronStatus').bootstrapSwitch();
+    });
+    </script>
+
+
+</head>
+
+<body>
+
+    <div id="wrapper">
+
+        <!-- Navigation -->
+        <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+            <%- include('../0partials/05top_menu'); -%>
+            <%- include('../0partials/10left_menu'); -%>
+        </nav>
+
+        <div id="page-wrapper">
+
+            <div class="container-fluid">
+
+                <!-- Page Heading -->
+                <div class="row">
+                    <div class="col-lg-12">
+                        <h1 class="page-header">
+                            Settings <small>Cron</small>
+                        </h1>
+                        
+                        <ol class="breadcrumb">
+                          <li>Settings</li>
+                          <li><a href="/admin/settings/cron">Cron</a></li>
+                        </ol>
+                    </div>
+                </div>
+                <!-- Page Heading end -->
+
+                <div class="clearfix">&nbsp;</div>
+                <br><br>
+
+                <!-- Switch -->
+                <div class="col-sm-4 col-sm-offset-4 well">
+                    <span style="font:15px Verdana;font-weight: bold;">Cron status:</span> <input type="checkbox" name="cronStatus" id="cronStatus">
+                    <br><br>
+                    <p class="alert alert-info" id="info_msg"></p>
+                </div>
+                <!-- Switch end -->
+
+                <div class="clearfix">&nbsp;</div>
+                <br>
+                <br>
+                <br>
+
+                <!-- Cron procs -->
+                <div class="col-sm-12">
+                    <h4>Cron processes <small>($ps aux | grep -v grep | grep 1cron/cronInit.js)</small></h4>
+                    <pre><%= cronProcs %></pre>
+                </div>
+                <!-- Cron procs end -->
+
+
+                <!-- Forever procs -->
+                <div class="col-sm-12">
+                    <h4>Forever processes <small>($forever list)</small></h4>
+                    <pre style="min-height:100px"><%= foreverProcs.replace(/(\[32m)|(\[39m)|(\[37m)|(\[90m)|(\[35m)|(\[33m)/g, '') %></pre>
+                </div>
+                <!-- Forever procs end -->
+
+
+            </div>
+            <!-- /.container-fluid -->
+
+        </div>
+        <!-- /#page-wrapper -->
+
+    </div>
+    <!-- /#wrapper -->
+
+
+<script>
+$(document).ready(function () {
+    
+    //determine cron status
+    var cronStatus;
+    var cronProcs = '<%= cronProcs.replace(/\n/g, ''); %>'
+
+    if (cronProcs !== '') {
+        cronStatus = 'Cron process is running!';
+        $('#cronStatus').bootstrapSwitch('state', true);
+    } else {
+        cronStatus = 'Cron process is stopped!';
+        $('#cronStatus').bootstrapSwitch('state', false);
+    }
+
+    $('#info_msg').text(cronStatus);
+
+
+
+    //change cron status
+    $('#cronStatus').on('switchChange.bootstrapSwitch', function (event, state) {
+        //state can be true or false
+        if (state) {
+            window.location.href ='/admin/settings/cron/start';
+        } else {
+            window.location.href ='/admin/settings/cron/stop';
+        }
+    });
+
+
+});
+</script>
+
+</body>
+</html>
