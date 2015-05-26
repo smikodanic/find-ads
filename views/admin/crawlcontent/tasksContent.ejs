@@ -67,7 +67,7 @@
                                 <% }); %>
                               </td>
                               <td><%= elem.cron %></td>
-                              <td><%= elem.status %></td>
+                              <td><%= elem.cronStatus %></td>
 
                               <td>
                                 
@@ -241,11 +241,11 @@
                         </div>
 
                         <div class="form-group">
-                          <label for="status" class="col-sm-3 control-label" title="If you want cron job to become active select 'On'. Otherwise select 'Off'.">Cron Status:</label>
+                          <label for="cronStatus" class="col-sm-3 control-label" title="If you want cron job to become active select 'on'. Otherwise select 'off'.">Cron Status:</label>
                           <div class="col-sm-2">
-                            <select name="status" id="status" class="form-control">
-                              <option value="1" <%= (task.id !== undefined && task.status == 1 ) ? 'selected' : ''; %> >On</option>
-                              <option value="0" <%= (task.id !== undefined && task.status == 0 ) ? 'selected' : ''; %> >Off</option>
+                            <select name="cronStatus" id="cronStatus" class="form-control">
+                              <option value="on" <%= (task.id !== undefined && task.cronStatus == 'on' ) ? 'selected' : ''; %> >on</option>
+                              <option value="off" <%= (task.id !== undefined && task.cronStatus == 'off' ) ? 'selected' : ''; %> >off</option>
                             </select>
                           </div>
                         </div>

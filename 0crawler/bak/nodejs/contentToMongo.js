@@ -79,7 +79,7 @@ function casperCrawl(link_arr2) {
 
       var casperCommandlineArgs = [
         '../casperjs/' + casperFile, //casper script
-        page_url //
+        page_url
       ];
 
       console.log("\n" + i + '. Crawling ..... ' + page_url);

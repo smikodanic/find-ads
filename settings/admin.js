@@ -13,6 +13,7 @@ module.exports = {
   password: 'astra',
   logging: 'pro',
   cronInitFile: '1cron/cronInit.js',
+  timeZone: 'Europe/Zagreb',
   mongo: {
     dbName: 'mongodb://localhost:27017/crawler',
     dbColl_category: 'category',

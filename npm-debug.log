@@ -1,349 +1,110 @@
 0 info it worked if it ends with ok
-1 verbose cli [ '/usr/bin/node', '/usr/bin/npm', 'install', 'pm2', '-g' ]
+1 verbose cli [ '/usr/bin/node', '/usr/bin/npm', 'install', '--save', 'cron' ]
 2 info using npm@1.4.28
 3 info using node@v0.10.37
 4 verbose node symlink /usr/bin/node
-5 verbose cache add [ 'pm2', null ]
-6 verbose cache add name=undefined spec="pm2" args=["pm2",null]
-7 verbose parsed url { protocol: null,
-7 verbose parsed url   slashes: null,
-7 verbose parsed url   auth: null,
-7 verbose parsed url   host: null,
-7 verbose parsed url   port: null,
-7 verbose parsed url   hostname: null,
-7 verbose parsed url   hash: null,
-7 verbose parsed url   search: null,
-7 verbose parsed url   query: null,
-7 verbose parsed url   pathname: 'pm2',
-7 verbose parsed url   path: 'pm2',
-7 verbose parsed url   href: 'pm2' }
-8 silly lockFile b1fbedd8-pm2 pm2
-9 verbose lock pm2 /home/frob/.npm/b1fbedd8-pm2.lock
-10 silly lockFile b1fbedd8-pm2 pm2
-11 silly lockFile b1fbedd8-pm2 pm2
-12 verbose addNamed [ 'pm2', '' ]
-13 verbose addNamed [ null, '*' ]
-14 silly lockFile d1072219-pm2 pm2@
-15 verbose lock pm2@ /home/frob/.npm/d1072219-pm2.lock
-16 silly addNameRange { name: 'pm2', range: '*', hasData: false }
-17 verbose request where is /pm2
-18 verbose request registry https://registry.npmjs.org/
-19 verbose request id edd381811fb70a33
-20 verbose url raw /pm2
-21 verbose url resolving [ 'https://registry.npmjs.org/', './pm2' ]
-22 verbose url resolved https://registry.npmjs.org/pm2
-23 verbose request where is https://registry.npmjs.org/pm2
-24 info trying registry request attempt 1 at 23:08:27
-25 http GET https://registry.npmjs.org/pm2
-26 http 200 https://registry.npmjs.org/pm2
-27 silly registry.get cb [ 200,
-27 silly registry.get   { server: 'CouchDB/1.5.0 (Erlang OTP/R16B03)',
-27 silly registry.get     etag: '"EB5TLGRZ2PREHPE7OHFPDMIMU"',
-27 silly registry.get     'content-type': 'application/json',
-27 silly registry.get     'cache-control': 'max-age=60',
-27 silly registry.get     'content-length': '304679',
-27 silly registry.get     'accept-ranges': 'bytes',
-27 silly registry.get     date: 'Mon, 25 May 2015 21:08:28 GMT',
-27 silly registry.get     via: '1.1 varnish',
-27 silly registry.get     age: '0',
-27 silly registry.get     connection: 'keep-alive',
-27 silly registry.get     'x-served-by': 'cache-fra1220-FRA',
-27 silly registry.get     'x-cache': 'HIT',
-27 silly registry.get     'x-cache-hits': '1',
-27 silly registry.get     'x-timer': 'S1432588108.434587,VS0,VE184',
-27 silly registry.get     vary: 'Accept' } ]
-28 silly addNameRange number 2 { name: 'pm2', range: '*', hasData: true }
-29 silly addNameRange versions [ 'pm2',
-29 silly addNameRange   [ '0.4.0',
-29 silly addNameRange     '0.4.1',
-29 silly addNameRange     '0.4.2',
-29 silly addNameRange     '0.4.3',
-29 silly addNameRange     '0.4.4',
-29 silly addNameRange     '0.4.5',
-29 silly addNameRange     '0.4.6',
-29 silly addNameRange     '0.4.7',
-29 silly addNameRange     '0.4.8',
-29 silly addNameRange     '0.4.10',
-29 silly addNameRange     '0.4.11',
-29 silly addNameRange     '0.4.12',
-29 silly addNameRange     '0.4.13',
-29 silly addNameRange     '0.4.14',
-29 silly addNameRange     '0.5.0',
-29 silly addNameRange     '0.5.1',
-29 silly addNameRange     '0.5.2',
-29 silly addNameRange     '0.5.3',
-29 silly addNameRange     '0.5.4',
-29 silly addNameRange     '0.5.5',
-29 silly addNameRange     '0.5.6',
-29 silly addNameRange     '0.5.7',
-29 silly addNameRange     '0.6.2',
-29 silly addNameRange     '0.6.3',
-29 silly addNameRange     '0.6.4',
-29 silly addNameRange     '0.6.5',
-29 silly addNameRange     '0.6.6',
-29 silly addNameRange     '0.6.7',
-29 silly addNameRange     '0.6.8',
-29 silly addNameRange     '0.6.9',
-29 silly addNameRange     '0.6.10',
-29 silly addNameRange     '0.6.11',
-29 silly addNameRange     '0.6.12',
-29 silly addNameRange     '0.6.13',
-29 silly addNameRange     '0.6.14',
-29 silly addNameRange     '0.6.15',
-29 silly addNameRange     '0.7.0',
-29 silly addNameRange     '0.7.1',
-29 silly addNameRange     '0.7.2',
-29 silly addNameRange     '0.7.3',
-29 silly addNameRange     '0.7.4',
-29 silly addNameRange     '0.7.5',
-29 silly addNameRange     '0.7.6',
-29 silly addNameRange     '0.7.7',
-29 silly addNameRange     '0.7.8',
-29 silly addNameRange     '0.8.0',
-29 silly addNameRange     '0.8.1',
-29 silly addNameRange     '0.8.2',
-29 silly addNameRange     '0.8.3',
-29 silly addNameRange     '0.8.4',
-29 silly addNameRange     '0.8.5',
-29 silly addNameRange     '0.8.6',
-29 silly addNameRange     '0.8.7',
-29 silly addNameRange     '0.8.8',
-29 silly addNameRange     '0.8.9',
-29 silly addNameRange     '0.8.10',
-29 silly addNameRange     '0.8.11',
-29 silly addNameRange     '0.8.12',
-29 silly addNameRange     '0.8.13',
-29 silly addNameRange     '0.8.14',
-29 silly addNameRange     '0.8.15',
-29 silly addNameRange     '0.9.0',
-29 silly addNameRange     '0.9.1',
-29 silly addNameRange     '0.9.2',
-29 silly addNameRange     '0.9.3',
-29 silly addNameRange     '0.9.4',
-29 silly addNameRange     '0.9.5',
-29 silly addNameRange     '0.9.6',
-29 silly addNameRange     '0.10.0-beta1',
-29 silly addNameRange     '0.10.0-beta2',
-29 silly addNameRange     '0.10.0-beta4',
-29 silly addNameRange     '0.10.0-beta5',
-29 silly addNameRange     '0.10.0-beta6',
-29 silly addNameRange     '0.10.0-beta7',
-29 silly addNameRange     '0.10.0-beta8',
-29 silly addNameRange     '0.10.0-beta9',
-29 silly addNameRange     '0.10.0-beta10',
-29 silly addNameRange     '0.10.0-beta11',
-29 silly addNameRange     '0.10.0-beta12',
-29 silly addNameRange     '0.10.0-beta13',
-29 silly addNameRange     '0.10.0-beta14',
-29 silly addNameRange     '0.10.0-beta15',
-29 silly addNameRange     '0.10.0-beta16',
-29 silly addNameRange     '0.10.0-beta17',
-29 silly addNameRange     '0.10.0-beta18',
-29 silly addNameRange     '0.10.0-beta19',
-29 silly addNameRange     '0.10.0-beta20',
-29 silly addNameRange     '0.10.0-beta21',
-29 silly addNameRange     '0.10.0-beta22',
-29 silly addNameRange     '0.10.0-beta23',
-29 silly addNameRange     '0.10.0-beta25',
-29 silly addNameRange     '0.10.0',
-29 silly addNameRange     '0.10.1',
-29 silly addNameRange     '0.10.2',
-29 silly addNameRange     '0.10.3',
-29 silly addNameRange     '0.10.4',
-29 silly addNameRange     '0.10.5',
-29 silly addNameRange     '0.10.6',
-29 silly addNameRange     '0.10.7',
-29 silly addNameRange     '0.10.8',
-29 silly addNameRange     '0.11.0-beta1',
-29 silly addNameRange     '0.11.0',
-29 silly addNameRange     '0.11.1',
-29 silly addNameRange     '0.12.0',
-29 silly addNameRange     '0.12.1',
-29 silly addNameRange     '0.12.2',
-29 silly addNameRange     '0.12.3',
-29 silly addNameRange     '0.12.4',
-29 silly addNameRange     '0.12.5',
-29 silly addNameRange     '0.12.6',
-29 silly addNameRange     '0.12.7',
-29 silly addNameRange     '0.12.8',
-29 silly addNameRange     '0.12.9',
-29 silly addNameRange     '0.12.10',
-29 silly addNameRange     '0.12.11',
-29 silly addNameRange     '0.12.12',
-29 silly addNameRange     '0.12.13',
-29 silly addNameRange     '0.12.14',
-29 silly addNameRange     '0.12.15' ] ]
-30 verbose addNamed [ 'pm2', '0.12.15' ]
-31 verbose addNamed [ '0.12.15', '0.12.15' ]
-32 silly lockFile 2d22cc8f-pm2-0-12-15 pm2@0.12.15
-33 verbose lock pm2@0.12.15 /home/frob/.npm/2d22cc8f-pm2-0-12-15.lock
-34 silly lockFile 6adbc3e0-ry-npmjs-org-pm2-pm2-0-12-15-tgz https://registry.npmjs.org/pm2/-/pm2-0.12.15.tgz
-35 verbose lock https://registry.npmjs.org/pm2/-/pm2-0.12.15.tgz /home/frob/.npm/6adbc3e0-ry-npmjs-org-pm2-pm2-0-12-15-tgz.lock
-36 verbose addRemoteTarball [ 'https://registry.npmjs.org/pm2/-/pm2-0.12.15.tgz',
-36 verbose addRemoteTarball   '4f9c701969a4a4853179f02e92786f6a6b6a36ba' ]
-37 info retry fetch attempt 1 at 23:08:28
-38 verbose fetch to= /tmp/npm-11815-C4Wm3Ddn/registry.npmjs.org/pm2/-/pm2-0.12.15.tgz
-39 http GET https://registry.npmjs.org/pm2/-/pm2-0.12.15.tgz
-40 http 200 https://registry.npmjs.org/pm2/-/pm2-0.12.15.tgz
-41 silly lockFile 6adbc3e0-ry-npmjs-org-pm2-pm2-0-12-15-tgz https://registry.npmjs.org/pm2/-/pm2-0.12.15.tgz
-42 silly lockFile 6adbc3e0-ry-npmjs-org-pm2-pm2-0-12-15-tgz https://registry.npmjs.org/pm2/-/pm2-0.12.15.tgz
-43 silly lockFile 2d22cc8f-pm2-0-12-15 pm2@0.12.15
-44 silly lockFile 2d22cc8f-pm2-0-12-15 pm2@0.12.15
-45 silly lockFile d1072219-pm2 pm2@
-46 silly lockFile d1072219-pm2 pm2@
-47 silly resolved [ { name: 'pm2',
-47 silly resolved     preferGlobal: 'true',
-47 silly resolved     version: '0.12.15',
-47 silly resolved     engines: { node: '>=0.10' },
-47 silly resolved     directories: { bin: './bin', lib: './lib', example: './examples' },
-47 silly resolved     author:
-47 silly resolved      { name: 'Strzelewicz Alexandre',
-47 silly resolved        email: 'as@unitech.io',
-47 silly resolved        url: 'https://keymetrics.io' },
-47 silly resolved     maintainers: [ [Object], [Object] ],
-47 silly resolved     contributors:
-47 silly resolved      [ [Object],
-47 silly resolved        [Object],
-47 silly resolved        [Object],
-47 silly resolved        [Object],
-47 silly resolved        [Object],
-47 silly resolved        [Object],
-47 silly resolved        [Object],
-47 silly resolved        [Object],
-47 silly resolved        [Object],
-47 silly resolved        [Object],
-47 silly resolved        [Object],
-47 silly resolved        [Object] ],
-47 silly resolved     homepage: 'https://github.com/Unitech/pm2',
-47 silly resolved     description: 'Production process manager for Node.JS applications with a built-in load balancer.',
-47 silly resolved     main: 'index.js',
-47 silly resolved     scripts: { test: 'NODE_ENV=test bash test/pm2_programmatic_tests.sh && NODE_ENV=test bash test/pm2_behavior_tests.sh' },
-47 silly resolved     keywords:
-47 silly resolved      [ 'cli',
-47 silly resolved        'fault tolerant',
-47 silly resolved        'sysadmin',
-47 silly resolved        'tools',
-47 silly resolved        'pm2',
-47 silly resolved        'logs',
-47 silly resolved        'log',
-47 silly resolved        'json',
-47 silly resolved        'express',
-47 silly resolved        'hapi',
-47 silly resolved        'kraken',
-47 silly resolved        'reload',
-47 silly resolved        'microservice',
-47 silly resolved        'programmatic',
-47 silly resolved        'harmony',
-47 silly resolved        'node-pm2',
-47 silly resolved        'production',
-47 silly resolved        'keymetrics',
-47 silly resolved        'deploy',
-47 silly resolved        'deployment',
-47 silly resolved        'daemon',
-47 silly resolved        'supervisor',
-47 silly resolved        'nodemon',
-47 silly resolved        'pm2.io',
-47 silly resolved        'ghost',
-47 silly resolved        'ghost production',
-47 silly resolved        'monitoring',
-47 silly resolved        'process manager',
-47 silly resolved        'forever',
-47 silly resolved        'forever-monitor',
-47 silly resolved        'keep process alive',
-47 silly resolved        'process configuration',
-47 silly resolved        'clustering',
-47 silly resolved        'cluster cli',
-47 silly resolved        'cluster',
-47 silly resolved        'cron',
-47 silly resolved        'devops',
-47 silly resolved        'dev ops' ],
-47 silly resolved     bin: { pm2: './bin/pm2', 'pm2-dev': './bin/pm2-dev' },
-47 silly resolved     dependencies:
-47 silly resolved      { async: '~0.9.0',
-47 silly resolved        chalk: '~0.5.1',
-47 silly resolved        chokidar: '^1.0.0',
-47 silly resolved        'cli-table': '0.3.1',
-47 silly resolved        'coffee-script': '1.8.0',
-47 silly resolved        colors: '1.0.3',
-47 silly resolved        commander: '2.6.0',
-47 silly resolved        cron: '1.0.5',
-47 silly resolved        debug: '2.1.0',
-47 silly resolved        eventemitter2: '0.4.14',
-47 silly resolved        'json-stringify-safe': '5.0.0',
-47 silly resolved        moment: '2.9.0',
-47 silly resolved        nssocket: '0.5.3',
-47 silly resolved        pidusage: '0.1.1',
-47 silly resolved        pmx: 'latest',
-47 silly resolved        vizion: 'latest',
-47 silly resolved        'pm2-axon': 'latest',
-47 silly resolved        'pm2-axon-rpc': '0.3.6',
-47 silly resolved        'pm2-deploy': 'latest',
-47 silly resolved        'pm2-multimeter': '0.1.2',
-47 silly resolved        babel: '^5.x',
-47 silly resolved        'is-iojs': '1.1.0',
-47 silly resolved        shelljs: '0.3.0',
-47 silly resolved        isbinaryfile: '^2.0.3',
-47 silly resolved        semver: '4.3.3',
-47 silly resolved        'pm2-logs': '~0.1.1',
-47 silly resolved        ikt: 'git+http://ikt.pm2.io/ikt.git#master' },
-47 silly resolved     devDependencies:
-47 silly resolved      { mocha: '^1.20.1',
-47 silly resolved        should: '^4.0.0',
-47 silly resolved        'better-assert': '^1.0.0',
-47 silly resolved        'promise-spawner': '^0.0.3',
-47 silly resolved        punt: '*' },
-47 silly resolved     optionalDependencies:
-47 silly resolved      { 'pm2-logs': '~0.1.1',
-47 silly resolved        ikt: 'git+http://ikt.pm2.io/ikt.git#master' },
-47 silly resolved     bugs: { url: 'https://github.com/Unitech/pm2/issues' },
-47 silly resolved     repository: { type: 'git', url: 'git://github.com/Unitech/pm2.git' },
-47 silly resolved     license: 'AGPLv3',
-47 silly resolved     gitHead: '0629b9d0004923e0c6add348ecc60263f7a0e226',
-47 silly resolved     _id: 'pm2@0.12.15',
-47 silly resolved     _shasum: '4f9c701969a4a4853179f02e92786f6a6b6a36ba',
-47 silly resolved     _from: 'pm2@',
-47 silly resolved     _npmVersion: '2.7.4',
-47 silly resolved     _nodeVersion: '0.12.2',
-47 silly resolved     _npmUser: { name: 'jshkurti', email: 'jonishkurti90@gmail.com' },
-47 silly resolved     dist:
-47 silly resolved      { shasum: '4f9c701969a4a4853179f02e92786f6a6b6a36ba',
-47 silly resolved        tarball: 'http://registry.npmjs.org/pm2/-/pm2-0.12.15.tgz' },
-47 silly resolved     _resolved: 'https://registry.npmjs.org/pm2/-/pm2-0.12.15.tgz' } ]
-48 info install pm2@0.12.15 into /usr/lib
-49 info installOne pm2@0.12.15
-50 verbose lib/node_modules/pm2 unbuild
-51 verbose tar unpack /home/frob/.npm/pm2/0.12.15/package.tgz
-52 silly lockFile 18c8b6c1-tar-usr-lib-node-modules-pm2 tar:///usr/lib/node_modules/pm2
-53 verbose lock tar:///usr/lib/node_modules/pm2 /home/frob/.npm/18c8b6c1-tar-usr-lib-node-modules-pm2.lock
-54 silly lockFile 9c4b5930-frob-npm-pm2-0-12-15-package-tgz tar:///home/frob/.npm/pm2/0.12.15/package.tgz
-55 verbose lock tar:///home/frob/.npm/pm2/0.12.15/package.tgz /home/frob/.npm/9c4b5930-frob-npm-pm2-0-12-15-package-tgz.lock
-56 silly gunzTarPerm modes [ '775', '664' ]
-57 error Error: EACCES, mkdir '/usr/lib/node_modules/pm2'
-57 error  { [Error: EACCES, mkdir '/usr/lib/node_modules/pm2']
-57 error   errno: 3,
-57 error   code: 'EACCES',
-57 error   path: '/usr/lib/node_modules/pm2',
-57 error   fstream_type: 'Directory',
-57 error   fstream_path: '/usr/lib/node_modules/pm2',
-57 error   fstream_class: 'DirWriter',
-57 error   fstream_stack:
-57 error    [ '/usr/lib/node_modules/npm/node_modules/fstream/lib/dir-writer.js:36:23',
-57 error      '/usr/lib/node_modules/npm/node_modules/mkdirp/index.js:46:53',
-57 error      'Object.oncomplete (fs.js:108:15)' ] }
-58 error Please try running this command again as root/Administrator.
-59 error System Linux 3.2.0-79-generic
-60 error command "/usr/bin/node" "/usr/bin/npm" "install" "pm2" "-g"
-61 error cwd /homenode/find-ads
-62 error node -v v0.10.37
-63 error npm -v 1.4.28
-64 error path /usr/lib/node_modules/pm2
-65 error fstream_path /usr/lib/node_modules/pm2
-66 error fstream_type Directory
-67 error fstream_class DirWriter
-68 error code EACCES
-69 error errno 3
-70 error stack Error: EACCES, mkdir '/usr/lib/node_modules/pm2'
-71 error fstream_stack /usr/lib/node_modules/npm/node_modules/fstream/lib/dir-writer.js:36:23
-71 error fstream_stack /usr/lib/node_modules/npm/node_modules/mkdirp/index.js:46:53
-71 error fstream_stack Object.oncomplete (fs.js:108:15)
-72 verbose exit [ 3, true ]
+5 verbose readDependencies using package.json deps
+6 verbose cache add [ 'cron', null ]
+7 verbose cache add name=undefined spec="cron" args=["cron",null]
+8 verbose parsed url { protocol: null,
+8 verbose parsed url   slashes: null,
+8 verbose parsed url   auth: null,
+8 verbose parsed url   host: null,
+8 verbose parsed url   port: null,
+8 verbose parsed url   hostname: null,
+8 verbose parsed url   hash: null,
+8 verbose parsed url   search: null,
+8 verbose parsed url   query: null,
+8 verbose parsed url   pathname: 'cron',
+8 verbose parsed url   path: 'cron',
+8 verbose parsed url   href: 'cron' }
+9 silly lockFile 02f91914-cron cron
+10 verbose lock cron /home/frob/.npm/02f91914-cron.lock
+11 silly lockFile 02f91914-cron cron
+12 silly lockFile 02f91914-cron cron
+13 verbose addNamed [ 'cron', '' ]
+14 verbose addNamed [ null, '*' ]
+15 silly lockFile b1088792-cron cron@
+16 verbose lock cron@ /home/frob/.npm/b1088792-cron.lock
+17 silly addNameRange { name: 'cron', range: '*', hasData: false }
+18 verbose request where is /cron
+19 verbose request registry https://registry.npmjs.org/
+20 verbose request id 17b7ba47b4f15739
+21 verbose url raw /cron
+22 verbose url resolving [ 'https://registry.npmjs.org/', './cron' ]
+23 verbose url resolved https://registry.npmjs.org/cron
+24 verbose request where is https://registry.npmjs.org/cron
+25 info trying registry request attempt 1 at 13:07:15
+26 verbose etag "7E8U3KDRV34EC6PTCQQ31P0WG"
+27 http GET https://registry.npmjs.org/cron
+28 http 304 https://registry.npmjs.org/cron
+29 silly registry.get cb [ 304,
+29 silly registry.get   { date: 'Tue, 26 May 2015 11:07:16 GMT',
+29 silly registry.get     via: '1.1 varnish',
+29 silly registry.get     'cache-control': 'max-age=60',
+29 silly registry.get     etag: '"7E8U3KDRV34EC6PTCQQ31P0WG"',
+29 silly registry.get     age: '0',
+29 silly registry.get     connection: 'keep-alive',
+29 silly registry.get     'x-served-by': 'cache-fra1229-FRA',
+29 silly registry.get     'x-cache': 'HIT',
+29 silly registry.get     'x-cache-hits': '1',
+29 silly registry.get     'x-timer': 'S1432638436.320259,VS0,VE429',
+29 silly registry.get     vary: 'Accept' } ]
+30 verbose etag https://registry.npmjs.org/cron from cache
+31 silly addNameRange number 2 { name: 'cron', range: '*', hasData: true }
+32 silly addNameRange versions [ 'cron',
+32 silly addNameRange   [ '0.1.0',
+32 silly addNameRange     '0.1.1',
+32 silly addNameRange     '0.1.2',
+32 silly addNameRange     '0.1.3',
+32 silly addNameRange     '0.2.0',
+32 silly addNameRange     '0.3.0',
+32 silly addNameRange     '0.3.1',
+32 silly addNameRange     '0.3.2',
+32 silly addNameRange     '0.3.3',
+32 silly addNameRange     '0.3.4',
+32 silly addNameRange     '1.0.0',
+32 silly addNameRange     '1.0.1',
+32 silly addNameRange     '1.0.2',
+32 silly addNameRange     '1.0.3',
+32 silly addNameRange     '1.0.4',
+32 silly addNameRange     '1.0.5',
+32 silly addNameRange     '1.0.6',
+32 silly addNameRange     '1.0.7',
+32 silly addNameRange     '1.0.8',
+32 silly addNameRange     '1.0.9' ] ]
+33 verbose addNamed [ 'cron', '1.0.9' ]
+34 verbose addNamed [ '1.0.9', '1.0.9' ]
+35 silly lockFile 8e5d8a7e-cron-1-0-9 cron@1.0.9
+36 verbose lock cron@1.0.9 /home/frob/.npm/8e5d8a7e-cron-1-0-9.lock
+37 silly lockFile d1152d99-ry-npmjs-org-cron-cron-1-0-9-tgz https://registry.npmjs.org/cron/-/cron-1.0.9.tgz
+38 verbose lock https://registry.npmjs.org/cron/-/cron-1.0.9.tgz /home/frob/.npm/d1152d99-ry-npmjs-org-cron-cron-1-0-9-tgz.lock
+39 verbose addRemoteTarball [ 'https://registry.npmjs.org/cron/-/cron-1.0.9.tgz',
+39 verbose addRemoteTarball   '5177cf751f3263f00f45ebf69fead1ea96d31cfc' ]
+40 info retry fetch attempt 1 at 13:07:16
+41 verbose fetch to= /tmp/npm-1592-vn4sietK/registry.npmjs.org/cron/-/cron-1.0.9.tgz
+42 http GET https://registry.npmjs.org/cron/-/cron-1.0.9.tgz
+43 http 200 https://registry.npmjs.org/cron/-/cron-1.0.9.tgz
+44 silly lockFile d1152d99-ry-npmjs-org-cron-cron-1-0-9-tgz https://registry.npmjs.org/cron/-/cron-1.0.9.tgz
+45 silly lockFile d1152d99-ry-npmjs-org-cron-cron-1-0-9-tgz https://registry.npmjs.org/cron/-/cron-1.0.9.tgz
+46 silly lockFile 8e5d8a7e-cron-1-0-9 cron@1.0.9
+47 silly lockFile 8e5d8a7e-cron-1-0-9 cron@1.0.9
+48 silly lockFile b1088792-cron cron@
+49 silly lockFile b1088792-cron cron@
+50 error Error: EACCES, mkdir '/home/frob/.npm/cron/1.0.9'
+50 error  { [Error: EACCES, mkdir '/home/frob/.npm/cron/1.0.9']
+50 error   errno: 3,
+50 error   code: 'EACCES',
+50 error   path: '/home/frob/.npm/cron/1.0.9',
+50 error   parent: 'find-ads' }
+51 error Please try running this command again as root/Administrator.
+52 error System Linux 3.2.0-79-generic
+53 error command "/usr/bin/node" "/usr/bin/npm" "install" "--save" "cron"
+54 error cwd /homenode/find-ads
+55 error node -v v0.10.37
+56 error npm -v 1.4.28
+57 error path /home/frob/.npm/cron/1.0.9
+58 error code EACCES
+59 error errno 3
+60 error stack Error: EACCES, mkdir '/home/frob/.npm/cron/1.0.9'
+61 verbose exit [ 3, true ]
