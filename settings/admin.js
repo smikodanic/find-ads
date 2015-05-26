@@ -11,7 +11,7 @@ module.exports = {
   nodeBinFile: '/usr/bin/node',
   username: 'admin',
   password: 'astra',
-  logging: 'pro',
+  logging: 'dev',
   cronInitFile: '1cron/cronInit.js',
   timeZone: 'Europe/Zagreb',
   mongo: {
