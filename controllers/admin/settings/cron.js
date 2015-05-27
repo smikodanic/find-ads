@@ -70,4 +70,36 @@ module.exports = function (router) {
 
   });
 
+
+  router.get('/restart', function (req, res) {
+
+    //check if username and password are good in session storage
+    var sess_tf = login.checksess_user_pass(req);
+
+    if (sess_tf) {
+
+      cron.restart(res, '/admin/settings/cron');
+
+    } else {
+      res.redirect('/admin');
+    }
+
+  });
+
+
+  router.get('/del', function (req, res) {
+
+    //check if username and password are good in session storage
+    var sess_tf = login.checksess_user_pass(req);
+
+    if (sess_tf) {
+
+      cron.del(res, '/admin/settings/cron');
+
+    } else {
+      res.redirect('/admin');
+    }
+
+  });
+
 };

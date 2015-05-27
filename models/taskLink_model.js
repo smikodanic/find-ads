@@ -5,6 +5,7 @@
 require('rootpath')();
 var MongoClient = require('mongodb').MongoClient;
 var logg = require('libraries/loggLib');
+var cron = require('libraries/cronLib');
 
 //mongo parameters
 var settings = require('settings/admin.js');
@@ -181,9 +182,12 @@ module.exports.updateTask = function (req, res) {
     db.collection(collName).update(selector, newDoc, function (err, status) {
       if (err) { logg.byWinston('error', __filename + ':182 ' + err); }
 
-      // logg.byWinston('info', __filename + ':172 Updated records: ' + status);
+      //restart cronInit file and redirect to /admin/crawllinks/tasksiteration
+      cron.restart(res, '/admin/crawllinks/tasksiteration');
+
+      logg.byWinston('info', __filename + ':187 Updated records: ' + status);
       db.close();
-      res.redirect('/admin/crawllinks/tasksiteration');
+      // res.redirect('/admin/crawllinks/tasksiteration');
     });
 
   }); //connect

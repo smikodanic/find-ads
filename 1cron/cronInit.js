@@ -27,7 +27,7 @@ var appDir = sett.appDir;
 function defineCron(elem, key, jobCnt, scriptFilePath) {
 
   //logging file
-  var loggFileName = collLinkTasks + '-' + elem.name;
+  var loggFileName = collLinkTasks + '-' + elem.name + '-cronStdout';
 
   // executed when job.start(); is invoked
   var onStartExe = function () {

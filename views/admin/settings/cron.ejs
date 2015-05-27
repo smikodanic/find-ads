@@ -55,6 +55,9 @@
                     <span style="font:15px Verdana;font-weight: bold;">Cron server status:</span> <input type="checkbox" name="cronStatus" id="cronStatus">
                     <br><br>
                     <p class="alert alert-info" id="info_msg"></p>
+                    <br><br>
+                    <a href="/admin/settings/cron/restart" class="btn btn-warning btn-lg" title="$pm2 restart ...">RESTART</a>
+                    <a href="/admin/settings/cron/del" class="btn btn-danger btn-lg" title="$pm2 delete ...">DELETE</a>
                 </div>
                 <!-- Switch end -->
 
@@ -122,6 +125,19 @@ $(document).ready(function () {
 
 
 });
+</script>
+
+
+
+<script>
+/* Bootstrap tooltip activation */
+  $(document).ready(function(){
+   var options = {
+    placement: "top",
+    delay: 800
+   };
+   $(".btn").tooltip(options);
+  });
 </script>
 
 </body>
