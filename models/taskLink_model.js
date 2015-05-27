@@ -45,7 +45,8 @@ module.exports.insertTask = function (req, res) {
           db.close();
 
           //on successful insertion do redirection
-          res.redirect('/admin/crawllinks/tasksiteration');
+          //restart cronInit file and redirect to /admin/crawllinks/tasksiteration
+          cron.restart(res, '/admin/crawllinks/tasksiteration');
         });
 
       });
