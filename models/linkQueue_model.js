@@ -4,14 +4,14 @@
 
 require('rootpath')();
 var MongoClient = require('mongodb').MongoClient;
-var logg = require('libraries/logging.js');
+var logg = require('libraries/loggLib');
 var pagination = require('libraries/pagination.js');
 // var nodedump = require('nodedump').dump;
 
 //mongo parameters
 var settings = require('settings/admin.js');
 var dbName = settings.mongo.dbName;
-var collName_tasks = settings.mongo.dbColl_tasks1;
+var collName_tasks = settings.mongo.dbColl_tasksLnk_iterate;
 
 /**
  * Insert links into linkQueue_* collection

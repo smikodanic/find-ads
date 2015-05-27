@@ -5,7 +5,7 @@
  */
 
 require('rootpath')(); //enable requiring modules from application's root folder
-var logg = require('libraries/logging.js');
+var logg = require('libraries/loggLib');
 var MongoClient = require('mongodb').MongoClient;
 
 var settings = require('settings/admin.js');

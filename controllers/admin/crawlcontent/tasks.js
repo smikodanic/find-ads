@@ -164,7 +164,7 @@ module.exports = function (router) {
 
       /* start crawling in same process */
       var MongoClient = require('mongodb').MongoClient;
-      var logg = require('libraries/logging.js');
+      var logg = require('libraries/loggLib');
       var settings = require('settings/admin.js');
       var dbName = settings.mongo.dbName;
       var collName_tasksCnt = settings.mongo.dbColl_tasksCnt;

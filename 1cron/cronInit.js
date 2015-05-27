@@ -7,7 +7,7 @@
 
 require('rootpath')();
 var MongoClient = require('mongodb').MongoClient;
-var logg = require('libraries/logging.js');
+var logg = require('libraries/loggLib');
 var time = require('libraries/timeLib.js');
 var CronJob = require('cron').CronJob;
 var childProcess = require('child_process');
@@ -16,7 +16,7 @@ var childProcess = require('child_process');
 var sett = require('settings/admin');
 var timeZone = sett.timeZone;
 var dbName = sett.mongo.dbName;
-var collLinkTasks = sett.mongo.dbColl_tasks1;
+var collLinkTasks = sett.mongo.dbColl_tasksLnk_iterate;
 var collContentTasks = sett.mongo.dbColl_tasksCnt;
 var nodeBinFile = sett.nodeBinFile;
 

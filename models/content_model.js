@@ -4,7 +4,7 @@
 
 require('rootpath')();
 var MongoClient = require('mongodb').MongoClient;
-var logg = require('libraries/logging.js');
+var logg = require('libraries/loggLib');
 var pagination = require('libraries/pagination.js');
 // var nodedump = require('nodedump').dump;
 

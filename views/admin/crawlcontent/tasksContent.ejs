@@ -88,7 +88,7 @@
                         <div class="clearfix">&nbsp;</div><br>
 
                         <!-- delete all documents -->                        
-                        <a href="/admin/crawlcontent/tasks/delete/all" class="btn btn-danger btn-sm"  id="deleteAll">Delete All</a>
+                        <a href="/admin/crawlcontent/tasks/delete/all" class="btn btn-danger btn-sm" id="deleteAll">Delete All</a>
                         <a href="/admin/crawlcontent/tasks/disable" class="btn btn-info btn-sm">Disable All</a>
                         <a href="/admin/crawlcontent/tasks" class="btn btn-info btn-sm" id="insertTask">Insert New</a>
 
@@ -590,7 +590,7 @@ var lightbox = function (sel) {
   var bw = $(window).width();
   var bh = $(window).height();
 
-  //colorize DIV background
+  //CSS options
   var cssOpt = {
     "width": bw + "px !important",
     "height": bh + 'px !important',
@@ -599,7 +599,7 @@ var lightbox = function (sel) {
     "left": "0px"
   }
 
-  $(sel).fadeIn(2200).css(cssOpt);
+  $(sel).fadeIn(1200).css(cssOpt);
 };
 
 

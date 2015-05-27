@@ -11,7 +11,7 @@ var MongoClient = require('mongodb').MongoClient;
 var nodedump = require('nodedump').dump;
 var url = require('url');
 var cheerio = require('cheerio');
-var logg = require('libraries/logging.js');
+var logg = require('libraries/loggLib');
 
 var igniter = require('0crawler/igniter');
 

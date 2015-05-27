@@ -41,69 +41,73 @@
                 <!-- /.row -->
 
                 <div class="clearfix">&nbsp;</div>
+                
+                <!-- table -->
                 <div class="row">
 
-                    <!-- table -->
-                    <div class="col-lg-12">
-                        <table class="table table-stripped table-hover table-condensed table-bordered">
-                            
-                            <tr>
-                                <th>id</th>
-                                <th>cat.</th>
-                                <th>name</th>
-                                <th>iteratingURL</th>
-                                <th>cron</th>
-                                <th>status</th>
-                                <th style="width:130px">action</th>
-                            </tr>
+                <div class="col-lg-12">
+                    <table class="table table-stripped table-hover table-condensed table-bordered">
+                        
+                      <tr>
+                          <th>id</th>
+                          <th>name</th>
+                          <th>iteratingURL</th>
+                          <th>from-to</th>
+                          <th>cron</th>
+                          <th>status</th>
+                          <th>int.(ms)</th>
+                          <th style="width:130px">action</th>
+                      </tr>
+                        
+                      <% tasks.forEach(function (elem) { %>
+                      <tr style="font-size:smaller">
+                        <td><%= elem.id %></td>
+                        <td><%= elem.name %></td>
+                        <td><%= elem.iteratingurl %></td>
+                        <td><%= elem.from$1 %> - <%= elem.to$1 %></td>
+                        <td><%= elem.cron %></td>
+                        <td><%= elem.cronStatus %></td>
+                        <td><%= elem.crawlInterval %></td>
+                        <td>
+                          
+                          <a href="/admin/crawllinks/tasksiteration/delete/<%= elem.id %>" class="fa fa-trash deleteTask" title="delete"></a>
+                          <a href="/admin/crawllinks/tasksiteration/edit/<%= elem.id %>" class="fa fa-pencil-square-o"title="edit"></a>
+                          <a href="/admin/crawllinks/tasksiteration/start/<%= elem.id %>" class="fa fa-play crawl-start crawlStart" title="crawl now" data-taskid="<%= elem.id %>"></a>
+                          <a href="/admin/crawllinks/resultsiteration/?q=&taskName=<%= elem.name %>&currentPage=1" class="fa fa-eye" title="see results" data-taskid="<%= elem.id %>"></a>
+                        
+                        </td>
+                      </tr>
+                      <% }); %>
+                        
+                    </table>
 
-                            
-                            <% tasks.forEach(function (elem) { %>
-                            <tr style="font-size:smaller">
-                              <td><%= elem.id %></td>
-                              <td><%= elem.category %></td>
-                              <td><%= elem.name %></td>
-                              <td><%= elem.iteratingurl %></td>
-                              <td><%= elem.cron %></td>
-                              <td><%= elem.status %></td>
+                    <div class="clearfix">&nbsp;</div> 
 
-                              <td>
-                                
-                                <a href="/admin/crawllinks/tasksiteration/delete/<%= elem.id %>" class="fa fa-trash" data-toggle="tooltip" data-placement="top" title="delete"></a>
-                                <a href="/admin/crawllinks/tasksiteration/edit/<%= elem.id %>" class="fa fa-pencil-square-o" data-toggle="tooltip" data-placement="top" title="edit"></a>
-                                <a href="/admin/crawllinks/tasksiteration/start/<%= elem.id %>" class="fa fa-play crawl-start" data-toggle="tooltip" data-placement="top" title="crawl now" data-taskid="<%= elem.id %>"></a>
-                                <a href="/admin/crawllinks/resultsiteration/?q=&taskName=<%= elem.name %>&currentPage=1" class="fa fa-eye" data-toggle="tooltip" data-placement="top" title="see results" data-taskid="<%= elem.id %>"></a>
-                              
-                              </td>
-
-                            </tr>
-                            <% }); %>
-                            
-                        </table>
-
-
-                        <div class="clearfix">&nbsp;</div><br>
-
-                        <!-- delete all documents -->                        
-                        <a href="/admin/crawllinks/tasksiteration/delete/all" class="btn btn-danger btn-sm">Delete All</a>
-                        <a href="/admin/crawllinks/tasksiteration/disable" class="btn btn-info btn-sm">Disable All</a>
-                        <a href="/admin/crawllinks/tasksiteration" class="btn btn-info btn-sm">Insert New</a>
-
+                    <div>                     
+                      <a href="/admin/crawllinks/tasksiteration/delete/all" class="btn btn-danger btn-sm" id="deleteAll">Delete All</a>
+                      <a href="/admin/crawllinks/tasksiteration/disable" class="btn btn-info btn-sm">Disable All</a>
+                      <a href="/admin/crawllinks/tasksiteration" class="btn btn-info btn-sm" id="insertTask">Insert New</a>
                     </div>
-                    
-                    <div class="clearfix">&nbsp;</div><br><br>
 
-                    <!-- form -->
-                    <div class="col-lg-12 well">
+                </div><!-- row end -->
+                <!-- table end-->
 
-                    <% //define form action value
-                      var act;
-                      if (task.id !== undefined) {
-                        act = '/admin/crawllinks/tasksiteration/update/' + task.id;
-                      } else {
-                        act = '/admin/crawllinks/tasksiteration/insert';
-                      }
-                    %>
+                <!-- insert/update form -->
+                <div class="row">
+
+                    <div class="col-sm-10 col-sm-offset-1 lightbox" id="lightbox-form">
+
+                        <span class="fa fa-times-circle close lightbox-close"></span>
+
+                        <!-- form -->
+                        <% //define form action value
+                          var act;
+                          if (task.id !== undefined) {
+                            act = '/admin/crawllinks/tasksiteration/update/' + task.id;
+                          } else {
+                            act = '/admin/crawllinks/tasksiteration/insert';
+                          }
+                        %>
 
                         <form action="<%= act %>" method="POST" enctype="application/x-www-form-urlencoded" class="form-horizontal">
                             
@@ -112,28 +116,6 @@
                           <div class="col-sm-3">
                             <input type="text" name="id" id="id" value="<%= task.id %>" class="form-control" readonly>
                           </div>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="category" class="col-sm-3 control-label" title="Select category for this task.">Category:</label>
-                            <div class="col-sm-4">
-                              <select name="category" id="category" class="form-control">
-                                    <option value="">All</option>
-
-                                  <% cats.forEach(function(elem){ %>
-                                    <option value="<%= elem.id %>" <%= (task.category == elem.id ) ? 'selected' : ''; %> ><%= elem.category %> (<%= elem.id %>)</option>
-                                  <% }); %>
-                              </select>
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="subcategory" class="col-sm-3 control-label" title="Select subcategory relevant to selected category.">Subcategory:</label>
-                            <div class="col-sm-4">
-                              <select name="subcategory" id="subcategory" class="form-control">
-
-                              </select>
-                            </div>
                         </div>
 
                         <div class="form-group">
@@ -194,22 +176,22 @@
                         </div>
 
                         <div class="form-group">
+                          <label for="cronStatus" class="col-sm-3 control-label" title="If you want cron job to become active select 'on'. Otherwise select 'off'.">Cron Status:</label>
+                          <div class="col-sm-2">
+                            <select name="cronStatus" id="cronStatus" class="form-control">
+                                <option value="on" <%= (task.id !== undefined && task.cronStatus == 'on' ) ? 'selected' : ''; %>>on</option>
+                                <option value="off" <%= (task.id !== undefined && task.cronStatus == 'off' ) ? 'selected' : ''; %>>off</option>
+                            </select>
+                          </div>
+                        </div>
+
+                        <div class="form-group">
                           <label for="crawlInterval" class="col-sm-3  control-label" title="Set the crawling interval between two crawlings in miliseconds. It's crawling speed.">crawlInterval:</label>
                           <div class="col-sm-2">
                             <input type="text" name="crawlInterval" id="crawlInterval" value="<%= (task.id !== undefined) ? task.crawlInterval : 3000; %>" class="form-control" required>
                           </div>
                           <label class="control-label">ms</label>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="status" class="col-sm-3 control-label" title="If you want cron job to become active select 'On'. Otherwise select 'Off'.">Status:</label>
-                            <div class="col-sm-2">
-                              <select name="status" id="status" class="form-control">
-                                  <option value="1" <%= (task.id !== undefined && task.status == 1 ) ? 'selected' : ''; %> >On</option>
-                                  <option value="0" <%= (task.id !== undefined && task.status == 0 ) ? 'selected' : ''; %> >Off</option>
-                              </select>
-                            </div>
-                        </div>
+                        </div>                        
 
                         <p class="clearfix">&nbsp;</p>
 
@@ -228,21 +210,40 @@
                         </div>
 
                         </form>
-                    </div>
                     <!--  form end -->
 
-                    <div class="col-sm-12 lightbox">
-                      <span class="fa fa-times-circle close"></span>
-                      Console: 
-                      <br>
-                      <iframe src="" frameborder="1" class="crawl-console">
-                        
-                      </iframe>
-                      
                     </div>
 
+                </div> <!-- row end -->
+                <!-- insert/update form end -->
+
+
+                <!-- delete task -->
+                <div class="row">
+                  <div class="col-sm-4 col-sm-offset-4 lightbox" id="lightbox-delete">
+                    <span class="fa fa-times-circle close lightbox-close"></span>
+                    <p>Do you want to delete this task?</p>
+                    <br>
+                    <a href="" id="deleteTaskYes" class="btn btn-danger">Yes</a>
+                    <button id="deleteTaskNo" class="btn btn-warning lightbox-close">No, thanks</button>
+                  </div>
+                </div> <!-- row end -->
+                <!-- delete task end -->
+
+
+                <!-- lightbox crawling console -->
+                <div class="row">
+                  <div class="col-sm-12 lightbox" id="lightbox-console">
+                    <span class="fa fa-times-circle close lightbox-close"></span>
+                    <h3>Crawl results</h3>
+                    <a href="/admin/crawllinks/tasksiteration/stop" class="btn btn-danger btn-lg">STOP crawling</a>
+                    <iframe src="" frameborder="1"></iframe>
+                  </div>
                 </div>
-                <!-- /.row -->
+                <!-- lightbox crawling console end-->
+
+
+
 
             </div>
             <!-- /.container-fluid -->
@@ -253,6 +254,11 @@
     </div>
     <!-- /#wrapper -->
     
+
+
+
+
+
 
 
 
@@ -268,88 +274,109 @@
   });
 </script>
 
-<script>
-/* append relevant subcategories into SELECT tag */
-  $(document).ready(function(){
-
-    //option tag for task to edit
-    var task = <%- JSON.stringify(task, null, 2) %>; //sent from links.js controller file
-    if (task.subcategory !== undefined) {
-      $('#subcategory').html('<option value="' + task.subcategory + '"> (' + task.subcategory + ') </option>');
-    }
-
-    $('#category').change(function(){
-      var val = $(this).val();
-      var cats = <%- JSON.stringify(cats, null, 2) %>; //'cats' comes from links_iterateurl.ejs
-      
-      $('#subcategory > option').remove();
-
-      // console.log(JSON.stringify(cats[val].subcats, null, 2));
-      if (cats[val] !== undefined) {
-        cats[val].subcats.forEach(function (elem, index) {
-
-          $('#subcategory').append('<option value="' + index + '">' + elem + '(' + index + ')' + '</option>');
-          // console.log(elem);
-        });
-      }
-
-      $('#subcategory').prepend('<option value="" selected>All</option>');
-
-    });
-
-  });
-</script>
 
 <script>
+/*LIGHTBOX*/
 
-  //lightbox (pop up window)
-  var lightbox = function () {
-    
-    //width and height of browser's window
-    var bw = $(window).width();
-    var bh = $(window).height();
+//lightbox function
+var lightbox = function (sel) {
+  
+  //width and height of browser's window
+  var bw = $(window).width();
+  var bh = $(window).height();
 
-    //colorize DIV background
-    var cssOpt = {
-      "background-color": "rgba(255,0,0,0.4)",
-      "width": bw + "px !important",
-      "height": bh + 'px !important',
-      "border": "5px solid Brown",
-      "position": "fixed",
-      "top": "0px",
-      "left": "0px",
-      "z-index": 20000
-    }
-    $('.lightbox').show(1000)
-      .css(cssOpt);
-    
+  //CSS options
+  var cssOpt = {
+    "width": bw + "px !important",
+    "height": bh + 'px !important',
+    "position": "absolute",
+    "top": "0px",
+    "left": "0px"
+  }
+
+  $(sel).fadeIn(1000).css(cssOpt);
+};
 
 
-    // console.log(bw + ' , ' + bh);
-  };
-
-  //start crawling with console (iframe) output
-  $(document).ready(function () {
-    $('.lightbox').hide();
-
-    $('.crawl-start').on('click', function (event) {
-      event.preventDefault();
-      
-      lightbox();
-
-      //start crawling by adding URL into iframe's SRC attribute
-      var taskID = $(this).attr('data-taskid');
-      $('.crawl-console').attr('src', '/admin/crawllinks/tasksiteration/start/' + taskID);
-    });
-
-    //close lightbox console
-    $('.lightbox .close').on('click', function() {
-      $('.lightbox').hide();
-    });
-
+$(document).ready(function () {
+  
+  /* Show form for inserting task */
+  var sel1 = "#lightbox-form"; //selector to be affected by lightbox function
+  $(sel1).hide();
+  $('#insertTask').click(function (event) {
+    event.preventDefault(); //prevent A tag behaviour
+    lightbox(sel1);
   });
+
+
+  /* Show delete one task buttons */
+  var sel2 = "#lightbox-delete"; //selector to be affected by lightbox function
+  $(sel2).hide();
+  $('.deleteTask').click(function (event) {
+    event.preventDefault(); //prevent A tag behaviour
+    
+    var href = $(this).attr('href');
+    $('#deleteTaskYes').attr('href', href);
+    
+    lightbox(sel2);
+  });
+
+
+  /* Show delete all tasks buttons */
+  var sel2 = "#lightbox-delete"; //selector to be affected by lightbox function
+  $(sel2).hide();
+  $('#deleteAll').click(function (event) {
+    event.preventDefault(); //prevent A tag behaviour
+    
+    var href = $(this).attr('href');
+    $('#deleteTaskYes').attr('href', href);
+
+    $(sel2 + '>p').text('Do you want to delete all tasks?');
+    
+    lightbox(sel2);
+  });
+
+
+  /* Show form for editing/updating task */
+  //change URL
+  $('.editTask').click(function (event) {
+    event.preventDefault(); //prevent A tag behaviour
+    var href = $(this).attr('href');
+    window.location.href = href;
+  });
+  //show form in lightbox if URL contains word 'edit'
+  if (window.location.href.indexOf('edit') !== -1 ) { 
+    lightbox(sel1);
+  }
+
+  /* Show crawl console */
+  var sel3 = '#lightbox-console';
+  $(sel3).hide();
+  $('.crawlStart').click(function (event) {
+    event.preventDefault(); //prevent A tag behaviour
+    
+    lightbox(sel3);
+
+    //start crawling by adding URL into iframe's SRC attribute
+    var taskHref = $(this).attr('href');
+    $('.lightbox > iframe').attr('src', taskHref);
+  });
+
+
+
+  /* hide lightbox */
+  $('.lightbox-close').on('click', function () {
+    $(this).parent().fadeOut();
+    window.location.href = '/admin/crawllinks/tasksiteration'; //reset URL
+  });
+
+});
+
 </script>
+
+
+
+
 
 </body>
-
 </html>

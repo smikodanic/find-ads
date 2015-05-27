@@ -1,9 +1,9 @@
 /**
  * General settings
  *
- * Logging:
- * 'dev' - development mode: loging to console and file
- * 'pro' - production mode: logging to file only
+ * logMode:
+ * 'dev' - development mode: loging to console
+ * 'pro' - production mode: logging to file
  */
 
 module.exports = {
@@ -11,13 +11,14 @@ module.exports = {
   nodeBinFile: '/usr/bin/node',
   username: 'admin',
   password: 'astra',
-  logging: 'dev',
+  logMode: 'dev', //dev | pro
+  logDir: 'tmp/logs/',
   cronInitFile: '1cron/cronInit.js',
   timeZone: 'Europe/Zagreb',
   mongo: {
     dbName: 'mongodb://localhost:27017/crawler',
     dbColl_category: 'category',
-    dbColl_tasks1: 'taskLink_iterate',
+    dbColl_tasksLnk_iterate: 'linkTasks_iterate',
     dbColl_tasksCnt: 'contentTasks'
   }
 

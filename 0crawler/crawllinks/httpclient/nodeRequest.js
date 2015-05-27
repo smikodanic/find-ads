@@ -2,15 +2,22 @@ require('rootpath')();
 var url = require('url');
 var http = require('http');
 var cheerio = require('cheerio');
-var logg = require('libraries/logging');
+var logg = require('libraries/loggLib');
 var tekstmod = require('libraries/tekstmodLib');
 var urlmod = require('libraries/urlmod');
 var timeLib = require('libraries/timeLib');
-var links_model = require('models/links_model');
+var links_model = require('models/linkQueue_model');
 
 
-// HTTP client created by NodeJS module - http.request()
-module.exports.node = function (db, moTask, cb_outResults) {
+/**
+ * HTTP client created by NodeJS module - http.request()
+ * @param  {object} db            - database
+ * @param  {string} collName      - collection name where is task: for example linkTasks_iterate
+ * @param  {object} moTask        - document inside collName. Contains all taks variables
+ * @param  {function} cb_outResults - callback function for displaying results in browser or console
+ * @return {object}               null
+ */
+module.exports.runURL = function (db, collNameTask, moTask, cb_outResults) {
 
   //MongoDB collection name
   var collName = 'linkQueue_' + moTask.name;
@@ -36,7 +43,7 @@ module.exports.node = function (db, moTask, cb_outResults) {
 
   // HTTP request using NodeJS 'http' module (http.request)
   var req2 = http.request(options, function (res2) {
-      if (res2.statusCode !== 200) { logg.me('error', __filename + ':38 Page not found: ' + pageURL, null); }
+      if (res2.statusCode !== 200) { logg.craw(false, moTask.loggFileName, 'Page not found: ' + pageURL); }
 
       //get htmlDoc from chunks of data
       var htmlDoc = '';
@@ -48,20 +55,25 @@ module.exports.node = function (db, moTask, cb_outResults) {
 
         //doc to be inserted into mongoDB
         var insMoDoc = {
+          "task_collection": collNameTask,
           "task_id": moTask.id,
           "pageURL": pageURL,
-          "dateTime": timeLib.nowLocale(),
+          "crawlTime": timeLib.nowLocale(),
           "links": []
         };
 
-        cb_outResults.send('Page: ' + pageURL + ' [' + timeLib.nowLocale() + '] ' + '\n');
+        //message 1
+        var msg1 = 'Page: ' + pageURL + ' [' + timeLib.nowLocale() + '] ';
+        logg.craw(false, moTask.loggFileName2, msg1); //log to file
+        cb_outResults.send(msg1 + '\n');
 
         //get array of links using cherrio module
         $ = cheerio.load(htmlDoc);
 
-        var href, tekst;
+        var n = 1, href, tekst;
         $(moTask.aselector).each(function () {
-          tekst = $(this).children().remove().end().text(); //get text from A tag without children tag texts
+          // tekst = $(this).children().remove().end().text(); //get text from A tag without children tag texts
+          tekst = $(this).text();
           href = $(this).attr('href');
 
           //prettify tekst
@@ -76,13 +88,23 @@ module.exports.node = function (db, moTask, cb_outResults) {
             "href": href
           });
 
-          cb_outResults.send('-----  ' + href + ' --- ' + tekst + '\n');
+          
+          //message 2
+          var msg2 = n + '. -----  ' + href + ' --- ' + tekst;
+          logg.craw(false, moTask.loggFileName2, msg2); //log to file
+          cb_outResults.send(msg2  + '\n');
+
+          n++;
         });
 
-        cb_outResults.send('\n\n');
+        //message 3
+        n = n - 1;
+        var msg3 = 'Extracted links: ' + n;
+        logg.craw(false, moTask.loggFileName, msg3); //log to file
+        cb_outResults.send(msg3 + '\n\n'); //send to browser
 
 
-        //insert into MongoDB
+        //insert into MongoDB linkQueue_* collection
         links_model.insertLinks(pageURL, db, collName, insMoDoc);
 
       });
@@ -90,7 +112,7 @@ module.exports.node = function (db, moTask, cb_outResults) {
     });
 
   req2.on('error', function (err) {
-    logg.me('error', __filename + ':115 ' + err);
+    logg.craw(false, moTask.loggFileName, 'http.request error: ' + err);
   });
 
   req2.end();

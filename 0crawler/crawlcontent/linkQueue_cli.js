@@ -7,7 +7,7 @@
 
 require('rootpath')();
 var MongoClient = require('mongodb').MongoClient;
-var logg = require('libraries/logging.js');
+var logg = require('libraries/loggLib');
 
 //DB settings
 var settings = require('settings/admin.js');

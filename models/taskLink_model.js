@@ -4,12 +4,12 @@
 
 require('rootpath')();
 var MongoClient = require('mongodb').MongoClient;
-var logg = require('libraries/logging.js');
+var logg = require('libraries/loggLib');
 
 //mongo parameters
 var settings = require('settings/admin.js');
 var dbName = settings.mongo.dbName;
-var collName = settings.mongo.dbColl_tasks1;
+var collName = settings.mongo.dbColl_tasksLnk_iterate;
 var collName_cat = settings.mongo.dbColl_category;
 
 module.exports.insertTask = function (req, res) {
@@ -24,7 +24,7 @@ module.exports.insertTask = function (req, res) {
 
 
   MongoClient.connect(dbName, function (err, db) {
-    if (err) { logg.me('error', __filename + ':28 ' + err); }
+    if (err) { logg.me('error', __filename + ':27 ' + err); }
 
     if (insDoc !== null) {
 
@@ -107,7 +107,7 @@ module.exports.deleteTask = function (req, res) {
       var collName_linkQueue = 'linkQueue_' + moTasksDocs_arr[0].name;
 
       db.collection(collName_linkQueue).drop(function (err) { //delete linkQueue_* collection where links are stored
-        if (err) { logg.me('error', __filename + ':110 ' + err); }
+        if (err) { logg.me('error', __filename + ':110 ' + err + ' or ' + collName_linkQueue + ' collection doesnt exist'); }
 
         db.collection(collName).remove(selector, options, function (err, status) { //delete task document
           if (err) { logg.me('error', __filename + ':105 ' + err); }
@@ -176,14 +176,14 @@ module.exports.updateTask = function (req, res) {
   }
 
   MongoClient.connect(dbName, function (err, db) {
-    if (err) { logg.me('error', __filename + ':166 ' + err); }
+    if (err) { logg.me('error', __filename + ':179 ' + err); }
 
     db.collection(collName).update(selector, newDoc, function (err, status) {
-      if (err) { logg.me('error', __filename + ':169 ' + err); }
+      if (err) { logg.me('error', __filename + ':182 ' + err); }
 
       // logg.me('info', __filename + ':172 Updated records: ' + status);
       db.close();
-      res.redirect('/admin/crawllinks/tasksiteration/edit/' + id_req);
+      res.redirect('/admin/crawllinks/tasksiteration');
     });
 
   }); //connect
@@ -195,18 +195,18 @@ module.exports.disableTasks = function (res) {
 
 
   var selector = {};
-  var update = {$set: {"status": 0}};
+  var update = {$set: {"cronStatus": "off"}};
   var options = {
     multi: true //update multiple documents
   };
 
   MongoClient.connect(dbName, function (err, db) {
-    if (err) { logg.me('error', __filename + ':191 ' + err); }
+    if (err) { logg.me('error', __filename + ':204 ' + err); }
 
     db.collection(collName).update(selector, update, options, function (err, status) {
-      if (err) { logg.me('error', __filename + ':194 ' + err); }
+      if (err) { logg.me('error', __filename + ':207 ' + err); }
 
-      logg.me('info', __filename + ':197 Updated records: ' + status);
+      logg.me('info', __filename + ':209 Updated records: ' + status);
       db.close();
       res.redirect('/admin/crawllinks/tasksiteration');
     });

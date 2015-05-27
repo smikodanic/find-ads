@@ -1,10 +1,12 @@
 require('rootpath')(); //enable requireing modules from application root folder
 var express = require('express');
 var router = express.Router();
+
 // var nodedump = require('nodedump').dump;
-var login = require('libraries/accountLoginLib.js');
+var login = require('libraries/accountLoginLib');
 var taskLink_model = require('models/taskLink_model');
-var crawloop = require('0crawler/tasksiteration_loop');
+
+
 
 var cb_list_Render = function (res, moTasksDocs_arr, moCatsDocs_arr) {
   var vdata = {
@@ -23,6 +25,8 @@ var cb_list2_Render = function (res, moTaskEdit_arr, moTasksDocs_arr, moCatsDocs
   };
   res.render('./admin/crawllinks/tasksiteration', vdata);
 };
+
+
 
 
 
@@ -140,7 +144,24 @@ module.exports = function (router) {
     };
 
     if (sess_tf) {
-      crawloop.start(task_id, cb_outResults);
+      var poll = require('0crawler/crawllinks/polling/tasksiteration_polling');
+      poll.start(task_id, cb_outResults);
+    } else {
+      res.redirect('/admin');
+    }
+
+  });
+
+
+  //stop crawling
+  router.get('/stop', function (req, res) {
+
+    //check username and password
+    var sess_tf = login.checksess_user_pass(req);
+
+    if (sess_tf) {
+      clearInterval(global.intId);
+      res.redirect('/admin/crawllinks/tasksiteration');
     } else {
       res.redirect('/admin');
     }
