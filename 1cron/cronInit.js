@@ -8,7 +8,6 @@
 require('rootpath')();
 var MongoClient = require('mongodb').MongoClient;
 var logg = require('libraries/loggLib');
-var time = require('libraries/timeLib.js');
 var CronJob = require('cron').CronJob;
 var childProcess = require('child_process');
 
@@ -19,74 +18,132 @@ var dbName = sett.mongo.dbName;
 var collLinkTasks = sett.mongo.dbColl_tasksLnk_iterate;
 var collContentTasks = sett.mongo.dbColl_tasksCnt;
 var nodeBinFile = sett.nodeBinFile;
+var appDir = sett.appDir;
+
+
+/**
+ * Define cron job
+ */
+function defineCron(elem, key, jobCnt, scriptFilePath) {
+
+  //logging file
+  var loggFileName = collLinkTasks + '-' + elem.name;
+
+  // executed when job.start(); is invoked
+  var onStartExe = function () {
+
+    var cmd = nodeBinFile; // /usr/bin/node
+    var args = [
+      appDir + scriptFilePath, // /homenode/find-ads/0crawler/crawllinks/tasksiteration_cli.js
+      elem.id // 0 | 1 | 2 ...
+    ];
+
+    logg.craw(false, loggFileName, '----- CRON started with: ' + cmd);
+    var spawnObj = childProcess.spawn(cmd, args);
+
+    spawnObj.stdout.on('data', function (data) {
+      logg.craw(false, loggFileName, 'SPAWN stdout: \n' + data);
+    });
+
+    spawnObj.stderr.on('data', function (data) {
+      logg.craw(false, loggFileName, '++++++++++ SPAWN stderr: \n' + data);
+    });
+
+    spawnObj.on('close', function (code) {
+      logg.craw(false, loggFileName, 'SPAWN exited with code: ' + code);
+    });
+
+  };
+
+  // executed when job.stop(); is invoked
+  var onStopExe = function () {
+    logg.byWinston('info', '----- CRON stopped: ' + scriptFilePath);
+  };
+
+  //define cron job
+  jobCnt[key] = new CronJob(elem.cron, onStartExe, onStopExe, false, timeZone);
+
+}
 
 
 
 
 
-/* Activate content tasks */
+
+/**
+ * Activate link tasks
+ */
 MongoClient.connect(dbName, function (err, db) {
-  if (err) { logg.me('error', __filename + ':29 ' + err); }
+  if (err) { logg.byWinston('error', __filename + ':28 ' + err); }
 
-  db.collection(collContentTasks).find({}).sort({id: 1}).toArray(function (err, contentTasks_arr) { //content tasks
-    if (err) { logg.me('error', __filename + ':32 ' + err); }
+  db.collection(collLinkTasks).find({}).sort({id: 1}).toArray(function (err, linkTasks_arr) { //link tasks
+    if (err) { logg.byWinston('error', __filename + ':31 ' + err); }
 
-    //cron jobs for crawling content
+    //cron jobs for crawling link
     var jobCnt = [];
-    contentTasks_arr.forEach(function (elem, key) {
-
-      console.log(elem.id);
-
-      // executed when job.start(); is invoked
-      function onStartExe() {
-
-        logg.me('info', 'Cron job started: ' + elem.name + ' at ' + time.nowLocale());
-
-        var cmdLineArgs = [
-          '../0crawler/crawlcontent/linkQueue_cli.js',
-          elem.id
-        ];
-
-        childProcess.execFile(nodeBinFile, cmdLineArgs, function (err, stdout) {
-          if (err) { console.log(err); }
-
-          console.log(stdout);
-        });
-
-      }
-
-      // executed when job.stop(); is invoked
-      var onStopExe = function () {
-        logg.me('info', 'Cron job stopped: ' + elem.name + ' at ' + time.nowLocale());
-      };
-
-
+    linkTasks_arr.forEach(function (elem, key) {
 
 
       //define cron job
-      jobCnt[key] = new CronJob(elem.cron, onStartExe, onStopExe, false, timeZone);
-
-
-
+      defineCron(elem, key, jobCnt, '/0crawler/crawllinks/tasksiteration_cli.js');
 
       //start or stop cron job -depends on cronStatus variable
       if (elem.cronStatus === 'on') {
 
-        console.log('Start job: ' + elem.name);
         jobCnt[key].start();
 
       } else {
 
         jobCnt[key].stop();
-
       }
 
     });
+
+    db.close();
 
   });
 
 });
 
+
+
+
+
+
+/**
+ * Activate content tasks
+ */
+MongoClient.connect(dbName, function (err, db) {
+  if (err) { logg.byWinston('error', __filename + ':28 ' + err); }
+
+  db.collection(collContentTasks).find({}).sort({id: 1}).toArray(function (err, linkTasks_arr) { //link tasks
+    if (err) { logg.byWinston('error', __filename + ':31 ' + err); }
+
+    //cron jobs for crawling link
+    var jobCnt = [];
+    linkTasks_arr.forEach(function (elem, key) {
+
+
+      //define cron job
+      defineCron(elem, key, jobCnt, '/0crawler/crawlcontent/linkQueue_cli.js');
+
+      //start or stop cron job -depends on cronStatus variable
+      if (elem.cronStatus === 'on') {
+
+        jobCnt[key].start();
+
+      } else {
+
+        jobCnt[key].stop();
+      }
+
+    });
+
+    db.close();
+
+  });
+
+});
 
 
 

@@ -5,6 +5,8 @@
  * Usefull for cron job.
  */
 require('rootpath')(); //enable requireing modules from application root folder
+var crawloop = require('0crawler/crawllinks/polling/tasksiteration_polling');
+
 
 //id from from command line process.argv
 if (process.argv.length < 3) {
@@ -13,6 +15,8 @@ if (process.argv.length < 3) {
 } else {
   var task_id = parseInt(process.argv[2], 10); //use parseint to convert string into number
 }
+
+
 
 //callback: output crawling results to console
 var cb_outResults = {
@@ -23,7 +27,6 @@ var cb_outResults = {
     process.exit();
   }
 };
-
 
 //callback: output crawling results to null (dont display output)
 var cb_outResults_null = {
@@ -36,6 +39,6 @@ var cb_outResults_null = {
 };
 
 
+
 //start crawling from command line
-var crawloop = require('0crawler/tasksiteration_loop');
-crawloop.start(task_id, cb_outResults);
+crawloop.start(task_id, cb_outResults_null);

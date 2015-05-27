@@ -24,22 +24,22 @@ var collName_tasks = settings.mongo.dbColl_tasksLnk_iterate;
 module.exports.insertLinks = function (pageURL, db, collName, insMoDoc) {
 
   db.collection(collName).createIndex({page: 1}, {unique: true, sparse: true}, function (err) { //create unique index to prevent duplicated documents
-    if (err) { logg.me('error', __filename + ':27 ' + err); }
+    if (err) { logg.byWinston('error', __filename + ':27 ' + err); }
 
     db.collection(collName).find({"pageURL": pageURL}).toArray(function (err, moTask2_arr) { //check if collection already exists
-      if (err) { logg.me('error', __filename + ':30 ' + err); }
+      if (err) { logg.byWinston('error', __filename + ':30 ' + err); }
 
       //if collection already exists do UPDATE
       if (moTask2_arr.length !== 0) {
 
         db.collection(collName).update({"pageURL": pageURL}, insMoDoc, function (err) {
-          if (err) { logg.me('error', __filename + ':36 ' + err); }
+          if (err) { logg.byWinston('error', __filename + ':36 ' + err); }
         });
 
       } else { //if collection doesn't exist do INSERT
 
         db.collection(collName).insert(insMoDoc, function (err) {
-          if (err) { logg.me('error', __filename + ':42 ' + err); }
+          if (err) { logg.byWinston('error', __filename + ':42 ' + err); }
         });
 
       }
@@ -75,12 +75,12 @@ module.exports.listLinks = function (req, res, cb_list) {
     queryDB = {"links.tekst": {"$regex": reg}};
     // queryDB = {"links.tekst": reg};
   }
-console.log(queryDB);
+
   MongoClient.connect(dbName, function (err, db) {
-    if (err) { logg.me('error', __filename + ':73 ' + err); }
+    if (err) { logg.byWinston('error', __filename + ':73 ' + err); }
 
     db.collection(collName_tasks).find({}).sort({id: 1}).toArray(function (err, moTasksDocs_arr) { //all tasks to fill SELECT tag
-      if (err) { logg.me('error', __filename + ':76 ' + err); }
+      if (err) { logg.byWinston('error', __filename + ':76 ' + err); }
 
       /* define linkQueue collection */
 
@@ -93,7 +93,7 @@ console.log(queryDB);
       var collName_linkQueue = 'linkQueue_' + taskName;
 
       db.collection(collName_linkQueue).count(queryDB, function (err, countNum) {
-        if (err) { logg.me('error', __filename + ':94 ' + err); }
+        if (err) { logg.byWinston('error', __filename + ':94 ' + err); }
 
         /* create pagination object which is sent to view file */
         var pagesPreURI = '/admin/crawllinks/resultsiteration/?q=' + q + '&taskName=' + taskName + '&currentPage=';
@@ -102,7 +102,7 @@ console.log(queryDB);
         var pagination_obj = pagination.paginator(req, countNum, pagesPreURI, perPage, spanNum);
 
         db.collection(collName_linkQueue).find(queryDB).skip(pagination_obj.skipNum).limit(pagination_obj.perPage).toArray(function (err, moQueueDocs_arr) {
-          if (err) { logg.me('error', __filename + ':103 ' + err); }
+          if (err) { logg.byWinston('error', __filename + ':103 ' + err); }
 
           cb_list(res, moTasksDocs_arr, moQueueDocs_arr, pagination_obj);
         });

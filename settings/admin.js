@@ -5,15 +5,22 @@
  * 'dev' - development mode: loging to console
  * 'pro' - production mode: logging to file
  */
+var path = require('path');
+
+
+// node application root directory path: /homenopde/find-ads
+var appDir = path.resolve(__dirname, '../');
+
 
 module.exports = {
 
   nodeBinFile: '/usr/bin/node',
+  appDir: appDir,
   username: 'admin',
   password: 'astra',
   logMode: 'dev', //dev | pro
-  logDir: 'tmp/logs/',
-  cronInitFile: '1cron/cronInit.js',
+  logDir: appDir + '/tmp/logs/',
+  cronInitFile: appDir + '/1cron/cronInit.js',
   timeZone: 'Europe/Zagreb',
   mongo: {
     dbName: 'mongodb://localhost:27017/crawler',

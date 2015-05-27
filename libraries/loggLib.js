@@ -41,11 +41,16 @@ var wlogger = new (winston.Logger)({
   ]
 });
 
+//handle uncaught exceptions
+winston.handleExceptions(new winston.transports.File({ filename: logDir + 'winston/' + preFile + 'exceptions.log'}));
+
+
 module.exports.byWinston = function (logLevel, message) {
 
   if (logMode === 'dev') { //development mode: logging to console
 
     winston.log(logLevel, message);
+    wlogger.log(logLevel, message);
 
   } else { //production mode: logging only to file
 
@@ -56,6 +61,11 @@ module.exports.byWinston = function (logLevel, message) {
 
 
 
+
+
+var cb_null = function () {
+  return null;
+}
 
 
 /**
@@ -71,7 +81,7 @@ module.exports.craw = function (erase, fileName, message) {
   var filePath = logDir + 'crawler/' + preFile + fileName + '.log';
 
   //truncate (erase) all file content (faster debugging)
-  if (erase) { fs.truncate(filePath, 0, null); }
+  if (erase) { fs.truncate(filePath, 0, cb_null); }
 
   //message with current time
   message = '[' + tm.nowSQL() + '] ' + message + '\n';
@@ -80,11 +90,11 @@ module.exports.craw = function (erase, fileName, message) {
   if (logMode === 'dev') { //development mode: logging to console
 
     console.log(message);
-    fs.appendFile(filePath, message, null);
+    fs.appendFile(filePath, message, cb_null);
 
   } else { //production mode: logging to file
 
-    fs.appendFile(filePath, message, null);
+    fs.appendFile(filePath, message, cb_null);
   }
 
 };

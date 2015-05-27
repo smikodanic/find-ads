@@ -1,7 +1,6 @@
 require('rootpath')(); //enable requiring modules from application's root folder
 var logg = require('libraries/loggLib.js');
 var MongoClient = require('mongodb').MongoClient;
-var httpClient = require('0crawler/crawllinks/httpclient/nodeRequest');
 
 //settings
 var sett = require('settings/admin.js');
@@ -22,13 +21,18 @@ module.exports.start = function (task_id, cb_outResults) {
       //MongoDB doc object
       var moTask = moTask_arr[0];
 
+      //httpClient is defined inside Mongo collection: linkTasks_*
+      var httpClient = require('0crawler/crawllinks/httpclient/' + moTask.httpclientScript);
+
+
       //define logg file name and put in moTask object
       moTask.loggFileName = collNameTask + '-' + moTask.name;
       moTask.loggFileName2 = collNameTask + '-' + moTask.name + '-results';
 
       //first logg: header with date
-      logg.craw(false, moTask.loggFileName, '--------- START CRAWLING LINKS from ' + collNameTask + '; name=' + moTask.name);
-      logg.craw(true, moTask.loggFileName2, '--------- START CRAWLING LINKS from ' + collNameTask + '; name=' + moTask.name);
+      var msg0 = '--------- START CRAWLING LINKS from ' + collNameTask + '; name=' + moTask.name + '; httpclientScript=' + moTask.httpclientScript;
+      logg.craw(false, moTask.loggFileName, msg0);
+      logg.craw(true, moTask.loggFileName2, msg0);
 
       //crawl first pagination page - defined by 'firstURL' variable
       moTask.iteratingurl2 = moTask.firsturl;

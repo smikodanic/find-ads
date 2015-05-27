@@ -176,7 +176,7 @@
                         </div>
 
                         <div class="form-group">
-                          <label for="cronStatus" class="col-sm-3 control-label" title="If you want cron job to become active select 'on'. Otherwise select 'off'.">Cron Status:</label>
+                          <label for="cronStatus" class="col-sm-3 control-label" title="If you want cron job to become active select 'on'. Otherwise select 'off'.">Cron status:</label>
                           <div class="col-sm-2">
                             <select name="cronStatus" id="cronStatus" class="form-control">
                                 <option value="on" <%= (task.id !== undefined && task.cronStatus == 'on' ) ? 'selected' : ''; %>>on</option>
@@ -191,6 +191,19 @@
                             <input type="text" name="crawlInterval" id="crawlInterval" value="<%= (task.id !== undefined) ? task.crawlInterval : 3000; %>" class="form-control" required>
                           </div>
                           <label class="control-label">ms</label>
+                        </div>
+
+                        <div class="form-group">
+                          <label for="httpclientScript" class="col-sm-3 control-label" title="Select script where HTTP Client is defined.">HTTP Client Script:</label>
+                          <div class="col-sm-4">
+                            <select name="httpclientScript" id="httpclientScript" class="form-control">
+
+                                <% httpclientFiles.forEach(function(elem){ %>
+                                <option value="<%= elem %>" <%= (task.httpclientScript == elem ) ? 'selected' : ''; %> ><%= elem %></option>
+                                <% }); %>
+
+                            </select>
+                          </div>
                         </div>                        
 
                         <p class="clearfix">&nbsp;</p>

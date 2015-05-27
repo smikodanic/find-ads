@@ -1,8 +1,7 @@
 require('rootpath')(); //enable requireing modules from application root folder
 var express = require('express');
 var router = express.Router();
-
-// var nodedump = require('nodedump').dump;
+var filedir = require('libraries/filedirLib.js');
 var login = require('libraries/accountLoginLib');
 var taskLink_model = require('models/taskLink_model');
 
@@ -12,7 +11,8 @@ var cb_list_Render = function (res, moTasksDocs_arr, moCatsDocs_arr) {
   var vdata = {
     task: {},
     tasks: moTasksDocs_arr,
-    cats: moCatsDocs_arr
+    cats: moCatsDocs_arr,
+    httpclientFiles: filedir.listFiles('0crawler/crawllinks/httpclient/')
   };
   res.render('./admin/crawllinks/tasksiteration', vdata);
 };
@@ -21,7 +21,8 @@ var cb_list2_Render = function (res, moTaskEdit_arr, moTasksDocs_arr, moCatsDocs
   var vdata = {
     task: moTaskEdit_arr[0], //task to be edited (object is sent to .ejs file)
     tasks: moTasksDocs_arr, //list tasks
-    cats: moCatsDocs_arr //list categories & subcategories in SELECT tags
+    cats: moCatsDocs_arr, //list categories & subcategories in SELECT tags
+    httpclientFiles: filedir.listFiles('0crawler/crawllinks/httpclient/')
   };
   res.render('./admin/crawllinks/tasksiteration', vdata);
 };
