@@ -50,12 +50,12 @@ var cb_outResults_null = {
 
 /* start crawling from command line */
 MongoClient.connect(dbName, function (err, db) { // Connect to MongoDB 'contentTasks' collection to get 'poolScript' value
-  if (err) { logg.me('error', __filename + ':54 ' + err); }
+  if (err) { logg.byWinston('error', __filename + ':53 ' + err); }
 
   db.collection(collName_tasksCnt).find({"id": task_id}).toArray(function (err, contentTasks_arr) { //get poolScript for a given task ID
-    if (err) { logg.me('error', __filename + ':57 ' + err); }
+    if (err) { logg.byWinston('error', __filename + ':56 ' + err); }
 
-    var poolContentlinks = require('0crawler/crawlcontent/pooling/' + contentTasks_arr[0].poolScript);
+    var poolContentlinks = require('0crawler/crawlcontent/polling/' + contentTasks_arr[0].pollScript);
     poolContentlinks.start(task_id, cb_outResults);
 
     db.close(); //close DB connection

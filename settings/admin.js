@@ -8,7 +8,7 @@
 var path = require('path');
 
 
-// node application root directory path: /homenopde/find-ads
+// node application root directory path: /homenode/find-ads
 var appDir = path.resolve(__dirname, '../');
 
 
@@ -20,7 +20,7 @@ module.exports = {
   password: 'astra',
   logMode: 'dev', //dev | pro
   logDir: appDir + '/tmp/logs/',
-  cronInitFile: appDir + '/1cron/cronInit.js',
+  cronInitFile: appDir + '/1cron/cronInitCrawlers.js',
   timeZone: 'Europe/Zagreb',
   mongo: {
     dbName: 'mongodb://localhost:27017/crawler',

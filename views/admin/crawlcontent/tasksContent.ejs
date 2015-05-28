@@ -190,20 +190,20 @@
                         <div class="clearfix">&nbsp;</div>
 
                         <div class="form-group">
-                          <label for="poolInterval" class="col-sm-3 control-label" title="Set the pool interval between two crawlings in miliseconds. It's crawling speed.">Pooling Interval:</label>
+                          <label for="pollInterval" class="col-sm-3 control-label" title="Set the poll interval between two crawlings in miliseconds. It's crawling speed.">Polling Interval:</label>
                           <div class="col-sm-2">
-                            <input type="text" name="poolInterval" id="poolInterval" value="<%= task.poolInterval %>" class="form-control" required>
+                            <input type="text" name="pollInterval" id="pollInterval" value="<%= task.pollInterval %>" class="form-control" required>
                           </div>
                           <label class="control-label">ms</label>
                         </div>
 
                         <div class="form-group">
-                          <label for="poolScript" class="col-sm-3 control-label" title="Select script which will call links to be crawled.">Pooling Script:</label>
+                          <label for="pollScript" class="col-sm-3 control-label" title="Select script which will call links to be crawled.">Polling Script:</label>
                           <div class="col-sm-4">
-                            <select name="poolScript" id="poolScript" class="form-control">
+                            <select name="pollScript" id="pollScript" class="form-control">
 
-                                <% poolingFiles.forEach(function(elem){ %>
-                                <option value="<%= elem %>" <%= (task.poolScript == elem ) ? 'selected' : ''; %> ><%= elem %></option>
+                                <% pollingFiles.forEach(function(elem){ %>
+                                <option value="<%= elem %>" <%= (task.pollScript == elem ) ? 'selected' : ''; %> ><%= elem %></option>
                                 <% }); %>
 
                             </select>

@@ -44,8 +44,7 @@ module.exports.insertTask = function (req, res) {
 
           db.close();
 
-          //on successful insertion do redirection
-          //restart cronInit file and redirect to /admin/crawllinks/tasksiteration
+          //restart cronInitCrawlers file and redirect to /admin/crawllinks/tasksiteration
           cron.restart(res, '/admin/crawllinks/tasksiteration');
         });
 
@@ -109,14 +108,16 @@ module.exports.deleteTask = function (req, res) {
       var collName_linkQueue = 'linkQueue_' + moTasksDocs_arr[0].name;
 
       db.collection(collName_linkQueue).drop(function (err) { //delete linkQueue_* collection where links are stored
-        if (err) { logg.byWinston('error', __filename + ':110 ' + err + ' or ' + collName_linkQueue + ' collection doesnt exist'); }
+        if (err) { logg.byWinston('error', __filename + ':111 ' + err + ' or ' + collName_linkQueue + ' collection doesnt exist'); }
 
         db.collection(collName).remove(selector, options, function (err, status) { //delete task document
-          if (err) { logg.byWinston('error', __filename + ':105 ' + err); }
+          if (err) { logg.byWinston('error', __filename + ':114 ' + err); }
 
-          logg.byWinston('info', __filename + ':115 Deleted records:' + status);
+          logg.byWinston('info', __filename + ':116 Deleted records:' + status);
           db.close();
-          res.redirect('/admin/crawllinks/tasksiteration');
+
+          //restart cronInitCrawlers file and redirect to /admin/crawllinks/tasksiteration
+          cron.restart(res, '/admin/crawllinks/tasksiteration');
         });
 
       });
@@ -183,12 +184,11 @@ module.exports.updateTask = function (req, res) {
     db.collection(collName).update(selector, newDoc, function (err, status) {
       if (err) { logg.byWinston('error', __filename + ':182 ' + err); }
 
-      //restart cronInit file and redirect to /admin/crawllinks/tasksiteration
-      cron.restart(res, '/admin/crawllinks/tasksiteration');
-
       logg.byWinston('info', __filename + ':187 Updated records: ' + status);
       db.close();
-      // res.redirect('/admin/crawllinks/tasksiteration');
+
+      //restart cronInitCrawlers file and redirect to /admin/crawllinks/tasksiteration
+      cron.restart(res, '/admin/crawllinks/tasksiteration');
     });
 
   }); //connect
@@ -213,7 +213,9 @@ module.exports.disableTasks = function (res) {
 
       logg.byWinston('info', __filename + ':209 Updated records: ' + status);
       db.close();
-      res.redirect('/admin/crawllinks/tasksiteration');
+
+      //restart cronInitCrawlers file and redirect to /admin/crawllinks/tasksiteration
+      cron.restart(res, '/admin/crawllinks/tasksiteration');
     });
 
   }); //connect

@@ -9,13 +9,13 @@ var logg = require('libraries/loggLib');
 //settings
 require('rootpath')();
 var settings = require('settings/admin');
-var cronInitFile = settings.cronInitFile; // 1cron/cronInit.js
+var cronInitFile = settings.cronInitFile; // 1cron/cronInitCrawlers.js
 
 
 
 
 /**
- * Check if /1cron/cronInit.js is running by pm2
+ * Check if /1cron/cronInitCrawlers.js is running by pm2
  */
 module.exports.isRunning = function (res, cb_render) {
 

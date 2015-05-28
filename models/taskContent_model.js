@@ -5,6 +5,7 @@
 require('rootpath')();
 var MongoClient = require('mongodb').MongoClient;
 var logg = require('libraries/loggLib');
+var cron = require('libraries/cronLib');
 
 //mongo parameters
 var settings = require('settings/admin.js');
@@ -25,7 +26,7 @@ var createSelectors = function (req) {
       //input 
       var selType =  req.body.selectorType[key];
       var selName =  req.body.selectorName[key];
-      
+
       //creating selvalue string to be JSON.parsed later
       var selValue;
       if (req.body.selectorValue[key].indexOf(',') !== -1) {
@@ -55,10 +56,10 @@ var createSelectors = function (req) {
 module.exports.listTasks = function (res, cb_list) {
 
   MongoClient.connect(dbName, function (err, db) {
-    if (err) { logg.me('error', __filename + ':43 ' + err); }
+    if (err) { logg.me('error', __filename + ':59 ' + err); }
 
     db.collections(function (err, colls) { //get all collections from database
-      if (err) { logg.me('error', __filename + ':46 ' + err); }
+      if (err) { logg.me('error', __filename + ':62 ' + err); }
 
       //filtering only linkQueue_* collections from array
       var linkQueue_colls = colls.filter(function (elem) {
@@ -67,10 +68,10 @@ module.exports.listTasks = function (res, cb_list) {
       });
 
       db.collection(collName_tasksCnt).find({}).sort({id: 1}).toArray(function (err, moTasksDocs_arr) { //content tasks
-        if (err) { logg.me('error', __filename + ':55 ' + err); }
+        if (err) { logg.me('error', __filename + ':71 ' + err); }
 
         db.collection(collName_cat).find({}).sort({id: 1}).toArray(function (err, moCatsDocs_arr) { //categories
-          if (err) { logg.me('error', __filename + ':58 ' + err); }
+          if (err) { logg.me('error', __filename + ':74 ' + err); }
 
           cb_list(res, linkQueue_colls, moTasksDocs_arr, moCatsDocs_arr);
           db.close();
@@ -83,6 +84,7 @@ module.exports.listTasks = function (res, cb_list) {
   }); //connect
 
 };
+
 
 
 /**
@@ -107,7 +109,7 @@ module.exports.insertTask = function (req, res) {
     delete insDoc.selectorType;
     delete insDoc.selectorName;
     delete insDoc.selectorValue;
-    delete insDoc.suggestCollection
+    delete insDoc.suggestCollection;
     insDoc.selectors = selectors;
 
   } else {
@@ -117,12 +119,12 @@ module.exports.insertTask = function (req, res) {
 
 
   MongoClient.connect(dbName, function (err, db) {
-    if (err) { logg.me('error', __filename + ':77 ' + err); }
+    if (err) { logg.me('error', __filename + ':121 ' + err); }
 
     if (insDoc !== null) {
 
       db.collection(collName_tasksCnt).find().sort({id: -1}).limit(1).toArray(function (err, moDocs_arr) { //find max ID
-        if (err) { logg.me('error', __filename + ':82 ' + err); }
+        if (err) { logg.me('error', __filename + ':126 ' + err); }
 
         //define new insDoc.id from max id value
         if (moDocs_arr[0] !== undefined) {
@@ -132,12 +134,12 @@ module.exports.insertTask = function (req, res) {
         }
 
         db.collection(collName_tasksCnt).insert(insDoc, function (err) {
-          if (err) { logg.me('error', __filename + ':92 ' + err); }
+          if (err) { logg.me('error', __filename + ':136 ' + err); }
 
           db.close();
 
-          //on successful insertion do redirection
-          res.redirect('/admin/crawlcontent/tasks');
+          //restart cronInitCrawlers file and redirect to /admin/crawllinks/tasksiteration
+          cron.restart(res, '/admin/crawlcontent/tasks');
         });
 
       });
@@ -167,14 +169,16 @@ module.exports.deleteTask = function (req, res) {
   }
 
   MongoClient.connect(dbName, function (err, db) {
-    if (err) { logg.me('error', __filename + ':132 ' + err); }
+    if (err) { logg.me('error', __filename + ':171 ' + err); }
 
-    db.collection(collName_tasksCnt).remove(selector, options, function (err) { //delete task document
-      if (err) { logg.me('error', __filename + ':105 ' + err); }
+    db.collection(collName_tasksCnt).remove(selector, options, function (err, status) { //delete task document
+      if (err) { logg.me('error', __filename + ':174 ' + err); }
 
-      // logg.me('info', __filename + ':110 Deleted records:' + status);
+      logg.byWinston('info', __filename + ':176 Deleted records:' + status);
       db.close();
-      res.redirect('/admin/crawlcontent/tasks');
+
+      //restart cronInitCrawlers file and redirect to /admin/crawllinks/tasksiteration
+      cron.restart(res, '/admin/crawlcontent/tasks');
     });
 
   }); //connect
@@ -190,10 +194,10 @@ module.exports.editTask = function (req, res, cb_list2) {
   var selector = {"id": id_req};
 
   MongoClient.connect(dbName, function (err, db) {
-    if (err) { logg.me('error', __filename + ':155 ' + err); }
+    if (err) { logg.me('error', __filename + ':196 ' + err); }
 
     db.collections(function (err, colls) { //get all collections from database
-      if (err) { logg.me('error', __filename + ':158 ' + err); }
+      if (err) { logg.me('error', __filename + ':199 ' + err); }
 
       //filtering only linkQueue_* collections from array
       var linkQueue_colls = colls.filter(function (elem) {
@@ -202,13 +206,13 @@ module.exports.editTask = function (req, res, cb_list2) {
       });
 
       db.collection(collName_tasksCnt).find({}).sort({id: 1}).toArray(function (err, moTasksDocs_arr) { //list all tasks to populate table
-        if (err) { logg.me('error', __filename + ':167 ' + err); }
+        if (err) { logg.me('error', __filename + ':208 ' + err); }
 
         db.collection(collName_tasksCnt).find(selector).toArray(function (err, moTaskEdit_arr) { //get current task (by 'id') to edit that task
-          if (err) { logg.me('error', __filename + ':170 ' + err); }
+          if (err) { logg.me('error', __filename + ':211 ' + err); }
 
           db.collection(collName_cat).find({}).sort({id: 1}).toArray(function (err, moCatsDocs_arr) {
-            if (err) { logg.me('error', __filename + ':194 ' + err); }
+            if (err) { logg.me('error', __filename + ':214 ' + err); }
 
             cb_list2(res, linkQueue_colls, moTasksDocs_arr, moCatsDocs_arr, moTaskEdit_arr);
             db.close();
@@ -249,21 +253,23 @@ module.exports.updateTask = function (req, res) {
     delete newDoc.selectorType;
     delete newDoc.selectorName;
     delete newDoc.selectorValue;
-    delete newDoc.suggestCollection
+    delete newDoc.suggestCollection;
     newDoc.selectors = selectors;
   } else {
     newDoc = null;
   }
 
   MongoClient.connect(dbName, function (err, db) {
-    if (err) { logg.me('error', __filename + ':166 ' + err); }
+    if (err) { logg.me('error', __filename + ':262 ' + err); }
 
     db.collection(collName_tasksCnt).update(selectorDB, newDoc, function (err, status) {
-      if (err) { logg.me('error', __filename + ':169 ' + err); }
+      if (err) { logg.me('error', __filename + ':265 ' + err); }
 
-      // logg.me('info', __filename + ':172 Updated records: ' + status);
+      logg.byWinston('info', __filename + ':267 Updated records: ' + status);
       db.close();
-      res.redirect('/admin/crawlcontent/tasks');
+
+      //restart cronInitCrawlers file and redirect to /admin/crawllinks/tasksiteration
+      cron.restart(res, '/admin/crawlcontent/tasks');
     });
 
   }); //connect
@@ -271,23 +277,26 @@ module.exports.updateTask = function (req, res) {
 };
 
 
+
 module.exports.disableTasks = function (res) {
 
   var selectorDB = {};
-  var update = {$set: {"status": 0}};
+  var update = {$set: {"cronStatus": "off"}};
   var options = {
     multi: true //update multiple documents
   };
 
   MongoClient.connect(dbName, function (err, db) {
-    if (err) { logg.me('error', __filename + ':254 ' + err); }
+    if (err) { logg.me('error', __filename + ':288 ' + err); }
 
     db.collection(collName_tasksCnt).update(selectorDB, update, options, function (err, status) {
-      if (err) { logg.me('error', __filename + ':257 ' + err); }
+      if (err) { logg.me('error', __filename + ':291 ' + err); }
 
-      // logg.me('info', __filename + ':197 Updated records: ' + status);
+      logg.byWinston('info', __filename + ':293 Updated records: ' + status);
       db.close();
-      res.redirect('/admin/crawlcontent/tasks');
+
+      //restart cronInitCrawlers file and redirect to /admin/crawllinks/tasksiteration
+      cron.restart(res, '/admin/crawlcontent/tasks');
     });
 
   }); //connect

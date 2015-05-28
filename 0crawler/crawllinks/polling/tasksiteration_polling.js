@@ -26,8 +26,8 @@ module.exports.start = function (task_id, cb_outResults) {
 
 
       //define logg file name and put in moTask object
-      moTask.loggFileName = collNameTask + '-' + moTask.name;
-      moTask.loggFileName2 = collNameTask + '-' + moTask.name + '-results';
+      moTask.loggFileName = collNameTask + '.' + moTask.id + 'TO' + 'linkQueue_' + moTask.name;
+      moTask.loggFileName2 = collNameTask + '.' + moTask.id + 'TO' + 'linkQueue_' + moTask.name + '-results';
 
       //first logg: header with date
       var msg0 = '--------- START CRAWLING LINKS from ' + collNameTask + '; name=' + moTask.name + '; httpclientScript=' + moTask.httpclientScript;

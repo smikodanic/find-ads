@@ -1,7 +1,7 @@
 /**
  * Get links from MongoDB 'linkQueue_*' and sending to httpClient
- * Pooling links defined by setInterval()
- * Pooling interval in miliseconds defined by moTask.poolInterval
+ * Polling links defined by setInterval()
+ * Polling interval in miliseconds defined by moTask.poolInterval
  */
 
 require('rootpath')(); //enable requiring modules from application's root folder
@@ -19,17 +19,17 @@ module.exports.start = function (task_id, cb_outResults) {
   var selector = {"id": task_id};
 
   MongoClient.connect(dbName, function (err, db) { //mongoDB connection
-    if (err) { logg.me('error', __filename + ':15 ' + err); }
+    if (err) { logg.byWinston('error', __filename + ':22 ' + err); }
 
     db.collection(collName_tasksCnt).find(selector).toArray(function (err, moTask_arr) { //get task data using 'task_id' from 'contentTasks'
-      if (err) { logg.me('error', __filename + ':18 ' + err); }
+      if (err) { logg.byWinston('error', __filename + ':25 ' + err); }
 
       //MongoDB doc object
       var moTask = moTask_arr[0];
 
 
       db.collection(moTask.linkQueue).find({}).toArray(function (err, moLinkQue_arr) {
-        if (err) { logg.me('error', __filename + ':25 ' + err); }
+        if (err) { logg.byWinston('error', __filename + ':32 ' + err); }
 
         /* concat all 'links' arrays in all documents inside linkQueue_* collection */
         var linksAll_arr = [];
@@ -37,6 +37,15 @@ module.exports.start = function (task_id, cb_outResults) {
         moLinkQue_arr.forEach(function (elem) {
           linksAll_arr = linksAll_arr.concat(elem.links); //concated links
         });
+
+
+
+        //define logg file name and put in moTask object
+        moTask.loggFileName = collName_tasksCnt + '.' + task_id + 'FROM' + moTask.linkQueue + 'TO' + moTask.contentCollection;
+        //first logg: header with date
+        var msg0 = '--------- START CRAWLING LINKS from ' + moTask.linkQueue + '.' + task_id + ' to ' + moTask.contentCollection + '; httpclientScript=' + moTask.httpclientScript;
+        logg.craw(false, moTask.loggFileName, msg0);
+
 
 
         /* Get link by link and extracting content. Inserting extracted content into MongoDB collection. */
@@ -53,11 +62,15 @@ module.exports.start = function (task_id, cb_outResults) {
               //get http client script: httpClient_noderequest.js in /0crawler/crawlercontent/httpclient/ directory
               var httpClient = require('0crawler/crawlcontent/httpclient/' + moTask.httpclientScript);
 
+              //logg URL
+              logg.craw(false, moTask.loggFileName, 'URL to httpClient: ' + linksAll_arr[i].href);
+
+
               httpClient.node(db, moTask, linksAll_arr[i], i, cb_outResults);
 
             } else {
 
-              logg.me('info', __filename + ':48 Bad URL to httpClient: ' + linksAll_arr[i].href);
+              logg.byWinston('info', __filename + ':48 Bad URL to httpClient: ' + linksAll_arr[i].href);
             }
 
           } else {
@@ -75,13 +88,15 @@ module.exports.start = function (task_id, cb_outResults) {
 
         }, moTask.poolInterval);
 
-
       });
 
     });
 
   });
 };
+
+
+
 
 
 /**
@@ -96,10 +111,10 @@ module.exports.testOneURL = function (url, task_id, cb_outResults) {
   var selector = {"id": task_id};
 
   MongoClient.connect(dbName, function (err, db) { //mongoDB connection
-    if (err) { logg.me('error', __filename + ':99 ' + err); }
+    if (err) { logg.byWinston('error', __filename + ':101 ' + err); }
 
     db.collection(collName_tasksCnt).find(selector).toArray(function (err, moTask_arr) { //get task data using 'task_id' from 'contentTasks'
-      if (err) { logg.me('error', __filename + ':102 ' + err); }
+      if (err) { logg.byWinston('error', __filename + ':104 ' + err); }
 
       //MongoDB doc object
       var moTask = moTask_arr[0];
