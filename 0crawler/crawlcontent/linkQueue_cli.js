@@ -49,16 +49,18 @@ var cb_outResults_null = {
 
 
 /* start crawling from command line */
-MongoClient.connect(dbName, function (err, db) { // Connect to MongoDB 'contentTasks' collection to get 'poolScript' value
+MongoClient.connect(dbName, function (err, db) { // Connect to MongoDB 'contentTasks' collection to get 'pollScript' value
   if (err) { logg.byWinston('error', __filename + ':53 ' + err); }
 
-  db.collection(collName_tasksCnt).find({"id": task_id}).toArray(function (err, contentTasks_arr) { //get poolScript for a given task ID
+  db.collection(collName_tasksCnt).find({"id": task_id}).toArray(function (err, contentTasks_arr) { //get pollScript for a given task ID
     if (err) { logg.byWinston('error', __filename + ':56 ' + err); }
 
-    var poolContentlinks = require('0crawler/crawlcontent/polling/' + contentTasks_arr[0].pollScript);
-    poolContentlinks.start(task_id, cb_outResults);
+    var pollContentlinks = require('0crawler/crawlcontent/polling/' + contentTasks_arr[0].pollScript);
+    pollContentlinks.start(task_id, cb_outResults);
 
     db.close(); //close DB connection
+
+    logg.craw(false, 'cronList', 'CONTENT: Cron job started in linkQueue_cli.js with: $node ' + contentTasks_arr[0].pollScript + ' ' + task_id);
   });
 
 });

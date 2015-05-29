@@ -1,7 +1,7 @@
 /**
  * This file must have X (executing) permission.
  * 
- * Test /crawlcontent/pooling/linkQueue_pooling.js for just one URL.
+ * Test /crawlcontent/polling/linkQueue_polling.js for just one URL.
  * Start crawling from command line: $node linkQueue_cli_testOneURL.js 1 http://old.adsuu.com/142802-webdevelopment/
  */
 
@@ -49,14 +49,14 @@ var cb_outResults_null = {
 
 
 /* start crawling from command line */
-MongoClient.connect(dbName, function (err, db) { // Connect to MongoDB 'contentTasks' collection to get 'poolScript' value
+MongoClient.connect(dbName, function (err, db) { // Connect to MongoDB 'contentTasks' collection to get 'pollScript' value
   if (err) { logg.me('error', __filename + ':53 ' + err); }
 
-  db.collection(collName_tasksCnt).find({"id": task_id}).toArray(function (err, contentTasks_arr) { //get poolScript for a given task ID
+  db.collection(collName_tasksCnt).find({"id": task_id}).toArray(function (err, contentTasks_arr) { //get pollScript for a given task ID
     if (err) { logg.me('error', __filename + ':56 ' + err); }
 
-    var poolContentlinks = require('0crawler/crawlcontent/pooling/' + contentTasks_arr[0].poolScript);
-    poolContentlinks.testOneURL(url, task_id, cb_outResults);
+    var pollContentlinks = require('0crawler/crawlcontent/polling/' + contentTasks_arr[0].pollScript);
+    pollContentlinks.testOneURL(url, task_id, cb_outResults);
 
     db.close(); //close DB connection
   });

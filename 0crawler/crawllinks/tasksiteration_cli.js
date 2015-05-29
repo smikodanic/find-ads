@@ -5,7 +5,8 @@
  * Usefull for cron job.
  */
 require('rootpath')(); //enable requireing modules from application root folder
-var crawloop = require('0crawler/crawllinks/polling/tasksiteration_polling');
+var poll = require('0crawler/crawllinks/polling/tasksiteration_polling');
+var logg = require('libraries/loggLib');
 
 
 //id from from command line process.argv
@@ -41,4 +42,7 @@ var cb_outResults_null = {
 
 
 //start crawling from command line
-crawloop.start(task_id, cb_outResults_null);
+poll.start(task_id, cb_outResults_null);
+
+//logging
+logg.craw(false, 'cronList', 'LINKS: Cron job started in tasksiteration_cli.js with: $node tasksiteration_polling.js ' + task_id);

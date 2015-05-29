@@ -41,9 +41,6 @@ var wlogger = new (winston.Logger)({
   ]
 });
 
-//handle uncaught exceptions
-winston.handleExceptions(new winston.transports.File({ filename: logDir + 'winston/' + preFile + 'exceptions.log'}));
-
 
 module.exports.byWinston = function (logLevel, message) {
 
@@ -65,7 +62,7 @@ module.exports.byWinston = function (logLevel, message) {
 
 var cb_null = function () {
   return null;
-}
+};
 
 
 /**
@@ -99,3 +96,21 @@ module.exports.craw = function (erase, fileName, message) {
 
 };
 
+
+
+//handle uncaught exceptions and put into /winston/ dir - long format
+winston.handleExceptions(new winston.transports.File({ filename: logDir + 'winston/' + preFile + 'exceptions.log'}));
+
+
+//handle uncaught exceptions - short format
+process.on('uncaughtException', function (err) {
+
+  var exceptFile = logDir + 'misc/uncaughtException.log';
+
+  if (err) {
+
+    var errMsg = '[' + tm.nowSQL() + ']\n' + err.stack + '\n\n';
+    fs.appendFile(exceptFile, errMsg, cb_null);
+  }
+
+});

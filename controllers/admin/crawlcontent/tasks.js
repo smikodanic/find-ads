@@ -11,8 +11,8 @@ var cb_list_Render = function (res, linkQueue_colls, moTasksDocs_arr, moCatsDocs
     tasks: moTasksDocs_arr,
     linkQueue_colls: linkQueue_colls,
     cats: moCatsDocs_arr,
-    pollingFiles: filedir.listFiles('0crawler/crawlcontent/polling/'),
-    httpclientFiles: filedir.listFiles('0crawler/crawlcontent/httpclient/')
+    pollingFiles: filedir.listJSFiles('0crawler/crawlcontent/polling/'),
+    httpclientFiles: filedir.listJSFiles('0crawler/crawlcontent/httpclient/')
   };
   res.render('./admin/crawlcontent/tasksContent', vdata);
 };
@@ -23,8 +23,8 @@ var cb_list2_Render = function (res, linkQueue_colls, moTasksDocs_arr, moCatsDoc
     tasks: moTasksDocs_arr,
     linkQueue_colls: linkQueue_colls,
     cats: moCatsDocs_arr,
-    pollingFiles: filedir.listFiles('0crawler/crawlcontent/polling/'),
-    httpclientFiles: filedir.listFiles('0crawler/crawlcontent/httpclient/')
+    pollingFiles: filedir.listJSFiles('0crawler/crawlcontent/polling/'),
+    httpclientFiles: filedir.listJSFiles('0crawler/crawlcontent/httpclient/')
   };
   res.render('./admin/crawlcontent/tasksContent', vdata);
 };
@@ -169,11 +169,11 @@ module.exports = function (router) {
       var dbName = settings.mongo.dbName;
       var collName_tasksCnt = settings.mongo.dbColl_tasksCnt;
 
-      // Connect to MongoDB 'contentTasks' collection to get 'poolScript' value
+      // Connect to MongoDB 'contentTasks' collection to get 'pollScript' value
       MongoClient.connect(dbName, function (err, db) {
         if (err) { logg.me('error', __filename + ':174 ' + err); }
 
-        db.collection(collName_tasksCnt).find({"id": task_id}).toArray(function (err, contentTasks_arr) { //get poolScript for a given task ID
+        db.collection(collName_tasksCnt).find({"id": task_id}).toArray(function (err, contentTasks_arr) { //get pollScript for a given task ID
           if (err) { logg.me('error', __filename + ':177 ' + err); }
 
           var pollContentlinks = require('0crawler/crawlcontent/polling/' + contentTasks_arr[0].pollScript);

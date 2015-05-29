@@ -42,6 +42,7 @@ module.exports.start = function (res) {
     if (err) { logg.byWinston('error', __filename + ':42 ' + err); }
 
     res.redirect('/admin/settings/cron');
+    logg.craw(false, 'cronList', 'Cron server started with pm2!');
   });
 
 };
@@ -56,6 +57,7 @@ module.exports.stop = function (res) {
     if (err) { logg.byWinston('error', __filename + ':56 ' + err); }
 
     res.redirect('/admin/settings/cron');
+    logg.craw(false, 'cronList', 'Cron server stopped with pm2!');
   });
 
 };
@@ -70,6 +72,7 @@ module.exports.restart = function (res, redirectURL) {
     if (err) { logg.byWinston('error', __filename + ':70 ' + err); }
 
     res.redirect(redirectURL);
+    logg.craw(false, 'cronList', 'Cron server restarted with pm2!');
   });
 
 };
@@ -84,6 +87,7 @@ module.exports.del = function (res, redirectURL) {
     if (err) { logg.byWinston('error', __filename + ':70 ' + err); }
 
     res.redirect(redirectURL);
+    logg.craw(false, 'cronList', 'Cron server pm2 process deleted!');
   });
 
 };

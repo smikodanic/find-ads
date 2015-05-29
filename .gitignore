@@ -1,5 +1,7 @@
 /tmp/*
 /tmp/sessions/*
 /tmp/logs/*
+/tmp/logs/crawler/*
+/tmp/logs/winston/*
 exceptions.log
 npm-debug.log

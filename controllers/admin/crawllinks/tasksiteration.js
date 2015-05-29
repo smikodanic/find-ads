@@ -12,7 +12,7 @@ var cb_list_Render = function (res, moTasksDocs_arr, moCatsDocs_arr) {
     task: {},
     tasks: moTasksDocs_arr,
     cats: moCatsDocs_arr,
-    httpclientFiles: filedir.listFiles('0crawler/crawllinks/httpclient/')
+    httpclientFiles: filedir.listJSFiles('0crawler/crawllinks/httpclient/')
   };
   res.render('./admin/crawllinks/tasksiteration', vdata);
 };
@@ -22,7 +22,7 @@ var cb_list2_Render = function (res, moTaskEdit_arr, moTasksDocs_arr, moCatsDocs
     task: moTaskEdit_arr[0], //task to be edited (object is sent to .ejs file)
     tasks: moTasksDocs_arr, //list tasks
     cats: moCatsDocs_arr, //list categories & subcategories in SELECT tags
-    httpclientFiles: filedir.listFiles('0crawler/crawllinks/httpclient/')
+    httpclientFiles: filedir.listJSFiles('0crawler/crawllinks/httpclient/')
   };
   res.render('./admin/crawllinks/tasksiteration', vdata);
 };

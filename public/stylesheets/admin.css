@@ -47,7 +47,6 @@ a.fa:hover {
 .lightbox #linkResults > a:hover {
 	color: #C8E8FF;
 }
-
 .lightbox iframe {
 	width: 70%;
 	height: 500px;
@@ -59,10 +58,13 @@ a.fa:hover {
 	border: 5px solid #E0DEDC;
 	overflow: scroll;
 }
-
-.lightbox h4 {
+.lightbox h3,h4 {
 	opacity: 1;
 	color: #222;
+}
+.lightbox h4>small, h3>small {
+	opacity: 1;
+	color: #ddd;
 }
 
 
