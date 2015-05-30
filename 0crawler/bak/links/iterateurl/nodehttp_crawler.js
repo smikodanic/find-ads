@@ -42,7 +42,7 @@ var httpClient = function (res, moTask, db) {
 
   // HTTP request using NodeJS 'http' module (http.request)
   var req2 = http.request(options, function (res2) {
-      if (res2.statusCode !== 200) { logg.me('error', __filename + ':43 Page not found: ' + options.hostname + options.path, null); }
+      if (res2.statusCode !== 200) { logg.byWinston('error', __filename + ':43 Page not found: ' + options.hostname + options.path, null); }
 
       //get htmlDoc from chunks of data
       var htmlDoc = '';
@@ -88,7 +88,7 @@ var httpClient = function (res, moTask, db) {
 
         //insert into mongoDb
         db.collection('linkQueue_LinkIterate').insert(insMoDoc, function (err) {
-          if (err) { logg.me('error', __filename + ':85 ' + err, res); }
+          if (err) { logg.byWinston('error', __filename + ':85 ' + err, res); }
           // db.close();
         });
 
@@ -97,7 +97,7 @@ var httpClient = function (res, moTask, db) {
     });
 
   req2.on('error', function (err) {
-    logg.me('error', __filename + ':94 ' + err, res);
+    logg.byWinston('error', __filename + ':94 ' + err, res);
   });
 
   req2.end();

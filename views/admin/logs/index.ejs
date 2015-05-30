@@ -56,7 +56,7 @@
 
                             <% logFiles.forEach(function (elem, key) { %>
                             
-                            <tr style="font:10px Verdana">
+                            <tr style="font:12px Verdana">
                               <td style="text-align:center"><input type="checkbox" name="fileIndexes[]" value="<%= key %>" class="chkBx"></td>
                               <td><a href="/admin/logs/preview/<%= logDirName %>/<%= elem.filename %>" class="showLog"><%= elem.filename %></a></td>
                               <td><%= elem.size %></td>
@@ -158,10 +158,10 @@ $(document).ready(function () {
     var href = $(this).attr('href');
     $(sel1 + ' iframe').attr('src', href);
     
-    //autorefresh URL
-    setInterval(function() {
-      $(sel1 + ' iframe').attr('src', href);
-    }, 5000);
+    /*autorefresh URL*/
+    // setInterval(function() {
+    //   $(sel1 + ' iframe').attr('src', href);
+    // }, 5000);
     
 
     lightbox(sel1);

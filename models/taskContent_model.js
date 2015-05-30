@@ -56,10 +56,10 @@ var createSelectors = function (req) {
 module.exports.listTasks = function (res, cb_list) {
 
   MongoClient.connect(dbName, function (err, db) {
-    if (err) { logg.me('error', __filename + ':59 ' + err); }
+    if (err) { logg.byWinston('error', __filename + ':59 ' + err); }
 
     db.collections(function (err, colls) { //get all collections from database
-      if (err) { logg.me('error', __filename + ':62 ' + err); }
+      if (err) { logg.byWinston('error', __filename + ':62 ' + err); }
 
       //filtering only linkQueue_* collections from array
       var linkQueue_colls = colls.filter(function (elem) {
@@ -68,10 +68,10 @@ module.exports.listTasks = function (res, cb_list) {
       });
 
       db.collection(collName_tasksCnt).find({}).sort({id: 1}).toArray(function (err, moTasksDocs_arr) { //content tasks
-        if (err) { logg.me('error', __filename + ':71 ' + err); }
+        if (err) { logg.byWinston('error', __filename + ':71 ' + err); }
 
         db.collection(collName_cat).find({}).sort({id: 1}).toArray(function (err, moCatsDocs_arr) { //categories
-          if (err) { logg.me('error', __filename + ':74 ' + err); }
+          if (err) { logg.byWinston('error', __filename + ':74 ' + err); }
 
           cb_list(res, linkQueue_colls, moTasksDocs_arr, moCatsDocs_arr);
           db.close();
@@ -119,12 +119,12 @@ module.exports.insertTask = function (req, res) {
 
 
   MongoClient.connect(dbName, function (err, db) {
-    if (err) { logg.me('error', __filename + ':121 ' + err); }
+    if (err) { logg.byWinston('error', __filename + ':121 ' + err); }
 
     if (insDoc !== null) {
 
       db.collection(collName_tasksCnt).find().sort({id: -1}).limit(1).toArray(function (err, moDocs_arr) { //find max ID
-        if (err) { logg.me('error', __filename + ':126 ' + err); }
+        if (err) { logg.byWinston('error', __filename + ':126 ' + err); }
 
         //define new insDoc.id from max id value
         if (moDocs_arr[0] !== undefined) {
@@ -134,7 +134,7 @@ module.exports.insertTask = function (req, res) {
         }
 
         db.collection(collName_tasksCnt).insert(insDoc, function (err) {
-          if (err) { logg.me('error', __filename + ':136 ' + err); }
+          if (err) { logg.byWinston('error', __filename + ':136 ' + err); }
 
           db.close();
 
@@ -169,10 +169,10 @@ module.exports.deleteTask = function (req, res) {
   }
 
   MongoClient.connect(dbName, function (err, db) {
-    if (err) { logg.me('error', __filename + ':171 ' + err); }
+    if (err) { logg.byWinston('error', __filename + ':171 ' + err); }
 
     db.collection(collName_tasksCnt).remove(selector, options, function (err, status) { //delete task document
-      if (err) { logg.me('error', __filename + ':174 ' + err); }
+      if (err) { logg.byWinston('error', __filename + ':174 ' + err); }
 
       logg.byWinston('info', __filename + ':176 Deleted records:' + status);
       db.close();
@@ -194,10 +194,10 @@ module.exports.editTask = function (req, res, cb_list2) {
   var selector = {"id": id_req};
 
   MongoClient.connect(dbName, function (err, db) {
-    if (err) { logg.me('error', __filename + ':196 ' + err); }
+    if (err) { logg.byWinston('error', __filename + ':196 ' + err); }
 
     db.collections(function (err, colls) { //get all collections from database
-      if (err) { logg.me('error', __filename + ':199 ' + err); }
+      if (err) { logg.byWinston('error', __filename + ':199 ' + err); }
 
       //filtering only linkQueue_* collections from array
       var linkQueue_colls = colls.filter(function (elem) {
@@ -206,13 +206,13 @@ module.exports.editTask = function (req, res, cb_list2) {
       });
 
       db.collection(collName_tasksCnt).find({}).sort({id: 1}).toArray(function (err, moTasksDocs_arr) { //list all tasks to populate table
-        if (err) { logg.me('error', __filename + ':208 ' + err); }
+        if (err) { logg.byWinston('error', __filename + ':208 ' + err); }
 
         db.collection(collName_tasksCnt).find(selector).toArray(function (err, moTaskEdit_arr) { //get current task (by 'id') to edit that task
-          if (err) { logg.me('error', __filename + ':211 ' + err); }
+          if (err) { logg.byWinston('error', __filename + ':211 ' + err); }
 
           db.collection(collName_cat).find({}).sort({id: 1}).toArray(function (err, moCatsDocs_arr) {
-            if (err) { logg.me('error', __filename + ':214 ' + err); }
+            if (err) { logg.byWinston('error', __filename + ':214 ' + err); }
 
             cb_list2(res, linkQueue_colls, moTasksDocs_arr, moCatsDocs_arr, moTaskEdit_arr);
             db.close();
@@ -260,10 +260,10 @@ module.exports.updateTask = function (req, res) {
   }
 
   MongoClient.connect(dbName, function (err, db) {
-    if (err) { logg.me('error', __filename + ':262 ' + err); }
+    if (err) { logg.byWinston('error', __filename + ':262 ' + err); }
 
     db.collection(collName_tasksCnt).update(selectorDB, newDoc, function (err, status) {
-      if (err) { logg.me('error', __filename + ':265 ' + err); }
+      if (err) { logg.byWinston('error', __filename + ':265 ' + err); }
 
       logg.byWinston('info', __filename + ':267 Updated records: ' + status);
       db.close();
@@ -287,10 +287,10 @@ module.exports.disableTasks = function (res) {
   };
 
   MongoClient.connect(dbName, function (err, db) {
-    if (err) { logg.me('error', __filename + ':288 ' + err); }
+    if (err) { logg.byWinston('error', __filename + ':288 ' + err); }
 
     db.collection(collName_tasksCnt).update(selectorDB, update, options, function (err, status) {
-      if (err) { logg.me('error', __filename + ':291 ' + err); }
+      if (err) { logg.byWinston('error', __filename + ':291 ' + err); }
 
       logg.byWinston('info', __filename + ':293 Updated records: ' + status);
       db.close();

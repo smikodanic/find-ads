@@ -34,7 +34,7 @@ var logger2 = new (winston.Logger)({
 });
 
 //uncaught exception logging
-winston.handleExceptions(new winston.transports.File({ filename: 'exceptions.log' }));
+// winston.handleExceptions(new winston.transports.File({ filename: 'exceptions23.log' }));
 
 
 module.exports = function (router) {

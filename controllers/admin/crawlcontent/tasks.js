@@ -139,8 +139,9 @@ module.exports = function (router) {
 
 
   /**
-   * start crawling task from browser
-   * To start crawling tasks from command line use: 
+   * Start crawling task from browser
+   * To start crawling tasks from command line use: $pm2 start 0/crawler/crawlcontent/linkQueue_cli.js 2
+   * @param {number} :task_id -id of the task from 'contentTasks' collection 
    */
   router.get('/start/:task_id', function (req, res) {
 
@@ -162,7 +163,7 @@ module.exports = function (router) {
 
     if (sess_tf) {
 
-      /* start crawling in same process */
+      /* start crawling in same NodeJS process */
       var MongoClient = require('mongodb').MongoClient;
       var logg = require('libraries/loggLib');
       var settings = require('settings/admin.js');
@@ -171,13 +172,14 @@ module.exports = function (router) {
 
       // Connect to MongoDB 'contentTasks' collection to get 'pollScript' value
       MongoClient.connect(dbName, function (err, db) {
-        if (err) { logg.me('error', __filename + ':174 ' + err); }
+        if (err) { logg.me('error', __filename + ':175 ' + err); }
 
         db.collection(collName_tasksCnt).find({"id": task_id}).toArray(function (err, contentTasks_arr) { //get pollScript for a given task ID
-          if (err) { logg.me('error', __filename + ':177 ' + err); }
+          if (err) { logg.me('error', __filename + ':178 ' + err); }
 
-          var pollContentlinks = require('0crawler/crawlcontent/polling/' + contentTasks_arr[0].pollScript);
-          pollContentlinks.start(task_id, cb_outResults);
+          //activate poll script for content crawling: 0crawler/crawlcontent/polling/linkQueue_polling.js
+          var pollContentLinks = require('0crawler/crawlcontent/polling/' + contentTasks_arr[0].pollScript);
+          pollContentLinks.start(task_id, cb_outResults);
 
           db.close(); //close DB connection
         });
@@ -186,6 +188,22 @@ module.exports = function (router) {
 
 
 
+    } else {
+      res.redirect('/admin');
+    }
+
+  });
+
+
+  //stop crawling
+  router.get('/stop', function (req, res) {
+
+    //check username and password
+    var sess_tf = login.checksess_user_pass(req);
+
+    if (sess_tf) {
+      clearInterval(global.intId);
+      res.redirect('/admin/crawlcontent/tasks');
     } else {
       res.redirect('/admin');
     }

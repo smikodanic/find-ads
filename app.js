@@ -13,8 +13,8 @@ var enrouten = require('express-enrouten'); //routing
 var session = require('express-session');
 var FileStore = require('session-file-store')(session);
 
-var routes = require('./routes/index');
-var admin_probno = require('./routes/admin/probno');
+// var routes = require('./routes/index');
+// var admin_probno = require('./routes/admin/probno');
 
 var app = express();
 
@@ -61,8 +61,8 @@ app.use(enrouten({
 
 
 
-app.use('/', routes);
-app.use('/admin', admin_probno);
+// app.use('/', routes);
+// app.use('/admin', admin_probno);
 
 
 

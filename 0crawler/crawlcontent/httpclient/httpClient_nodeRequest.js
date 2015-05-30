@@ -15,7 +15,7 @@ var dbName = settings.mongo.dbName;
 
 
 // HTTP client created by NodeJS module - http.request()
-module.exports.node = function (db, moTask, link, i, cb_outResults) {
+module.exports.runURL = function (db, moTask, link, i, cb_outResults) {
 
   //vars
   var url_obj = url.parse(link.href);
@@ -41,12 +41,15 @@ module.exports.node = function (db, moTask, link, i, cb_outResults) {
 
   // HTTP request using NodeJS 'http' module (http.request)
   var req2 = http.request(options, function (res2) {
-      console.log(res2.statusCode + ' pageURL: ' + pageURL);
+
+      // console.log(res2.statusCode + ' pageURL: ' + pageURL);
       // console.log(JSON.stringify(res2.headers, null, 2) + "\n-----------------------------------\n");
 
-      if (res2.statusCode !== 200) {
-        logg.me('error', __filename + ':49 Page doesnt exist: ' + pageURL, null);
-      } else { //prevent to crawl non-existing pages
+      if (res2.statusCode !== 200) {//prevent to crawl non-existing pages
+
+        logg.craw(false, moTask.loggFileName, 'ERROR: Response not 200: ' + pageURL + '; Response is:' + res2.statusCode, null);
+
+      } else {
 
 
         //get htmlDoc from chunks of data
@@ -69,21 +72,24 @@ module.exports.node = function (db, moTask, link, i, cb_outResults) {
             "content": [] //array of objects
           };
 
-          var showRez = i + '. Page: ' + pageURL + '\n';
-          cb_outResults.send(showRez);
-          // console.log(showRez);
 
-          /* extract data by selectors defined in 'contentTasks' e.g. inside moTask object */
+
+          //messaging page URL
+          var msg_rez = i + '. URL in httpClient: ' + pageURL;
+          cb_outResults.send(msg_rez + '\n');
+          logg.craw(false, moTask.loggFileName, msg_rez);
+
+
+
+
+          /***** extract data by selectors defined in 'contentTasks' e.g. inside moTask object *****/
           $ = cheerio.load(htmlDoc); //load cheerio
-
 
           var content_arr = [], cont_obj, extractedData;
           moTask.selectors.forEach(function (elem) { //iterate through CSS selectors
 
-            /*
-             * extract data from pageURL using CSS selectors: text, html, image or URL
-             * elem.value is CSS selector from MongoDB 'contentTask' collection
-             */
+            // extract data from pageURL using CSS selectors: text, html, image or URL
+            // elem.value is CSS selector from MongoDB 'contentTask' collection
             if (elem.type === 'text') {
               extractedData = $(elem.value).text();
             } else if (elem.type === 'html') {
@@ -97,7 +103,7 @@ module.exports.node = function (db, moTask, link, i, cb_outResults) {
             }
 
             //prettify tekst
-            extractedData = tekstmod.strongtrim(extractedData);
+            // extractedData = tekstmod.strongtrim(extractedData);
 
             //create content object
             cont_obj = {
@@ -109,17 +115,27 @@ module.exports.node = function (db, moTask, link, i, cb_outResults) {
             //push content object into array
             content_arr.push(cont_obj);
 
-            cb_outResults.send('-----  ' + elem.name + ': ' + extractedData + '\n');
+            //messaging extracted data
+            var msg_extracted = '-----  ' + elem.name + ': ' + extractedData;
+            cb_outResults.send(msg_extracted + '\n');
+            logg.craw(false, moTask.loggFileName, msg_extracted);
 
-          });
+          }); //forEach end
+
 
           insMoDoc.content = content_arr; //fill extracted data into 'content' property
 
-          cb_outResults.send('[' + timeLib.nowLocale() + ']\n\n');
+
+
+
+          //messaging end
+          var msg_end = '[' + timeLib.nowLocale() + ']\n\n';
+          cb_outResults.send(msg_end);
+
 
           /**
            * ------- MODEL: insert into MongoDB --------
-           * Checks if pageURL already wxists in DB - prevent duplication
+           * Checks if pageURL already exists in DB - prevent duplication
            */
           content_model.insertContent(pageURL, db, moTask.contentCollection, insMoDoc);
 
@@ -133,7 +149,7 @@ module.exports.node = function (db, moTask, link, i, cb_outResults) {
 
 
   req2.on('error', function (err) {
-    logg.me('error', __filename + ':95 ' + err);
+    logg.byWinston('error', __filename + ':152 ' + err);
   });
 
   req2.end();

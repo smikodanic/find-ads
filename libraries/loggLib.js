@@ -8,7 +8,7 @@ var tm = require('libraries/timeLib');
 
 //settings
 var sett = require('settings/admin');
-var logMode = sett.logMode; //development or production mode
+var logMode = sett.logMode; //development or production mode: dev | pro
 var logDir = sett.logDir;
 
 
@@ -27,7 +27,11 @@ var wlogger = new (winston.Logger)({
     new (winston.transports.File)({
       name: 'info-file',
       filename: logDir + 'winston/' + preFile + 'info.log',
-      level: 'info'
+      level: 'info',
+      colorize: false,
+      timestamp: true,
+      json: true,
+      handleExceptions: false
     }),
     new (winston.transports.File)({
       name: 'error-file',
@@ -84,7 +88,7 @@ module.exports.craw = function (erase, fileName, message) {
   message = '[' + tm.nowSQL() + '] ' + message + '\n';
 
 
-  if (logMode === 'dev') { //development mode: logging to console
+  if (logMode === 'dev') { //development mode: logging to console and file
 
     console.log(message);
     fs.appendFile(filePath, message, cb_null);

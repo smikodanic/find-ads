@@ -33,13 +33,21 @@ module.exports.insertLinks = function (pageURL, db, collName, insMoDoc) {
       if (moTask2_arr.length !== 0) {
 
         db.collection(collName).update({"pageURL": pageURL}, insMoDoc, function (err) {
-          if (err) { logg.byWinston('error', __filename + ':36 ' + err); }
+          if (err) {
+            logg.craw(false, 'crawlingLinks_dump', '--------  ERROR when updating MongoDB: ' + err);
+          } else {
+            logg.craw(false, 'crawlingLinks_dump', '--------  UPDATED in MongoDB');
+          }
         });
 
       } else { //if collection doesn't exist do INSERT
 
         db.collection(collName).insert(insMoDoc, function (err) {
-          if (err) { logg.byWinston('error', __filename + ':42 ' + err); }
+          if (err) {
+            logg.craw(false, 'crawlingLinks_dump', '--------  ERROR when inserting in MongoDB: ' + err);
+          } else {
+            logg.craw(false, 'crawlingLinks_dump', '--------  INSERTED in MongoDB');
+          }
         });
 
       }

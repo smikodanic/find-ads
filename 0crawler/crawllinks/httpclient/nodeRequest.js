@@ -43,7 +43,7 @@ module.exports.runURL = function (db, collNameTask, moTask, cb_outResults) {
 
   // HTTP request using NodeJS 'http' module (http.request)
   var req2 = http.request(options, function (res2) {
-      if (res2.statusCode !== 200) { logg.craw(false, moTask.loggFileName, 'Page not found: ' + pageURL); }
+      if (res2.statusCode !== 200) { logg.craw(false, moTask.loggFileName, 'ERROR: Response not 200: ' + pageURL + '; Response is:' + res2.statusCode, null); }
 
       //get htmlDoc from chunks of data
       var htmlDoc = '';
@@ -62,10 +62,10 @@ module.exports.runURL = function (db, collNameTask, moTask, cb_outResults) {
           "links": []
         };
 
-        //message 1
-        var msg1 = 'Page: ' + pageURL + ' [' + timeLib.nowLocale() + '] ';
-        logg.craw(false, moTask.loggFileName2, msg1); //log to file
-        cb_outResults.send(msg1 + '\n');
+        //messaging page URL
+        var msg_rez = '+ URL in httpClient: ' + pageURL;
+        cb_outResults.send(msg_rez + '\n');
+        logg.craw(false, moTask.loggFileName, msg_rez);
 
         //get array of links using cherrio module
         $ = cheerio.load(htmlDoc);
@@ -89,19 +89,19 @@ module.exports.runURL = function (db, collNameTask, moTask, cb_outResults) {
           });
 
           
-          //message 2
-          var msg2 = n + '. -----  ' + href + ' --- ' + tekst;
-          logg.craw(false, moTask.loggFileName2, msg2); //log to file
-          cb_outResults.send(msg2  + '\n');
+          //message hrefs
+          var msg_href = '----- ' + n + '. ' + href + ' --- ' + tekst;
+          logg.craw(false, moTask.loggFileName, msg_href); //log to file
+          cb_outResults.send(msg_href  + '\n');
 
           n++;
         });
 
-        //message 3
+        //message number of extracted links
         n = n - 1;
-        var msg3 = 'Extracted links: ' + n;
-        logg.craw(false, moTask.loggFileName, msg3); //log to file
-        cb_outResults.send(msg3 + '\n\n'); //send to browser
+        var msg_num = '-------- Extracted links: ' + n;
+        cb_outResults.send(msg_num + '\n\n'); //send to browser
+        logg.craw(false, moTask.loggFileName, msg_num); //log to file
 
 
         //insert into MongoDB linkQueue_* collection

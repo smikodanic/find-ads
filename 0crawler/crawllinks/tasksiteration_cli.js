@@ -45,4 +45,4 @@ var cb_outResults_null = {
 poll.start(task_id, cb_outResults_null);
 
 //logging
-logg.craw(false, 'cronList', 'LINKS: Cron job started in tasksiteration_cli.js with: $node tasksiteration_polling.js ' + task_id);
+logg.craw(false, 'cronList', '+++ Content crawling: CLI SCRIPT tasksiteration_cli.js execute: $node tasksiteration_polling.js ' + task_id);

@@ -50,12 +50,12 @@ module.exports.insertCategory = function (req, res) {
 
   MongoClient.connect(dbName, function (err, db) {
 
-    if (err) { logg.me('error', __filename + ':47 ' + err, res); }
+    if (err) { logg.byWinston('error', __filename + ':47 ' + err, res); }
 
     if (insDoc !== null) {
 
       db.collection(collName).find().sort({id: -1}).limit(1).toArray(function (err, moDocs_arr) { //find max ID
-        if (err) { logg.me('error', __filename + ':52 ' + err, res); }
+        if (err) { logg.byWinston('error', __filename + ':52 ' + err, res); }
 
         //define new insDoc.id from max id value
         if (moDocs_arr[0] !== undefined) {
@@ -65,7 +65,7 @@ module.exports.insertCategory = function (req, res) {
         }
 
         db.collection(collName).insert(insDoc, function (err) {
-          if (err) { logg.me('error', __filename + ':47 ' + err, res); }
+          if (err) { logg.byWinston('error', __filename + ':47 ' + err, res); }
 
           //on successful insertion do redirection
           res.redirect('/admin/categories/');
@@ -87,11 +87,11 @@ module.exports.listCategories = function (res, cb_list) {
 
   MongoClient.connect(dbName, function (err, db) {
 
-    if (err) { logg.me('error', __filename + ':84 ' + err, res); }
+    if (err) { logg.byWinston('error', __filename + ':84 ' + err, res); }
 
     //list results
     db.collection(collName).find({}).sort({id: 1}).toArray(function (err, moDocs_arr) {
-      if (err) { logg.me('error', __filename + ':88 ' + err, res); }
+      if (err) { logg.byWinston('error', __filename + ':88 ' + err, res); }
 
       cb_list(res, moDocs_arr);
       db.close();
@@ -120,14 +120,14 @@ module.exports.deleteCategory = function (req, res) {
   }
 
   MongoClient.connect(dbName, function (err, db) {
-    if (err) { logg.me('error', __filename + ':117 ' + err, res); }
+    if (err) { logg.byWinston('error', __filename + ':117 ' + err, res); }
 
     db.collection(collName).remove(selector, options, function (err, status) {
-      if (err) { logg.me('error', __filename + ':120 ' + err, res); }
+      if (err) { logg.byWinston('error', __filename + ':120 ' + err, res); }
 
       res.redirect('/admin/categories/');
 
-      // logg.me('info', __filename + ':124 Deleted records:' + status, null);
+      logg.byWinston('info', __filename + ':130 Deleted records:' + status, null);
       db.close();
     });
 
@@ -145,14 +145,14 @@ module.exports.editCategory = function (req, res, cb_list2) {
   var selector = {"id": id_req};
 
   MongoClient.connect(dbName, function (err, db) {
-    if (err) { logg.me('error', __filename + ':142 ' + err, res); }
+    if (err) { logg.byWinston('error', __filename + ':142 ' + err, res); }
 
     db.collection(collName).find(selector).toArray(function (err, moDocEdit_arr) {
-      if (err) { logg.me('error', __filename + ':145 ' + err, res); }
+      if (err) { logg.byWinston('error', __filename + ':145 ' + err, res); }
 
       //list results
       db.collection(collName).find({}).sort({id: 1}).toArray(function (err, moDocs_arr) {
-        if (err) { logg.me('error', __filename + ':149 ' + err, res); }
+        if (err) { logg.byWinston('error', __filename + ':149 ' + err, res); }
 
         cb_list2(res, moDocs_arr, moDocEdit_arr);
         db.close();
@@ -193,13 +193,13 @@ module.exports.updateCategory = function (req, res) {
   }
 
   MongoClient.connect(dbName, function (err, db) {
-    if (err) { logg.me('error', __filename + ':190 ' + err, res); }
+    if (err) { logg.byWinston('error', __filename + ':190 ' + err, res); }
 
     db.collection(collName).update(selector, newDoc, function (err, status) {
-      if (err) { logg.me('error', __filename + ':193 ' + err, res); }
+      if (err) { logg.byWinston('error', __filename + ':193 ' + err, res); }
 
+      logg.byWinston('info', __filename + ':197 Updated records:' + status, null);
       res.redirect('/admin/categories/edit/' + id_req);
-      // logg.me('info', __filename + ':197 Updated records:' + status, null);
       db.close();
     });
 

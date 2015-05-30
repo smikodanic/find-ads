@@ -50,10 +50,10 @@ var cb_outResults_null = {
 
 /* start crawling from command line */
 MongoClient.connect(dbName, function (err, db) { // Connect to MongoDB 'contentTasks' collection to get 'pollScript' value
-  if (err) { logg.me('error', __filename + ':53 ' + err); }
+  if (err) { logg.byWinston('error', __filename + ':53 ' + err); }
 
   db.collection(collName_tasksCnt).find({"id": task_id}).toArray(function (err, contentTasks_arr) { //get pollScript for a given task ID
-    if (err) { logg.me('error', __filename + ':56 ' + err); }
+    if (err) { logg.byWinston('error', __filename + ':56 ' + err); }
 
     var pollContentlinks = require('0crawler/crawlcontent/polling/' + contentTasks_arr[0].pollScript);
     pollContentlinks.testOneURL(url, task_id, cb_outResults);

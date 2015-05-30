@@ -1,6 +1,6 @@
 /**
  * Get links from MongoDB 'linkQueue_*' and sending to httpClient
- * Polling links defined by setInterval()
+ * Polling links in time interval defined by setInterval()
  * Polling interval in miliseconds defined by moTask.pollInterval
  */
 
@@ -41,11 +41,13 @@ module.exports.start = function (task_id, cb_outResults) {
 
 
         //define logg file name and put in moTask object
-        moTask.loggFileName = collName_tasksCnt + '.' + task_id + 'FROM' + moTask.linkQueue + 'TO' + moTask.contentCollection;
+        // moTask.loggFileName = collName_tasksCnt + '.' + task_id + 'FROM' + moTask.linkQueue + 'TO' + moTask.contentCollection;
+        moTask.loggFileName = 'crawlingContent_dump';
 
-        //first logg: header with date
-        var msg0 = '--------- START CRAWLING CONTENT from ' + moTask.linkQueue + '.' + task_id + ' to ' + moTask.contentCollection + '; pollScript=' + moTask.pollScript + '; httpclientScript=' + moTask.httpclientScript + '; Links total:' + linksAll_arr.length;
-        logg.craw(false, moTask.loggFileName, msg0);
+        //log crawling start
+        var msg_start = '--------- CONTENT CRAWLING STARTED in linkQueue_polling.js \ntask ID: ' + collName_tasksCnt + '.' + moTask.id + '\nFROM ' + moTask.linkQueue + ' TO ' + moTask.contentCollection + '; \npollScript=' + moTask.pollScript + '; \nhttpclientScript=' + moTask.httpclientScript + '; \nLinks total:' + linksAll_arr.length;
+        logg.craw(false, moTask.loggFileName, msg_start);
+        logg.craw(false, 'cronList', msg_start);
 
 
 
@@ -64,9 +66,9 @@ module.exports.start = function (task_id, cb_outResults) {
               var httpClient = require('0crawler/crawlcontent/httpclient/' + moTask.httpclientScript);
 
               //logg URL
-              logg.craw(false, moTask.loggFileName, i + 1 + '. URL to httpClient: ' + linksAll_arr[i].href);
+              logg.craw(false, moTask.loggFileName, i + '. URL to httpClient: ' + linksAll_arr[i].href);
 
-              httpClient.node(db, moTask, linksAll_arr[i], i, cb_outResults);
+              httpClient.runURL(db, moTask, linksAll_arr[i], i, cb_outResults);
 
             } else if (linksAll_arr[i] === undefined) {
 
@@ -84,16 +86,21 @@ module.exports.start = function (task_id, cb_outResults) {
 
             var timeElapsed = (i * moTask.pollInterval) / 1000;
 
-            //logg URL
-            logg.craw(false, moTask.loggFileName, '--------- CONTENT CRAWLING FINISHED after ' + timeElapsed + ' sec');
-            logg.craw(false, 'cronList', 'CONTENT: Cron job finished in linkQueue_cli.js after ' + timeElapsed + ' sec');
+            //logg crawling end
+            var msg_end = '--------- CONTENT CRAWLING FINISHED after ' + timeElapsed + ' sec; Crawled pages:' + i + ' task:' + collName_tasksCnt + '.' + moTask.id;
+            logg.craw(false, moTask.loggFileName, msg_end + '\n');
+            logg.craw(false, 'cronList', msg_end);
 
-            // cb_outResults.end();
+            //delaying, otherwise logg.craw will not work because cron process will be killed
+            setTimeout(cb_outResults.end, 3000);
           }
 
           i++;
 
         }, moTask.pollInterval);
+
+        //send intID to global scope to be accessible with /stop controller
+        global.intId = intID;
 
       });
 
@@ -139,7 +146,7 @@ module.exports.testOneURL = function (url, task_id, cb_outResults) {
 
           //get http client script: httpClient_noderequest.js in /0crawler/crawlercontent/httpclient/ directory
           var httpClient = require('0crawler/crawlcontent/httpclient/' + moTask.httpclientScript);
-          httpClient.node(db, moTask, link, 1, cb_outResults);
+          httpClient.runURL(db, moTask, link, 1, cb_outResults);
 
         } else {
           clearInterval(intID); //stop crawling

@@ -27,7 +27,7 @@ var appDir = sett.appDir;
 function defineCron(elem, key, jobCnt, scriptFilePath) {
 
   //logging file
-  var loggFileName = 'cronStdout_dump';
+  var loggFileName = 'cronStdout_lastCrawlingDump';
 
   // executed when job.start(); is invoked
   var onStartExe = function () {
@@ -38,7 +38,13 @@ function defineCron(elem, key, jobCnt, scriptFilePath) {
       elem.id // 0 | 1 | 2 ...
     ];
 
-    logg.craw(true, loggFileName, '----- CRON started with: ' + cmd);
+
+    //messaging when cron is started
+    var msg_cronStart = '+++++++++ CRON INITIALIZED in cronInitCrawlers.js and spawning process: $' + cmd + ' ' + scriptFilePath + ' ' + elem.id;
+    logg.craw(false, 'cronList', msg_cronStart);
+    logg.craw(true, loggFileName, msg_cronStart);
+
+
     var spawnObj = childProcess.spawn(cmd, args);
 
     spawnObj.stdout.on('data', function (data) {

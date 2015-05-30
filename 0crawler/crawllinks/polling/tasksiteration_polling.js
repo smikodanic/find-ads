@@ -13,10 +13,10 @@ module.exports.start = function (task_id, cb_outResults) {
   var selector = {"id": task_id};
 
   MongoClient.connect(dbName, function (err, db) {
-    if (err) { logg.me('error', __filename + ':16 ' + err); }
+    if (err) { logg.byWinston('error', __filename + ':16 ' + err); }
 
     db.collection(collNameTask).find(selector).toArray(function (err, moTask_arr) { //get task data using 'task_id'
-      if (err) { logg.me('error', __filename + ':19 ' + err); }
+      if (err) { logg.byWinston('error', __filename + ':19 ' + err); }
 
       //MongoDB doc object
       var moTask = moTask_arr[0];
@@ -25,18 +25,21 @@ module.exports.start = function (task_id, cb_outResults) {
       var httpClient = require('0crawler/crawllinks/httpclient/' + moTask.httpclientScript);
 
 
-      //define logg file name and put in moTask object
-      moTask.loggFileName = collNameTask + '.' + moTask.id + 'TO' + 'linkQueue_' + moTask.name;
-      moTask.loggFileName2 = collNameTask + '.' + moTask.id + 'TO' + 'linkQueue_' + moTask.name + '-results';
 
-      //first logg: header with date
-      var msg0 = '--------- START CRAWLING LINKS from ' + collNameTask + '; name=' + moTask.name + '; httpclientScript=' + moTask.httpclientScript;
-      logg.craw(false, moTask.loggFileName, msg0);
-      logg.craw(true, moTask.loggFileName2, msg0);
+      //define logg file name and put in moTask object
+      moTask.loggFileName = 'crawlingLinks_dump';
+
+      //log crawling start
+      var msg_start = '--------- LINKS CRAWLING STARTED in tasksiteration.js \ntask ID: ' + collNameTask + '.' + moTask.id + '\nFROM ' + collNameTask + ' TO linkQueue_' + moTask.name + '\nhttpclientScript=' + moTask.httpclientScript;
+      logg.craw(false, moTask.loggFileName, msg_start);
+      logg.craw(false, 'cronList', msg_start);
+
+
+
 
       //crawl first pagination page - defined by 'firstURL' variable
       moTask.iteratingurl2 = moTask.firsturl;
-      logg.craw(false, moTask.loggFileName, 'First URL to httpClient: ' + moTask.iteratingurl2);
+      logg.craw(false, moTask.loggFileName, '0. First URL to httpClient: ' + moTask.iteratingurl2);
       httpClient.runURL(db, collNameTask, moTask, cb_outResults);
 
 
@@ -51,7 +54,7 @@ module.exports.start = function (task_id, cb_outResults) {
           //http://www.adsuu.com/business-offer-$1/ -> http://www.adsuu.com/business-offer-1/
           moTask.iteratingurl2 = moTask.iteratingurl.replace('$1', i);
 
-          logg.craw(false, moTask.loggFileName, 'URL to httpClient: ' + moTask.iteratingurl2);
+          logg.craw(false, moTask.loggFileName, i + '. URL to httpClient: ' + moTask.iteratingurl2);
           httpClient.runURL(db, collNameTask, moTask, cb_outResults);
 
         } else {
@@ -61,9 +64,13 @@ module.exports.start = function (task_id, cb_outResults) {
           db.close();
 
           var timeElapsed = (i * moTask.crawlInterval) / 1000;
-          logg.craw(false, moTask.loggFileName, '--------- CRAWL TASK FINISHED: ' + moTask.name + ' (Time elapsed:' + timeElapsed + 'sec)\n\n');
+          var msg_end = '--------- LINKS CRAWLING FINISHED after ' + timeElapsed + ' sec; Crawled pages:' + i + ' task:' + collNameTask + '.' + moTask.id;
+          logg.craw(false, moTask.loggFileName, msg_end + '\n');
+          logg.craw(false, 'cronList', msg_end);
 
-          cb_outResults.end();
+
+          //delaying, otherwise logg.craw will not work because cron process will be killed
+          setTimeout(cb_outResults.end, 3000);
         }
 
         i++;

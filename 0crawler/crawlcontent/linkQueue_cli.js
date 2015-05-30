@@ -60,7 +60,7 @@ MongoClient.connect(dbName, function (err, db) { // Connect to MongoDB 'contentT
 
     db.close(); //close DB connection
 
-    logg.craw(false, 'cronList', 'CONTENT: Cron job started in linkQueue_cli.js with: $node ' + contentTasks_arr[0].pollScript + ' ' + task_id);
+    logg.craw(false, 'cronList', '+++ Links crawling: CLI SCRIPT linkQueue_cli.js execute: $node ' + contentTasks_arr[0].pollScript + ' ' + task_id);
   });
 
 });
