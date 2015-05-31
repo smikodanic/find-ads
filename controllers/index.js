@@ -59,7 +59,7 @@ module.exports = function (router) {
   router.get('/search/:q/(:currentPage)?', function (req, res) {
 
     var q;
-    if (req.params.q !== undefined) { //q comes from FORM via POST
+    if (req.params.q !== '') { //q comes from FORM via POST
       q = req.params.q;
     } else {
       q = 'all';
