@@ -23,8 +23,8 @@ var collName_tasks = settings.mongo.dbColl_tasksLnk_iterate;
  */
 module.exports.insertLinks = function (pageURL, db, collName, insMoDoc) {
 
-  db.collection(collName).createIndex({page: 1}, {unique: true, sparse: true}, function (err) { //create unique index to prevent duplicated documents
-    if (err) { logg.byWinston('error', __filename + ':27 ' + err); }
+  // db.collection(collName).createIndex({page: 1}, {unique: true, sparse: true}, function (err) { //create unique index to prevent duplicated documents
+    // if (err) { logg.byWinston('error', __filename + ':27 ' + err); }
 
     db.collection(collName).find({"pageURL": pageURL}).toArray(function (err, moTask2_arr) { //check if collection already exists
       if (err) { logg.byWinston('error', __filename + ':30 ' + err); }
@@ -54,7 +54,7 @@ module.exports.insertLinks = function (pageURL, db, collName, insMoDoc) {
 
     });
 
-  });
+  // });
 
 };
 

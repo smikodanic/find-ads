@@ -103,7 +103,7 @@ module.exports.runURL = function (db, moTask, link, i, cb_outResults) {
             }
 
             //prettify tekst
-            // extractedData = tekstmod.strongtrim(extractedData);
+            extractedData = tekstmod.strongtrim(extractedData);
 
             //fill extracted data into 'extract' property: extract.title[1] gives advert title
             insMoDoc.extract[cssSel.name] = [cssSel.type, cssSel.value, extractedData];

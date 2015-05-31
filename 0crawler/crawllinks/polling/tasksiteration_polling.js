@@ -46,10 +46,10 @@ module.exports.start = function (task_id, cb_outResults) {
 
 
       //iterating through pagination URLs changing variable $1 - defined by 'iteratingURL' variable
-      var i = moTask.from$1;
+      var i = parseInt(moTask.from$1, 10);
       var intID = setInterval(function () {
 
-        if (i <= moTask.to$1) {
+        if (i <= parseInt(moTask.to$1, 10)) {
 
           //http://www.adsuu.com/business-offer-$1/ -> http://www.adsuu.com/business-offer-1/
           moTask.iteratingurl2 = moTask.iteratingurl.replace('$1', i);
