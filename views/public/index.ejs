@@ -4,17 +4,14 @@
 
 <%- include('0partials/05header'); -%>
 
-
-
 <main>
-
   
 <div class="col-sm-4 col-sm-offset-4 title-header">
   <h1 id="homepage-title"><%= h1 %></h1>
 </div>
 
 <div class="col-sm-10 col-sm-push-1">
-   	<form action="#" method="GET" enctype="application/x-www-form-urlencoded" class="form">
+   	<form action="/search" method="POST" enctype="application/x-www-form-urlencoded" class="form">
       
       <div class="input-group">
 				<input type="text" class="form-control input-lg" id="q" name="q" value="" placeholder="enter search query">
@@ -44,14 +41,12 @@ setInterval(function () {
 $('#q').focus();
 </script>
 
+
 <script>
 //add background body
 $(document).ready(function () {
   setTimeout(function () {
-    $('body').hide();
-    $('body').fadeIn(1000, function () {
-      $('body').addClass('add-bkg');
-    });
+    $('body').addClass('add-bkg');
   }, 3000);
 });
 </script>

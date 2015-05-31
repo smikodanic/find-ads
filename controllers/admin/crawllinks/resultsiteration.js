@@ -2,7 +2,7 @@ require('rootpath')(); //enable requireing modules from application root folder
 var express = require('express');
 var router = express.Router();
 var login = require('libraries/accountLoginLib.js');
-var links_model = require('models/linkQueue_model');
+var linkQueue_model = require('models/linkQueue_model');
 
 var cb_list_Render = function (res, moTasksDocs_arr, moQueueDocs_arr, pagination_obj) {
   var vdata = {
@@ -24,7 +24,7 @@ module.exports = function (router) {
     var sess_tf = login.checksess_user_pass(req);
 
     if (sess_tf) {
-      links_model.listLinks(req, res, cb_list_Render);
+      linkQueue_model.listLinks(req, res, cb_list_Render);
     } else {
       res.redirect('/admin');
     }
@@ -38,7 +38,7 @@ module.exports = function (router) {
     var sess_tf = login.checksess_user_pass(req);
 
     if (sess_tf) {
-      links_model.listLinks(req, res, cb_list_Render);
+      linkQueue_model.listLinks(req, res, cb_list_Render);
     } else {
       res.redirect('/admin');
     }

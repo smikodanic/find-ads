@@ -50,6 +50,7 @@
                                 <th title="content task name">name</th>
                                 <th title="linkQueue collection">link queue</th>
                                 <th title="CSS selectors for extracting data">extracted data</th>
+                                <th title="MongoDB collection name">collection</th>
                                 <th>cron</th>
                                 <th title="cron job status: on or off">status</th>
                                 <th style="width:130px">action</th>
@@ -66,6 +67,7 @@
                                   <%= elem.name %>,
                                 <% }); %>
                               </td>
+                              <td><%= elem.contentCollection %></td>
                               <td><%= elem.cron %></td>
                               <td><%= elem.cronStatus %></td>
 

@@ -6,11 +6,14 @@ require('rootpath')();
 var MongoClient = require('mongodb').MongoClient;
 var logg = require('libraries/loggLib');
 var pagination = require('libraries/pagination.js');
+var urlmod = require('libraries/urlmod');
+var timeLib = require('libraries/timeLib');
 // var nodedump = require('nodedump').dump;
 
 //mongo parameters
-var settings = require('settings/admin.js');
-var dbName = settings.mongo.dbName;
+var sett = require('settings/admin.js');
+var dbName = sett.mongo.dbName;
+var dbColl_searchTerms = sett.mongo.dbColl_searchTerms;
 
 /**
  * Insert content into 'content_*' collection during crawling
@@ -69,5 +72,76 @@ module.exports.insertContent = function (pageURL, db, contentCollection, insMoDo
     });
 
   });
+
+};
+
+
+
+module.exports.homeSearchOut = function (q, req, res, cb_render) {
+
+  if (req.method === 'GET') { //when request comes from pagination link, not form's POST
+    q = urlmod.unencodeParameter(q); //convert 'some-query' into 'some query'
+  }
+
+  //define query
+  var queryDB;
+  if (q === 'all') {
+    queryDB = {};
+  } else {
+    var reg = new RegExp(q, 'ig'); //creating regular expression
+    queryDB = {
+      "extract.description": {"$regex": reg}
+    };
+    // queryDB = {"links.tekst": reg};
+  }
+
+
+
+  MongoClient.connect(dbName, function (err, db) {
+    if (err) { logg.byWinston('error', __filename + ':98 ' + err); }
+
+    db.collection('content').count(queryDB, function (err, countNum) {
+      if (err) { logg.byWinston('error', __filename + ':101 ' + err); }
+
+      //convert 'some query' INTO 'some+query'
+      var q2 = urlmod.encodeParameter(q);
+
+      /* create pagination object which is sent to view file */
+      var pagesPreURI = '/search/' + q2 + '/';
+      var perPage = 25; //show results per page
+      var spanNum = 6; //show pagination numbers. Must be even number (paran broj)
+      var pagination_obj = pagination.paginator(req, countNum, pagesPreURI, perPage, spanNum);
+
+      db.collection('content').find(queryDB).skip(pagination_obj.skipNum).limit(pagination_obj.perPage).toArray(function (err, moContent_arr) {
+        if (err) { logg.byWinston('error', __filename + ':116 ' + err); }
+
+        /* insert search term into mongo collection */
+        if (countNum !== 0 && pagination_obj.currentPage < 2 && q !== 'all') {
+
+          var insMoDoc = {
+            term: q,
+            results: countNum,
+            url: pagesPreURI,
+            date: timeLib.nowSQL(),
+            ip: req.connection.remoteAddress
+          };
+
+          db.collection(dbColl_searchTerms).insert(insMoDoc, function (err) {
+            if (err) { logg.byWinston('error', __filename + ':130 ' + err); }
+
+            cb_render(q, res, moContent_arr, pagination_obj);
+          });
+
+        } else {
+
+          cb_render(q, res, moContent_arr, pagination_obj);
+        }
+
+
+      });
+
+    });
+
+  }); //connect
 
 };

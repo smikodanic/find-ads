@@ -1,0 +1,89 @@
+<%- include('0partials/01head'); -%>
+
+<body> 
+
+<main class="container-fluid">
+
+<%- include('0partials/05header'); -%>
+
+<div class="row">
+  
+
+  <!-- filter -->
+  <aside class="col-sm-3 hidden-xs">
+    <h2>Filter</h2>
+  
+
+  </aside>
+  <!-- filter -->
+
+
+  <!-- results -->
+  <div class="col-sm-9">
+
+    <h2>
+      <small>Search query:</small> <%= q %>
+      <small style="margin-left:30px;">Results: <%= pagination.countNum %></small>
+    </h2>
+
+    <div class="list-group">
+      
+      <% for(var i=0; i<contentDocs.length; i++) { %>
+      <div class="list-group-item izlist">
+
+        <img alt="Web proxy" src="/images/noimage.jpg">
+        
+        <h4 class="list-group-item-heading">
+          <small><%= i+1+pagination.perPage*(pagination.currentPage-1) %>. </small>
+          <a href="<%= contentDocs[i].pageURL %>" target="_blank"><%= contentDocs[i].extract.title[2] %></a>
+          <sup class="badge">active</sup>
+        </h4>
+
+        <p class="list-group-item-text"><%= contentDocs[i].extract.description[2] %></p>
+        
+        <span><%= contentDocs[i].pageURL.replace('http://', ''); %></span> 
+        <span><%= contentDocs[i].crawlDateTime %></span>
+
+      </div>
+
+      <% } %>
+
+    </div>
+
+  </div>
+  <!-- results end -->
+
+  <!-- Pagination -->
+  <nav class="col-sm-9 col-sm-offset-3">
+    <ul class="pagination">
+      <li><a href="<%= pagination.pagesPreURI + '1' %>"> &laquo;</a></li>
+
+      <% 
+      pagination.currentPage = parseInt(pagination.currentPage); //convert string into number
+      
+      pagination.pages_arr.forEach(function(elem){
+        var hclass;
+        if (elem === pagination.currentPage) {
+          hclass = 'class="active"';
+        } else {
+          hclass = '';
+        }
+      %>
+
+      <li <%- hclass %>><a href="<%= pagination.pagesPreURI + elem %>"><%= elem %></a></li>
+                    
+      <% }); %>
+
+      <li><a href="<%= pagination.pagesPreURI + pagination.pagesTotal %>"> &raquo;</a></li>
+    </ul>
+  </nav>
+  <!-- Pagination END -->
+
+
+</div> <!-- row end -->
+
+</main>
+
+
+</body> 
+</html>

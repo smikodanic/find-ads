@@ -12,3 +12,40 @@
 	margin-top: 100px;
 	color: #FFC017;
 }
+
+h1,h2,h3 {
+	font-family: sans-serif;
+}
+
+
+/* Search result listings */
+.list-group-item.izlist {
+	margin-top: 8px;
+	min-height: 100px;
+}
+.list-group-item.izlist:hover {
+	background-color: #eee;
+}
+.list-group-item.izlist > span {
+	color: #0A7116;
+	font:11px Verdana;
+	margin-left:10px;
+}
+.list-group-item.izlist > img {
+	height: 70px;
+	float: right;
+	margin: 5px;
+	border: 1px solid #ccc;
+}
+.list-group-item.izlist-header {
+	margin-bottom: 28px;
+	background-color: #DFEDF4;
+	border-bottom:1px solid #195F82;
+	font: 14px Arial;
+}
+.list-group-item.izlist-header>span {
+	float:right;
+}
+.list-group-item.izlist-header>b {
+	color: #D208E9;
+}

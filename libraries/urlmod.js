@@ -22,3 +22,30 @@ module.exports.toAbsolute = function (pageURL, inurl) {
 
   return outurl;
 };
+
+
+
+/**
+ * Encode parameter in URI:  /some string with empty spaces čćžšđ/ -> /some-string-with-empty-spaces-čćžšđ/
+ * @param {string} q -parameter
+ * @return {string} converted parameter
+ *
+ */
+module.exports.encodeParameter = function (q) {
+  var q2 = q.replace(' ', '-');
+  q2 = encodeURI(q2);
+  return q2;
+};
+
+
+/**
+ * Unencode parameter in URI: /some-string-with-empty-spaces-čćžšđ/ -> /some string with empty spaces čćžšđ/
+ * @param {string} q -parameter
+ * @return {string} converted parameter
+ *
+ */
+module.exports.unencodeParameter = function (q) {
+  q2 = encodeURI(q);
+  var q3 = q2.replace('-', ' ');
+  return q3;
+};

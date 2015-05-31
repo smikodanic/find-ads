@@ -69,7 +69,7 @@ module.exports.runURL = function (db, moTask, link, i, cb_outResults) {
             "crawlDateTime": timeLib.nowLocale(),
             "category": parseInt(moTask.category, 10),
             "subcategory": parseInt(moTask.subcategory, 10),
-            "content": [] //array of objects
+            "extract": {} //will be an object
           };
 
 
@@ -85,45 +85,35 @@ module.exports.runURL = function (db, moTask, link, i, cb_outResults) {
           /***** extract data by selectors defined in 'contentTasks' e.g. inside moTask object *****/
           $ = cheerio.load(htmlDoc); //load cheerio
 
-          var content_arr = [], cont_obj, extractedData;
-          moTask.selectors.forEach(function (elem) { //iterate through CSS selectors
+          var extractedData;
+          moTask.selectors.forEach(function (cssSel) { //iterate through CSS selectors
 
             // extract data from pageURL using CSS selectors: text, html, image or URL
-            // elem.value is CSS selector from MongoDB 'contentTask' collection
-            if (elem.type === 'text') {
-              extractedData = $(elem.value).text();
-            } else if (elem.type === 'html') {
-              extractedData = $(elem.value).html();
-            } else if (elem.type === 'href') {
-              extractedData = $(elem.value).attr('href');
-            } else if (elem.type === 'src') {
-              extractedData = $(elem.value).attr('src');
-            } else { //elem.tyle === 'attr'
-              extractedData = $(elem.value[0]).attr(elem.value[1]);
+            // cssSel.value is CSS selector from MongoDB 'contentTask' collection
+            if (cssSel.type === 'text') {
+              extractedData = $(cssSel.value).text();
+            } else if (cssSel.type === 'html') {
+              extractedData = $(cssSel.value).html();
+            } else if (cssSel.type === 'href') {
+              extractedData = $(cssSel.value).attr('href');
+            } else if (cssSel.type === 'src') {
+              extractedData = $(cssSel.value).attr('src');
+            } else { //cssSel.tyle === 'attr'
+              extractedData = $(cssSel.value[0]).attr(cssSel.value[1]);
             }
 
             //prettify tekst
             // extractedData = tekstmod.strongtrim(extractedData);
 
-            //create content object
-            cont_obj = {
-              type: elem.type,
-              name: elem.name,
-              extracteddata: extractedData
-            };
-
-            //push content object into array
-            content_arr.push(cont_obj);
+            //fill extracted data into 'extract' property: extract.title[1] gives advert title
+            insMoDoc.extract[cssSel.name] = [cssSel.type, cssSel.value, extractedData];
 
             //messaging extracted data
-            var msg_extracted = '-----  ' + elem.name + ': ' + extractedData;
+            var msg_extracted = '-----  ' + cssSel.name + ': ' + extractedData;
             cb_outResults.send(msg_extracted + '\n');
             logg.craw(false, moTask.loggFileName, msg_extracted);
 
           }); //forEach end
-
-
-          insMoDoc.content = content_arr; //fill extracted data into 'content' property
 
 
 
