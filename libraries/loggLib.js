@@ -134,7 +134,7 @@ module.exports.visitors = function (req, fileName) {
 
   var filePath;
   if (userAgent.indexOf('bot') !== -1 ||  userAgent.indexOf('crawl') !== -1 ||  userAgent.indexOf('spider') !== -1  || userAgent.indexOf('slurp') !== -1 ||  userAgent.indexOf('yahoo') !== -1) {
-    filePath = logDir + 'misc/' + preFile + 'visitors_' + fileName + 'Bot.log';
+    filePath = logDir + 'misc/' + preFile + 'visitorsBot_' + fileName + '.log';
   } else {
     filePath = logDir + 'misc/' + preFile + 'visitors_' + fileName + '.log';
   }
