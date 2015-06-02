@@ -118,3 +118,28 @@ process.on('uncaughtException', function (err) {
   }
 
 });
+
+
+//log website visitors
+module.exports.visitors = function (req, fileName) {
+
+  //visitor's info
+  var timeNow = tm.nowSQL();
+  var userAgent = req.headers['user-agent'];
+  var ip = req.ip;
+  var referer = req.headers.referer;
+  var currentURI = req.originalUrl;
+  var method = req.method;
+
+
+  var filePath;
+  if (userAgent.indexOf('bot') !== -1 ||  userAgent.indexOf('crawl') !== -1 ||  userAgent.indexOf('spider') !== -1  || userAgent.indexOf('slurp') !== -1 ||  userAgent.indexOf('yahoo') !== -1) {
+    filePath = logDir + 'misc/' + preFile + 'visitors_' + fileName + 'Bot.log';
+  } else {
+    filePath = logDir + 'misc/' + preFile + 'visitors_' + fileName + '.log';
+  }
+
+
+  var line = timeNow + ' - ' + userAgent + ' - ' + ip + ' - ' + referer + ' - ' + currentURI + ' - ' + method + '\n';
+  fs.appendFile(filePath, line, cb_null);
+};

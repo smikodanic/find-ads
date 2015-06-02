@@ -3,6 +3,7 @@ require('rootpath')();
 var express = require('express');
 var router = express.Router();
 var nodedump = require('nodedump').dump;
+var logg = require('libraries/loggLib');
 
 
 /* view functions */
@@ -36,6 +37,10 @@ module.exports = function (router) {
     };
 
     res.render('public/index', vdata);
+    // res.send(nodedump(req)).end();
+
+    //logging visitors
+    logg.visitors(req, 'home');
   });
 
 
@@ -67,6 +72,9 @@ module.exports = function (router) {
 
     var content_model = require('models/content_model');
     content_model.homeSearchOut(q, req, res, cb_render);
+
+    //logging visitors
+    logg.visitors(req, 'home-search');
   });
 
 

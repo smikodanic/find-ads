@@ -109,7 +109,7 @@ module.exports.homeSearchOut = function (q, req, res, cb_render) {
       /* create pagination object which is sent to view file */
       var pagesPreURI = '/search/' + q2 + '/';
       var perPage = 25; //show results per page
-      var spanNum = 6; //show pagination numbers. Must be even number (paran broj)
+      var spanNum = 10; //show pagination numbers. Must be even number (paran broj)
       var pagination_obj = pagination.paginator(req, countNum, pagesPreURI, perPage, spanNum);
 
       db.collection('content').find(queryDB).skip(pagination_obj.skipNum).limit(pagination_obj.perPage).toArray(function (err, moContent_arr) {
