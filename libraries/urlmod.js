@@ -32,9 +32,9 @@ module.exports.toAbsolute = function (pageURL, inurl) {
  *
  */
 module.exports.encodeParameter = function (q) {
-  var q2 = q.replace(' ', '-');
-  q2 = encodeURI(q2);
-  return q2;
+  var q = q.replace(' ', '-');
+  q = encodeURI(q);
+  return q;
 };
 
 

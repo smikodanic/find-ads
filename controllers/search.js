@@ -40,7 +40,7 @@ module.exports = function (router) {
     }
 
     var content_model = require('models/content_model');
-    content_model.homeSearchOut(q, req, res, cb_render);
+    content_model.homeSearchOut('content', q, req, res, cb_render);
   });
 
 

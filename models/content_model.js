@@ -104,10 +104,10 @@ module.exports.homeSearchOut = function (collName, q, req, res, cb_render) {
 
 
   MongoClient.connect(dbName, function (err, db) {
-    if (err) { logg.byWinston('error', __filename + ':98 ' + err); }
+    if (err) { logg.byWinston('error', __filename + ':107 ' + err); }
 
     db.collection(collName).count(queryDB, function (err, countNum) {
-      if (err) { logg.byWinston('error', __filename + ':101 ' + err); }
+      if (err) { logg.byWinston('error', __filename + ':110 ' + err); }
 
       //convert 'some query' INTO 'some+query'
       var q2 = urlmod.encodeParameter(q);
@@ -119,7 +119,7 @@ module.exports.homeSearchOut = function (collName, q, req, res, cb_render) {
       var pagination_obj = pagination.paginator(req, countNum, pagesPreURI, perPage, spanNum);
 
       db.collection(collName).find(queryDB).sort({cid: -1}).skip(pagination_obj.skipNum).limit(pagination_obj.perPage).toArray(function (err, moContent_arr) {
-        if (err) { logg.byWinston('error', __filename + ':116 ' + err); }
+        if (err) { logg.byWinston('error', __filename + ':122 ' + err); }
 
         /* insert search term into mongo collection */
         if (countNum !== 0 && pagination_obj.currentPage < 2 && q !== 'all') {
@@ -133,7 +133,7 @@ module.exports.homeSearchOut = function (collName, q, req, res, cb_render) {
           };
 
           db.collection(dbColl_searchTerms).insert(insMoDoc, function (err) {
-            if (err) { logg.byWinston('error', __filename + ':130 ' + err); }
+            if (err) { logg.byWinston('error', __filename + ':136 ' + err); }
 
             cb_render(q, res, moContent_arr, pagination_obj);
           });
