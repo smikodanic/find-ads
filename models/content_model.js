@@ -86,7 +86,7 @@ module.exports.insertContent = function (pageURL, db, contentCollection, insMoDo
 module.exports.homeSearchOut = function (q, req, res, cb_render) {
 
   //define collection name
-  var collName = 'content_test';
+  var collName = 'content';
 
   if (req.method === 'GET') { //when request comes from pagination link, not form's POST
     q = urlmod.unencodeParameter(q); //convert 'some-query' into 'some query'
