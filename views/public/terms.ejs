@@ -1,0 +1,74 @@
+<%- include('0partials/01head'); -%>
+
+<body> 
+
+<main class="container-fluid">
+
+<%- include('0partials/05header'); -%>
+
+<div class="row">
+
+  <!-- results -->
+  <div class="col-sm-8 col-sm-offset-2">
+
+    <h2>
+      <small><%= title %></small>
+      <small style="margin-left:30px;">Results: <%= pagination.countNum %></small>
+    </h2>
+
+    <div class="list-group">
+      
+      <% for(var i=0; i<searchTerms.length; i++) { %>
+      <div class="list-group-item">
+        
+        <h4 class="list-group-item-heading">
+          <small><%= i+1+pagination.perPage*(pagination.currentPage-1) %>. </small>
+          <a href="<%= searchTerms[i].url %>" class="cntLnk"><%= searchTerms[i].term %></a>
+        </h4>
+        
+        <span><%= searchTerms[i].ip %> &middot; <%= searchTerms[i].date %></span> 
+
+      </div>
+
+      <% } %>
+
+    </div>
+
+  </div>
+  <!-- results end -->
+
+  <!-- Pagination -->
+  <nav class="col-sm-9 col-sm-offset-3">
+    <ul class="pagination">
+      <li><a href="<%= pagination.pagesPreURI + '1' %>"> &laquo;</a></li>
+
+      <% 
+      pagination.currentPage = parseInt(pagination.currentPage); //convert string into number
+      
+      pagination.pages_arr.forEach(function(elem){
+        var hclass;
+        if (elem === pagination.currentPage) {
+          hclass = 'class="active"';
+        } else {
+          hclass = '';
+        }
+      %>
+
+      <li <%- hclass %>><a href="<%= pagination.pagesPreURI + elem %>"><%= elem %></a></li>
+                    
+      <% }); %>
+
+      <li><a href="<%= pagination.pagesPreURI + pagination.pagesTotal %>"> &raquo;</a></li>
+    </ul>
+  </nav>
+  <!-- Pagination END -->
+
+
+</div> <!-- row end -->
+
+</main>
+
+</body> 
+</html>
+
+

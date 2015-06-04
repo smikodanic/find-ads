@@ -46,7 +46,7 @@ module.exports = function (router) {
 
 
   /* search results from pagination link */
-  router.get('/:q/(:currentPage)?', function (req, res) {
+  router.get('/:q/(:currentPage([0-9]+))?', function (req, res) { //currentPage can only be a number
 
     var q;
     if (req.params.q !== '') { //q comes from FORM via POST
@@ -60,6 +60,30 @@ module.exports = function (router) {
 
     //logging visitors
     logg.visitors(req, 'home-search');
+  });
+
+
+
+  /* list all search terms */
+  router.get('/terms/list/(:currentPage([0-9]+))?', function (req, res) {
+console.log(req.params.currentPage);
+    var cb_terms = function (res, mo_searchTerms, pagination_obj) {
+      var vdata = {
+        title: 'All serch terms',
+        desc: 'List all search queries.',
+        keywords: 'search queries, search terms, list of all search terms',
+        searchTerms: mo_searchTerms,
+        pagination: pagination_obj
+      };
+
+      console.log(JSON.stringify(pagination_obj, null, 2));
+
+      res.render('public/terms', vdata);
+    };
+
+    //call model and render homepage
+    var searchTerms_model = require('models/searchTerms_model');
+    searchTerms_model.listAll(req, res, cb_terms);
   });
 
 

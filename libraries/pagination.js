@@ -25,7 +25,6 @@ module.exports.paginator = function (req, countNum, pagesPreURI, perPage, spanNu
     currentPage = 1;
   }
 
-
   //define total number of pages
   var pagesTotal = Math.floor(countNum / perPage) + 1; //npr. 20/2 = 10
 

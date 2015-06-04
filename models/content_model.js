@@ -122,7 +122,7 @@ module.exports.homeSearchOut = function (collName, q, req, res, cb_render) {
         if (err) { logg.byWinston('error', __filename + ':122 ' + err); }
 
         /* insert search term into mongo collection */
-        if (countNum !== 0 && pagination_obj.currentPage < 2 && q !== 'all') {
+        if (countNum !== 0 && pagination_obj.currentPage < 2 && q !== 'all' && req.method === 'POST') {
 
           var insMoDoc = {
             term: q,
@@ -132,7 +132,7 @@ module.exports.homeSearchOut = function (collName, q, req, res, cb_render) {
             ip: req.connection.remoteAddress
           };
 
-          db.collection(dbColl_searchTerms).insert(insMoDoc, function (err) {
+          db.collection(dbColl_searchTerms).insert(insMoDoc, function (err) { //insert search query
             if (err) { logg.byWinston('error', __filename + ':136 ' + err); }
 
             cb_render(q, res, moContent_arr, pagination_obj);

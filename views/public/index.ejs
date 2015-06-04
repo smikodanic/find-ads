@@ -5,25 +5,66 @@
 <%- include('0partials/05header'); -%>
 
 <main>
+
+<header class="row">
+  <div class="col-sm-4 col-sm-offset-4 title-header">
+    <h1 id="homepage-title"><%= h1 %></h1>
+  </div>
+</header>
+
+<section class="row">
+  <div class="col-sm-10 col-sm-push-1">
+     	<form action="/search" method="POST" enctype="application/x-www-form-urlencoded" class="form">
+        
+        <div class="input-group">
+  				<input type="text" class="form-control input-lg" id="q" name="q" value="" placeholder="enter search query">
+  				<span class="input-group-btn">
+    				<button class="btn btn-success btn-lg" type="submit"><span id="btn-txt">Go!</span></button>
+  				</span>
+  		  </div>
   
-<div class="col-sm-4 col-sm-offset-4 title-header">
-  <h1 id="homepage-title"><%= h1 %></h1>
-</div>
-
-<div class="col-sm-10 col-sm-push-1">
-   	<form action="/search" method="POST" enctype="application/x-www-form-urlencoded" class="form">
+    	</form>
+  
       
-      <div class="input-group">
-				<input type="text" class="form-control input-lg" id="q" name="q" value="" placeholder="enter search query">
-				<span class="input-group-btn">
-  				<button class="btn btn-success btn-lg" type="submit"><span id="btn-txt">Go!</span></button>
-				</span>
-		  </div>
+  </div>
+</section>
 
-  	</form>
+<div class="clearfix">&nbsp;</div><br><br>
 
-    <p style="text-align:center;margin-top: 130px;"><a href="/search/all/">List All ADS</a></p>
-</div>
+<section class="row">
+  <div class="col-sm-6 col-sm-push-3">
+    <div class="searchTerms_box">
+      
+      <h3>Latest search terms:</h3>
+
+      <% 
+        searchTerms.forEach(function (elem) {
+
+          //generate random font-size
+          var fontSize = Math.random()*50;
+          if (fontSize < 12) {
+            fontSize = 12;
+          } else if (fontSize > 35) {
+            fontSize = 35;
+          }
+      %>
+        <a href="<%= elem.url %>" style="font-size:<%= fontSize %>px; margin-left:10px;"><%= elem.term %>(<%= elem.results %>)</a>
+      <% }) %>
+
+      <p style="text-align:center;margin-top: 50px;">
+        <a href="/search/terms/list/">See all search terms</a> &middot;
+        <a href="/search/all/">List all ads</a>
+      </p>
+
+    </div>
+  </div>
+</section>
+
+<div class="clearfix">&nbsp;</div>
+<br>
+<br>
+<br>
+
 </main>
 
 
