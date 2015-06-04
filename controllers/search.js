@@ -66,7 +66,7 @@ module.exports = function (router) {
 
   /* list all search terms */
   router.get('/terms/list/(:currentPage([0-9]+))?', function (req, res) {
-console.log(req.params.currentPage);
+
     var cb_terms = function (res, mo_searchTerms, pagination_obj) {
       var vdata = {
         title: 'All serch terms',
@@ -75,8 +75,6 @@ console.log(req.params.currentPage);
         searchTerms: mo_searchTerms,
         pagination: pagination_obj
       };
-
-      console.log(JSON.stringify(pagination_obj, null, 2));
 
       res.render('public/terms', vdata);
     };
