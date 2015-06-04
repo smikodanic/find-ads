@@ -52,7 +52,7 @@ app.use(enrouten({
   index: 'controllers/index.js',
   directory: 'controllers',
   routes: [
-    // { path: '/proba', method: 'GET', handler: require('./controllers/proba.js') },
+    // { path: '/nest', method: 'GET', handler: require('./controllers/index') },
     // { path: '/admin', method: 'GET', handler: require('./routes/admin'), middleware: [isAuthenticated] }
   ],
   // middleware: [middleware1, middleware2, ...etc]

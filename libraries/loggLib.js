@@ -126,7 +126,7 @@ module.exports.visitors = function (req, fileName) {
   //visitor's info
   var timeNow = tm.nowSQL();
   var userAgent = req.headers['user-agent'];
-  var ip = req.ip;
+  var ip = req.connection.remoteAddress;
   var referer = req.headers.referer;
   var currentURI = req.originalUrl;
   var method = req.method;

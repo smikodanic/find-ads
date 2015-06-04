@@ -44,39 +44,32 @@ module.exports = function (router) {
   });
 
 
+  /* advert */
+  router.get('/:titleURI/cid:cid', function (req, res) {
 
-  /* search results from form */
-  router.post('/search', function (req, res) {
+    //content ID 
+    var cid = req.params.cid;
 
-    var q;
-    if (req.body.q !== '') { //q comes from FORM via POST
-      q = req.body.q;
-    } else {
-      q = 'all';
-    }
+    var cb_advert = function (res, moContent_arr) {
+      var vdata = {
+        title: moContent_arr[0].extract.title[2],
+        desc: moContent_arr[0].extract.title[2],
+        keywords: moContent_arr[0].extract.title[2],
+        p: moContent_arr[0].extract.description[2]
 
+      };
+
+    res.render('public/advert', vdata);
+    };
+
+    //call content model function
     var content_model = require('models/content_model');
-    content_model.homeSearchOut(q, req, res, cb_render);
-  });
+    content_model.getDataByCid('content_test', cid, res, cb_advert);
 
-
-  /* search results from pagination link */
-  router.get('/search/:q/(:currentPage)?', function (req, res) {
-
-    var q;
-    if (req.params.q !== '') { //q comes from FORM via POST
-      q = req.params.q;
-    } else {
-      q = 'all';
-    }
-
-    var content_model = require('models/content_model');
-    content_model.homeSearchOut(q, req, res, cb_render);
 
     //logging visitors
-    logg.visitors(req, 'home-search');
+    logg.visitors(req, 'advert');
   });
-
 
 
 };

@@ -26,13 +26,17 @@ var dbColl_searchTerms = sett.mongo.dbColl_searchTerms;
 module.exports.insertContent = function (pageURL, db, contentCollection, insMoDoc) {
 
   db.collection(contentCollection).createIndex({pageURL: 1}, {unique: true, sparse: true}, function (err) { //create unique index to prevent duplicated documents
-    if (err) { logg.byWinston('error', __filename + ':26 ' + err); }
+    if (err) { logg.byWinston('error', __filename + ':29 ' + err); }
 
     db.collection(contentCollection).find({"pageURL": pageURL}).toArray(function (err, moContent_arr) { //check if doc e.g. pageURL already exists
-      if (err) { logg.byWinston('error', __filename + ':29 ' + err); }
+      if (err) { logg.byWinston('error', __filename + ':30 ' + err); }
 
       //if collection already exists do UPDATE
       if (moContent_arr.length !== 0) {
+
+        //return the same 'cid'
+        insMoDoc.cid = moContent_arr[0].cid;
+        insMoDoc.crawlStatus = 'UPD'; //record is updated
 
         db.collection(contentCollection).update({"pageURL": pageURL}, insMoDoc, function (err) {
           if (err) {
@@ -44,8 +48,8 @@ module.exports.insertContent = function (pageURL, db, contentCollection, insMoDo
 
       } else { //if collection doesn't exist do INSERT
 
-        db.collection(contentCollection).find().sort({cid: -1}).limit(1).toArray(function (err, moDocs_arr) { //find max ID
-          if (err) { logg.byWinston('error', __filename + ':41 ' + err); }
+        db.collection(contentCollection).find().sort({cid: -1}).limit(1).toArray(function (err, moDocs_arr) { //find max 'cid'
+          if (err) { logg.byWinston('error', __filename + ':48 ' + err); }
 
 
           //define new insDoc.id from max id value
@@ -54,6 +58,8 @@ module.exports.insertContent = function (pageURL, db, contentCollection, insMoDo
           } else {
             insMoDoc.cid = 0;
           }
+
+          insMoDoc.crawlStatus = 'INS'; //new record inserted
 
 
           db.collection(contentCollection).insert(insMoDoc, function (err) {
@@ -79,6 +85,9 @@ module.exports.insertContent = function (pageURL, db, contentCollection, insMoDo
 
 module.exports.homeSearchOut = function (q, req, res, cb_render) {
 
+  //define collection name
+  var collName = 'content_test';
+
   if (req.method === 'GET') { //when request comes from pagination link, not form's POST
     q = urlmod.unencodeParameter(q); //convert 'some-query' into 'some query'
   }
@@ -100,7 +109,7 @@ module.exports.homeSearchOut = function (q, req, res, cb_render) {
   MongoClient.connect(dbName, function (err, db) {
     if (err) { logg.byWinston('error', __filename + ':98 ' + err); }
 
-    db.collection('content').count(queryDB, function (err, countNum) {
+    db.collection(collName).count(queryDB, function (err, countNum) {
       if (err) { logg.byWinston('error', __filename + ':101 ' + err); }
 
       //convert 'some query' INTO 'some+query'
@@ -112,7 +121,7 @@ module.exports.homeSearchOut = function (q, req, res, cb_render) {
       var spanNum = 10; //show pagination numbers. Must be even number (paran broj)
       var pagination_obj = pagination.paginator(req, countNum, pagesPreURI, perPage, spanNum);
 
-      db.collection('content').find(queryDB).skip(pagination_obj.skipNum).limit(pagination_obj.perPage).toArray(function (err, moContent_arr) {
+      db.collection(collName).find(queryDB).sort({cid: -1}).skip(pagination_obj.skipNum).limit(pagination_obj.perPage).toArray(function (err, moContent_arr) {
         if (err) { logg.byWinston('error', __filename + ':116 ' + err); }
 
         /* insert search term into mongo collection */
@@ -143,5 +152,33 @@ module.exports.homeSearchOut = function (q, req, res, cb_render) {
     });
 
   }); //connect
+
+};
+
+
+
+/**
+ * Get content data by 'cid'
+ * @param {string} collName -MongoDB collection name
+ * @param {number} cid -content ID
+ */
+module.exports.getDataByCid = function (collName, cid, res, cb_advert) {
+
+  MongoClient.connect(dbName, function (err, db) {
+    if (err) { logg.byWinston('error', __filename + ':168 ' + err); }
+
+
+    //Mongo query
+    cid = parseInt(cid, 10); //convert string to number
+    var dbQuery = {cid: cid};
+    // console.log(JSON.stringify(dbQuery, null, 2));
+
+    db.collection(collName).find(dbQuery).toArray(function (err, moContent_arr) {
+      if (err) { logg.byWinston('error', __filename + ':172 ' + err); }
+
+      cb_advert(res, moContent_arr);
+    });
+
+  });
 
 };

@@ -7,7 +7,6 @@
 <%- include('0partials/05header'); -%>
 
 <div class="row">
-  
 
   <!-- filter -->
   <aside class="col-sm-3 hidden-xs">
@@ -35,8 +34,8 @@
         
         <h4 class="list-group-item-heading">
           <small><%= i+1+pagination.perPage*(pagination.currentPage-1) %>. </small>
-          <a href="<%= contentDocs[i].pageURL %>" target="_blank"><%= contentDocs[i].extract.title[2] %></a>
-          <sup class="badge">active</sup>
+          <a href="/<%= urlmod.strToURI(contentDocs[i].extract.title[2]) %>/cid<%= contentDocs[i].cid %>" data-pageURL="<%= contentDocs[i].pageURL %>" class="cntLnk"><%= contentDocs[i].extract.title[2] %></a>
+          <sup class="badge"><%= contentDocs[i].crawlStatus %></sup>
         </h4>
 
         <p class="list-group-item-text"><%= contentDocs[i].extract.description[2] %></p>
@@ -82,7 +81,78 @@
 
 </div> <!-- row end -->
 
+
+<!-- lightbox crawling console -->
+<div class="row">
+  <div class="col-sm-8 col-sm-offset-4 lightbox" id="lightbox-console">
+    <span class="glyphicon glyphicon-remove-circle lightbox-close"></span>
+    <h3>Preview advert:</h3>
+    <iframe src="" frameborder="1"></iframe>
+    <br><a href="#" class="btn btn-success btn-lg" id="visitSite" target="_blank">See more ...</a>
+  </div>
+</div>
+<!-- lightbox crawling console end-->
+
+
 </main>
+
+<script>
+/*LIGHTBOX*/
+
+//lightbox function
+var lightbox = function (sel, top) {
+  
+  //width and height of browser's window
+  var bw = $(window).width();
+  var bh = $(window).height();
+
+  //CSS options
+  var cssOpt = {
+    "width": bw + "px !important",
+    "height": bh + "px !important",
+    "position": "absolute",
+    "top": top + "px", //scroll not dependant
+    "left": "0px"
+  }
+
+  $(sel).fadeIn(1200).css(cssOpt);
+};
+
+
+$(document).ready(function () {
+  
+  /* Show form for inserting task */
+  var sel3 = '#lightbox-console';
+  $(sel3).hide();
+  $('a.cntLnk').click(function (event) {
+    event.preventDefault(); //prevent A tag behaviour
+    
+    var scrollOffset = $(this).offset();
+
+    lightbox(sel3, scrollOffset.top);
+
+    //show advert in iframe by changing iframe's SRC attribute
+    var cntHref = $(this).attr('href');
+    $('#lightbox-console > iframe').attr('src', cntHref);
+
+    //fill href of 'See more ...' button
+    var pageURL = $(this).attr('data-pageURL');
+    $('#visitSite').attr('href', pageURL);
+  });
+
+
+
+  /* hide lightbox */
+  $('.lightbox-close').on('click', function () {
+    $(this).parent().fadeOut();
+    // window.location.href = '/admin/crawlcontent/tasks'; //reset URL
+  });
+
+});
+
+</script>
 
 </body> 
 </html>
+
+

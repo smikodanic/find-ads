@@ -45,7 +45,22 @@ module.exports.encodeParameter = function (q) {
  *
  */
 module.exports.unencodeParameter = function (q) {
-  q2 = encodeURI(q);
+  var q2 = decodeURI(q);
   var q3 = q2.replace('-', ' ');
   return q3;
+};
+
+
+
+/**
+ * Convert string into uri format: 'Some String čćžšđ' -> 'some-string-cczsd'
+ * @param {string} s -inputed string
+ */
+module.exports.strToURI = function (s) {
+  s = s.toLocaleLowerCase();
+  s = s.replace(/[`~!@#$%\^&*()_|+\-=?;:'",.<>\{\}\[\]\\\/]/gi, ' '); //replace special characters
+  s = s.replace(/\s/ig, '-'); //replace empty space with -
+  s = encodeURI(s);
+  s = s.replace(/[\-]{1,}/ig, '-'); //replace --- with -
+  return s;
 };
