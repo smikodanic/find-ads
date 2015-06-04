@@ -64,7 +64,7 @@ module.exports = function (router) {
 
     //call content model function
     var content_model = require('models/content_model');
-    content_model.getDataByCid('content_test', cid, res, cb_advert);
+    content_model.getDataByCid('content', cid, res, cb_advert);
 
 
     //logging visitors
