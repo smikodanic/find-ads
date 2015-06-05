@@ -21,7 +21,9 @@ var cb_render = function (req, res, extractedData) {
 
 
 
+
 module.exports = function (router) {
+
 
   router.get('/', function (req, res) {
 
@@ -38,6 +40,8 @@ module.exports = function (router) {
   });
 
 
+
+  /* execute script from 0crawler/tests/httpclients/ */
   router.post('/', function (req, res) {
 
     var sess_tf = login.checksess_user_pass(req);
@@ -45,15 +49,30 @@ module.exports = function (router) {
     if (sess_tf) {
 
       var httpclientScript = req.body.httpclientScript; // node-request.js
-
       var httpClient = require('0crawler/tests/httpclients/' + httpclientScript);
-      httpClient.extractData(req, res, cb_render);
+
+      //determine which httpclient script to test
+      if (httpclientScript.indexOf('node') !== -1) { //httpclient: node's http.request module
+
+        httpClient.extractData(req, res, cb_render);
+
+      } else if (httpclientScript.indexOf('casper') !== -1) { //httpclient: casperjs
+
+        httpClient.casperExtract(req, res, cb_render);
+
+      } else {
+
+        cb_render(req, res, 'HTTP Client Script not selected!');
+
+      }
+
 
     } else {
       res.redirect('/admin');
     }
 
   });
+
 
 
 };

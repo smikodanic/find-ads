@@ -52,7 +52,7 @@
                             <select name="httpclientScript" id="httpclientScript" class="form-control">
 
                                 <% httpclients.forEach(function(elem){ %>
-                                <option value="<%= elem %>"><%= elem %></option>
+                                <option value="<%= elem %>" <%= (req.body.httpclientScript === elem) ? 'selected' : '' %>><%= elem %></option>
                                 <% }); %>
 
                             </select>
