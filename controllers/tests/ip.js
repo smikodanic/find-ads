@@ -13,7 +13,7 @@ module.exports = function (router) {
   //http://localhost:3000/proba
   router.get('/', function (req, res) {
 
-    res.send(nodedump(req.connection.remoteAddress));
+    res.send(nodedump(req));
 
   });
 
