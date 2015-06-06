@@ -1,6 +1,6 @@
 require('rootpath')();
 var url = require('url');
-var http = require('follow-redirects');
+var folred = require('follow-redirects');
 var cheerio = require('cheerio');
 var logg = require('libraries/loggLib');
 var tekstmod = require('libraries/tekstmodLib');
@@ -26,10 +26,20 @@ module.exports.runURL = function (db, collNameTask, moTask, cb_outResults) {
   var url_obj = url.parse(moTask.iteratingurl2);
   var pageURL = url_obj.protocol + '//' + url_obj.hostname + url_obj.path;
 
+  //select http or https module
+  var http_s, portNum;
+  if (url_obj.protocol === 'http:') {
+    http_s = folred.http;
+    portNum = 80;
+  } else {
+    http_s = folred.https;
+    portNum = 443;
+  }
+
   //HTTP client options
   var options = {
     hostname: url_obj.host,
-    port: 80,
+    port: portNum,
     path: url_obj.path,
     method: 'GET',
     headers: {
@@ -42,7 +52,7 @@ module.exports.runURL = function (db, collNameTask, moTask, cb_outResults) {
 
 
   // HTTP request using NodeJS 'http' module (http.request)
-  var req2 = http.request(options, function (res2) {
+  var req2 = http_s.request(options, function (res2) {
       if (res2.statusCode !== 200) { logg.craw(false, moTask.loggFileName, 'ERROR: Response not 200: ' + pageURL + '; Response is:' + res2.statusCode, null); }
 
       //get htmlDoc from chunks of data
