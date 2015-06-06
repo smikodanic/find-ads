@@ -22,6 +22,7 @@
     "rootpath": "^0.1.2",
     "serve-favicon": "~2.2.0",
     "session-file-store": "0.0.3",
+    "superagent": "^1.2.0",
     "winston": "^1.0.0"
   }
 }
