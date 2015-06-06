@@ -13,11 +13,7 @@ var logDir = sett.logDir;
 
 
 //define Date for file prefix
-var currentTime = new Date();
-var year = currentTime.getFullYear();
-var month = ("0" + (currentTime.getMonth() + 1)).slice(-2);
-var day = ("0" + currentTime.getDate()).slice(-2);
-var preFile = year + month + day; //20151231
+var preFile = tm.yyyymmddNow(); //20151231
 
 
 
