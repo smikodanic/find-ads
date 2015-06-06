@@ -29,37 +29,23 @@ module.exports.casperExtract = function (req, res, cb_render) {
 
   //child process
   childProcess.execFile(casperBinFile, casperCommandlineArgs, function (err, stdout) {
-    console.log(err.code);
+
     if (err.code === 'ENOENT') {
       cb_render(req, res, __filename + ':33 ' + err);
     } else {
 
-      console.log(JSON.stringify(stdout, null, 2));
       var htmlDoc = stdout; //complete HTML from Casper
 
-      $ = cheerio.load(htmlDoc);
-
-      // extract data from pageURL using CSS selectors: text, html, image or URL
-      var extractedData;
-      if (data_type === 'text') {
-        extractedData = $(css_selector).text();
-      } else if (data_type === 'html') {
-        extractedData = $(css_selector).html();
-      } else if (data_type === 'href') {
-        extractedData = $(css_selector).attr('href');
-      } else if (data_type === 'src') {
-        extractedData = $(css_selector).attr('src');
-      } else { //data_type === 'attr'
-        var css_selector_arr = css_selector.split(',');
-        extractedData = $(css_selector_arr[0].trim()).attr(css_selector_arr[1].trim());
-      }
+      //extract data from htmlDoc
+      var htmlLib = require('libraries/htmlLib');
+      var extractedData = htmlLib.extractData(htmlDoc, data_type, css_selector);
 
       if (extractedData !== '') {
         cb_render(req, res, '\nExtracted Data:\n' + extractedData);
       } else {
         cb_render(req, res, '\nHTML Output:\n' + htmlDoc);
       }
-      
+
 
     }
 

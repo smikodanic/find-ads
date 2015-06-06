@@ -60,6 +60,10 @@ module.exports = function (router) {
 
         httpClient.casperExtract(req, res, cb_render);
 
+      } else if (httpclientScript.indexOf('requestNPM') !== -1) { //httpclient: request NPM
+
+        httpClient.extractData(req, res, cb_render);
+
       } else {
 
         cb_render(req, res, 'HTTP Client Script not selected!');

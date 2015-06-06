@@ -1,9 +1,5 @@
 require('rootpath')();
 var url = require('url');
-var cheerio = require('cheerio');
-var logg = require('libraries/loggLib');
-var tekstmod = require('libraries/tekstmodLib');
-var urlmod = require('libraries/urlmod');
 
 //http module is used
 var http = require('http');
@@ -52,22 +48,9 @@ module.exports.extractData = function (req, res, cb_render) {
 
       res2.on('end', function () {
 
-        $ = cheerio.load(htmlDoc);
-
-        // extract data from pageURL using CSS selectors: text, html, image or URL
-        var extractedData;
-        if (data_type === 'text') {
-          extractedData = $(css_selector).text();
-        } else if (data_type === 'html') {
-          extractedData = $(css_selector).html();
-        } else if (data_type === 'href') {
-          extractedData = $(css_selector).attr('href');
-        } else if (data_type === 'src') {
-          extractedData = $(css_selector).attr('src');
-        } else { //data_type === 'attr'
-          var css_selector_arr = css_selector.split(',');
-          extractedData = $(css_selector_arr[0].trim()).attr(css_selector_arr[1].trim());
-        }
+        //extract data from htmlDoc
+        var htmlLib = require('libraries/htmlLib');
+        var extractedData = htmlLib.extractData(htmlDoc, data_type, css_selector);
 
         cb_render(req, res, 'Status:' + res2.statusCode + '\n\nExtracted Data:\n' + extractedData);
       });
