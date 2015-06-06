@@ -1,3 +1,12 @@
+/**
+ * Extract data by natural node's module 'http'
+ * method: http.request()
+ *
+ * - can't crawl redirected URL's
+ *
+ * https://nodejs.org/api/http.html#http_http_request_options_callback
+ */
+
 require('rootpath')();
 var url = require('url');
 
@@ -52,7 +61,11 @@ module.exports.extractData = function (req, res, cb_render) {
         var htmlLib = require('libraries/htmlLib');
         var extractedData = htmlLib.extractData(htmlDoc, data_type, css_selector);
 
-        cb_render(req, res, 'Status:' + res2.statusCode + '\n\nExtracted Data:\n' + extractedData);
+        if (extractedData !== '') {
+          cb_render(req, res, 'Status:' + res2.statusCode + '\n\nExtracted Data:\n' + extractedData);
+        } else {
+          cb_render(req, res, 'Status:' + res2.statusCode + '\n\nExtracted Data:\n' + htmlDoc);
+        }
       });
 
     });

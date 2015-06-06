@@ -1,5 +1,12 @@
+/**
+ * Extract data by 'request' NPM module
+ * $npm install --save request
+ *
+ * https://www.npmjs.com/package/request
+ * https://github.com/request/request
+ */
+
 require('rootpath')();
-var nodedump = require('nodedump');
 var url = require('url');
 
 //httpclient is NPM request ($npm install request)

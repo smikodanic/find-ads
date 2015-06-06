@@ -64,6 +64,14 @@ module.exports = function (router) {
 
         httpClient.extractData(req, res, cb_render);
 
+      } else if (httpclientScript.indexOf('superagent') !== -1) { //httpclient: superagent
+
+        httpClient.extractData(req, res, cb_render);
+
+      } else if (httpclientScript.indexOf('libcurl') !== -1) { //httpclient: node-libcurl
+
+        httpClient.extractData(req, res, cb_render);
+
       } else {
 
         cb_render(req, res, 'HTTP Client Script not selected!');

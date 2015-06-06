@@ -1,3 +1,12 @@
+/**
+ * Extract data by 'follow-redirects' NPM module
+ * $npm install --save request
+ *
+ * - can crawl redirected URL's
+ *
+ * https://www.npmjs.com/package/follow-redirects
+ */
+
 require('rootpath')();
 var url = require('url');
 
@@ -49,10 +58,16 @@ module.exports.extractData = function (req, res, cb_render) {
 
       res2.on('end', function () {
 
+        //extract data from htmlDoc
         var htmlLib = require('libraries/htmlLib');
         var extractedData = htmlLib.extractData(htmlDoc, data_type, css_selector);
 
-        cb_render(req, res, 'Status:' + res2.statusCode + '\n\nExtracted Data:\n' + extractedData);
+        if (extractedData !== '') {
+          cb_render(req, res, 'Status:' + res2.statusCode + '\n\nExtracted Data:\n' + extractedData);
+        } else {
+          cb_render(req, res, 'Status:' + res2.statusCode + '\n\nExtracted Data:\n' + htmlDoc);
+        }
+
       });
 
     });
