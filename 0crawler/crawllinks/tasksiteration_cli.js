@@ -1,11 +1,9 @@
-/*jslint unparam: true*/
-
 /**
  * Start crawling from command line: $node tasksiteration_start_cli.js 3
  * Usefull for cron job.
  */
-require('rootpath')(); //enable requireing modules from application root folder
-var poll = require('0crawler/crawllinks/polling/tasksiteration_polling');
+require('rootpath')();
+var poll = require('0crawler/crawllinks/polling/lnk_linkTasks_iterate');
 var logg = require('libraries/loggLib');
 
 
@@ -45,4 +43,4 @@ var cb_outResults_null = {
 poll.start(task_id, cb_outResults_null);
 
 //logging
-logg.craw(false, 'cronList', '+++ Content crawling: CLI SCRIPT tasksiteration_cli.js execute: $node tasksiteration_polling.js ' + task_id);
+logg.craw(false, 'cronList', '+++ Content crawling: CLI SCRIPT tasksiteration_cli.js execute: $node lnk_linkTasks_iterate.js ' + task_id);

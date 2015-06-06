@@ -29,6 +29,7 @@ module.exports.curlExtract = function (req, res, cb_render) {
   var binFile = '/usr/bin/curl';
 
   var cliArgs = [
+    '-L', //follow redirects option
     pageURL
   ];
 
@@ -40,7 +41,7 @@ module.exports.curlExtract = function (req, res, cb_render) {
     } else {
 
       var htmlDoc = stdout; //complete HTML from Casper
-
+console.log('STD' + pageURL);
       //extract data from htmlDoc
       var htmlLib = require('libraries/htmlLib');
       var extractedData = htmlLib.extractData(htmlDoc, data_type, css_selector);
