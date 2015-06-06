@@ -9,11 +9,11 @@ module.exports = function (router) {
 
   //http://localhost:3000/proba
   router.get('/', function (req, res) {
-    
-    var date = new date();
-    var d = date.toISOString().slice(0, 19).replace('T', ' ');
 
-    res.send(d).end();
+    var date = new Date();
+    var d2 = date.toLocaleString();
+
+    res.send(d2).end();
   });
 
 

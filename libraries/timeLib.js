@@ -13,7 +13,7 @@ module.exports.nowLocale = function () {
 module.exports.nowSQL = function () {
   var date = new Date();
   var hours = date.getUTCHours();
-  // date.setUTCHours(hours + 2); // +2 hours for CEST (Central European Savelight Time)
+  date.setUTCHours(hours + 2); // +2 hours for CEST (Central European Savelight Time)
 
   var d = date.toISOString().slice(0, 19).replace('T', ' ');
   return d;
