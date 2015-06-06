@@ -2,6 +2,9 @@
  * Extract data by 'request' NPM module
  * $npm install --save request
  *
+ *  - Redirected URLs can be crawled too
+ * - Also support https
+ *
  * https://www.npmjs.com/package/request
  * https://github.com/request/request
  */
@@ -26,13 +29,17 @@ module.exports.extractData = function (req, res, cb_render) {
     url: pageURL,
     qs: {}, //Query string data
     method: 'GET',
+    followRedirect: true,
+    followAllRedirects: false, //follow non-GET redirects
+    maxRedirects: 2,
+    removeRefererHeader: false, //remove referer after redirection
     headers: {
       'Host': url_obj.host,
       'User-Agent': 'Mozilla/5.0 (X11; Ubuntu; Linux i686; rv:36.0) Gecko/20100101 Firefox/36.0',
       'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
       'Accept-Language': 'en-US,en;q=0.5',
-      'Accept-Encoding': 'gzip, deflate',
-      'Referer': 'http://www.adsuu.com',
+      // 'Accept-Encoding': 'gzip, deflate',
+      'Referer': 'http://www.find-ads.com',
       'Cookie': '',
       'Connection': 'keep-alive'
     }

@@ -47,26 +47,32 @@ module.exports.extractData = function (req, res, cb_render) {
 
   // HTTP request using NodeJS 'http' module (http.request)
   var req2 = http.request(options, function (res2) {
-      if (res2.statusCode !== 200) { cb_render(req, res, 'ERROR: Response not 200: ' + pageURL + '; Response is:' + res2.statusCode); }
+      if (res2.statusCode !== 200) {
+        cb_render(req, res, 'ERROR: Response not 200: ' + pageURL + '; Response is:' + res2.statusCode);
+      } else {
 
-      //get htmlDoc from chunks of data
-      var htmlDoc = '';
-      res2.on('data', function (chunk) {
-        htmlDoc += chunk;
-      });
+        //get htmlDoc from chunks of data
+        var htmlDoc = '';
+        res2.on('data', function (chunk) {
+          htmlDoc += chunk;
+        });
 
-      res2.on('end', function () {
+        res2.on('end', function () {
 
-        //extract data from htmlDoc
-        var htmlLib = require('libraries/htmlLib');
-        var extractedData = htmlLib.extractData(htmlDoc, data_type, css_selector);
+          //extract data from htmlDoc
+          var htmlLib = require('libraries/htmlLib');
+          var extractedData = htmlLib.extractData(htmlDoc, data_type, css_selector);
 
-        if (extractedData !== '') {
-          cb_render(req, res, 'Status:' + res2.statusCode + '\n\nExtracted Data:\n' + extractedData);
-        } else {
-          cb_render(req, res, 'Status:' + res2.statusCode + '\n\nExtracted Data:\n' + htmlDoc);
-        }
-      });
+          if (extractedData !== '') {
+            cb_render(req, res, 'Status:' + res2.statusCode + '\n\nExtracted Data:\n' + extractedData);
+          } else {
+            cb_render(req, res, 'Status:' + res2.statusCode + '\n\nExtracted Data:\n' + htmlDoc);
+          }
+
+        });
+
+      }
+
 
     });
 

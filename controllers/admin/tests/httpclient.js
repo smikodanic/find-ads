@@ -68,9 +68,9 @@ module.exports = function (router) {
 
         httpClient.extractData(req, res, cb_render);
 
-      } else if (httpclientScript.indexOf('libcurl') !== -1) { //httpclient: node-libcurl
+      } else if (httpclientScript.indexOf('curl') !== -1) { //httpclient: command line curl
 
-        httpClient.extractData(req, res, cb_render);
+        httpClient.curlExtract(req, res, cb_render);
 
       } else {
 

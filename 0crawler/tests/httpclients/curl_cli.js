@@ -1,12 +1,13 @@
 /**
- * Extract data by CasperJS
- * $npm install -g casperjs
+ * Extract data by calling command line CURL.
+ * CURL have to be preinstalled with #apt-get install curl
  *
- * - can crawl redirected URL's and AJAX sites
+ * - can crawl redirected URL's but not AJAX sites
  * - This script is generating child process and call Casper script: $casperjs /browsers/casper_simple.js http://www.adsuu.com
  *
  * http://casperjs.org/
  */
+
 require('rootpath')();
 var childProcess = require('child_process');
 var cheerio = require('cheerio');
@@ -17,7 +18,7 @@ var appDir = sett.appDir;
 
 
 
-module.exports.casperExtract = function (req, res, cb_render) {
+module.exports.curlExtract = function (req, res, cb_render) {
 
   //input vars
   var pageURL = req.body.pageURL;
@@ -25,17 +26,16 @@ module.exports.casperExtract = function (req, res, cb_render) {
   var css_selector = req.body.css_selector;
 
   //casper exe file
-  var casperBinFile = '/usr/lib/node_modules/casperjs/bin/casperjs';
+  var binFile = '/usr/bin/curl';
 
-  var casperCommandlineArgs = [
-    appDir + '/0crawler/tests/casper/casper_simple.js',
+  var cliArgs = [
     pageURL
   ];
 
   //child process
-  childProcess.execFile(casperBinFile, casperCommandlineArgs, function (err, stdout) {
+  childProcess.execFile(binFile, cliArgs, function (err, stdout) {
 
-    if (err.code === 'ENOENT') {
+    if (err) {
       cb_render(req, res, __filename + ':33 ' + err);
     } else {
 
