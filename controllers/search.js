@@ -54,7 +54,6 @@ module.exports = function (router) {
     } else {
       q = 'all';
     }
-
     var content_model = require('models/content_model');
     content_model.homeSearchOut('content', q, req, res, cb_render);
 

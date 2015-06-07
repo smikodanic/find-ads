@@ -25,57 +25,52 @@ var dbColl_searchTerms = sett.mongo.dbColl_searchTerms;
  */
 module.exports.insertContent = function (pageURL, db, contentCollection, insMoDoc) {
 
-  db.collection(contentCollection).createIndex({pageURL: 1}, {unique: true, sparse: true}, function (err) { //create unique index to prevent duplicated documents
-    if (err) { logg.byWinston('error', __filename + ':29 ' + err); }
+  db.collection(contentCollection).find({"pageURL": pageURL}).toArray(function (err, moContent_arr) { //check if doc e.g. pageURL already exists
+    if (err) { logg.byWinston('error', __filename + ':30 ' + err); }
 
-    db.collection(contentCollection).find({"pageURL": pageURL}).toArray(function (err, moContent_arr) { //check if doc e.g. pageURL already exists
-      if (err) { logg.byWinston('error', __filename + ':30 ' + err); }
+    //if collection already exists do UPDATE
+    if (moContent_arr.length !== 0) {
 
-      //if collection already exists do UPDATE
-      if (moContent_arr.length !== 0) {
+      //return the same 'cid'
+      insMoDoc.cid = moContent_arr[0].cid;
+      insMoDoc.crawlStatus = 'UPD'; //record is updated
 
-        //return the same 'cid'
-        insMoDoc.cid = moContent_arr[0].cid;
-        insMoDoc.crawlStatus = 'UPD'; //record is updated
+      db.collection(contentCollection).update({"pageURL": pageURL}, insMoDoc, function (err) {
+        if (err) {
+          logg.craw(false, 'crawlingContent_dump', '--------  ERROR when updating MongoDB: ' + err);
+        } else {
+          logg.craw(false, 'crawlingContent_dump', '--------  UPDATED in MongoDB');
+        }
+      });
 
-        db.collection(contentCollection).update({"pageURL": pageURL}, insMoDoc, function (err) {
+    } else { //if collection doesn't exist do INSERT
+
+      db.collection(contentCollection).find().sort({cid: -1}).limit(1).toArray(function (err, moDocs_arr) { //find max 'cid'
+        if (err) { logg.byWinston('error', __filename + ':48 ' + err); }
+
+
+        //define new insDoc.id from max id value
+        if (moDocs_arr[0] !== undefined) {
+          insMoDoc.cid = moDocs_arr[0].cid + 1;
+        } else {
+          insMoDoc.cid = 0;
+        }
+
+        insMoDoc.crawlStatus = 'INS'; //new record inserted
+
+
+        db.collection(contentCollection).insert(insMoDoc, function (err) {
           if (err) {
-            logg.craw(false, 'crawlingContent_dump', '--------  ERROR when updating MongoDB: ' + err);
+            logg.craw(false, 'crawlingContent_dump', '--------  ERROR when inserting in MongoDB: ' + err);
           } else {
-            logg.craw(false, 'crawlingContent_dump', '--------  UPDATED in MongoDB');
+            logg.craw(false, 'crawlingContent_dump', '--------  INSERTED in MongoDB');
           }
         });
 
-      } else { //if collection doesn't exist do INSERT
 
-        db.collection(contentCollection).find().sort({cid: -1}).limit(1).toArray(function (err, moDocs_arr) { //find max 'cid'
-          if (err) { logg.byWinston('error', __filename + ':48 ' + err); }
+      });
 
-
-          //define new insDoc.id from max id value
-          if (moDocs_arr[0] !== undefined) {
-            insMoDoc.cid = moDocs_arr[0].cid + 1;
-          } else {
-            insMoDoc.cid = 0;
-          }
-
-          insMoDoc.crawlStatus = 'INS'; //new record inserted
-
-
-          db.collection(contentCollection).insert(insMoDoc, function (err) {
-            if (err) {
-              logg.craw(false, 'crawlingContent_dump', '--------  ERROR when inserting in MongoDB: ' + err);
-            } else {
-              logg.craw(false, 'crawlingContent_dump', '--------  INSERTED in MongoDB');
-            }
-          });
-
-
-        });
-
-      }
-
-    });
+    }
 
   });
 
