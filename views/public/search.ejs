@@ -30,7 +30,12 @@
       <% for(var i=0; i<contentDocs.length; i++) { %>
       <div class="list-group-item izlist">
 
-        <img alt="Web proxy" src="/images/noimage.jpg">
+        <!-- ad image -->
+        <% if (contentDocs[i].extract.image === undefined) { %>
+          <img alt="Web proxy" src="/images/noimage.jpg">
+        <% } else { %>
+          <img alt="Web proxy" src="<%= contentDocs[i].extract.image[2] %>">
+        <% } %>
         
         <h4 class="list-group-item-heading">
           <small><%= i+1+pagination.perPage*(pagination.currentPage-1) %>. </small>
@@ -38,7 +43,15 @@
           <sup class="badge"><%= contentDocs[i].crawlStatus %></sup>
         </h4>
 
-        <p class="list-group-item-text"><%= contentDocs[i].extract.description[2] %></p>
+        <%//decrease description
+          var desc = contentDocs[i].extract.description[2];
+          var descLength = 250;
+
+          if (desc.length > descLength) {
+            desc = desc.substring(0, descLength) + ' ...';
+          }
+        %>
+        <p class="list-group-item-text"><%= desc %></p>
         
         <span><%= contentDocs[i].pageURL.replace('http://', ''); %></span> 
         <span><%= contentDocs[i].crawlDateTime %></span>
