@@ -124,12 +124,18 @@ module.exports.homeSearchOut = function (collName, q, req, res, cb_render) {
         /* insert search term into mongo collection */
         if (countNum !== 0 && pagination_obj.currentPage < 2 && q !== 'all' && req.method === 'POST') {
 
+          //IP
+          var ip = req.headers['x-forwarded-for'] ||
+            req.connection.remoteAddress ||
+            req.socket.remoteAddress ||
+            req.connection.socket.remoteAddress;
+
           var insMoDoc = {
             term: q,
             results: countNum,
             url: pagesPreURI,
             date: timeLib.nowSQL(),
-            ip: req.connection.remoteAddress
+            ip: ip
           };
 
           db.collection(dbColl_searchTerms).insert(insMoDoc, function (err) { //insert search query
