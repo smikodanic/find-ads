@@ -168,7 +168,7 @@ module.exports.getDataByCid = function (collName, cid, res, cb_advert) {
 
     //Mongo query
     cid = parseInt(cid, 10); //convert string to number
-    var dbQuery = {cid: cid};
+    var dbQuery = {"cid": cid};
     // console.log(JSON.stringify(dbQuery, null, 2));
 
     db.collection(collName).find(dbQuery).toArray(function (err, moContent_arr) {

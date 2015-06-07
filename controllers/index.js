@@ -46,16 +46,30 @@ module.exports = function (router) {
     var cid = req.params.cid;
 
     var cb_advert = function (res, moContent_arr) {
-      var vdata = {
-        title: moContent_arr[0].extract.title[2],
-        desc: moContent_arr[0].extract.title[2],
-        keywords: moContent_arr[0].extract.title[2],
-        p: moContent_arr[0].extract.description[2]
 
-      };
+      var vdata;
+      if (moContent_arr[0] !== undefined) { //if cid exists
 
-      res.render('public/advert', vdata);
+        vdata = {
+          title: moContent_arr[0].extract.title[2],
+          desc: moContent_arr[0].extract.title[2],
+          keywords: moContent_arr[0].extract.title[2],
+          p: moContent_arr[0].extract.description[2]
+        };
+
+        res.render('public/advert', vdata);
+
+      } else { //if cid and content dont exist
+
+        vdata = {
+          titleURI: req.params.titleURI
+        };
+
+        res.status(404).render('404', vdata);
+      }
+
     };
+
 
     //call content model function
     var content_model = require('models/content_model');

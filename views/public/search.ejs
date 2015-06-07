@@ -39,8 +39,15 @@
         
         <h4 class="list-group-item-heading">
           <small><%= i+1+pagination.perPage*(pagination.currentPage-1) %>. </small>
-          <a href="/<%= urlmod.strToURI(contentDocs[i].extract.title[2]) %>/cid<%= contentDocs[i].cid %>" data-pageURL="<%= contentDocs[i].pageURL %>" class="cntLnk"><%= contentDocs[i].extract.title[2] %></a>
+
+          <a href="/<%= urlmod.strToURI(contentDocs[i].extract.title[2]) %>/cid<%= contentDocs[i].cid %>" target="_blank"><%= contentDocs[i].extract.title[2] %></a>
+          
           <sup class="badge"><%= contentDocs[i].crawlStatus %></sup>
+
+          <a href="/<%= urlmod.strToURI(contentDocs[i].extract.title[2]) %>/cid<%= contentDocs[i].cid %>" data-pageURL="<%= contentDocs[i].pageURL %>" class="cntLnk"><sup class="glyphicon glyphicon-eye-open" style="font-size:12px;position:relative;top:-6px;color:Silver;"></sup></a>
+
+          <a href="<%= contentDocs[i].pageURL %>" target="_blank"><sup class="glyphicon glyphicon-link" style="font-size:12px;position:relative;top:-6px;color:Silver;"></sup></a>
+
         </h4>
 
         <%//decrease description

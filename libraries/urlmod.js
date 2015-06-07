@@ -32,7 +32,7 @@ module.exports.toAbsolute = function (pageURL, inurl) {
  *
  */
 module.exports.encodeParameter = function (q) {
-  var q = q.replace(' ', '-');
+  var q = q.replace(/\s/g, '-');
   q = encodeURI(q);
   return q;
 };
@@ -46,7 +46,7 @@ module.exports.encodeParameter = function (q) {
  */
 module.exports.unencodeParameter = function (q) {
   var q2 = decodeURI(q);
-  var q3 = q2.replace('-', ' ');
+  var q3 = q2.replace(/\-/g, ' ');
   return q3;
 };
 
