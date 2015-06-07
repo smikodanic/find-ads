@@ -3,17 +3,11 @@
 <head>
 <meta charset="UTF-8">
 <title><%= title %></title>
-<meta name="description" content="">
-<meta name="keywords" content="">
+<meta name="description" content="<%= desc %>">
+<meta name="keywords" content="<%= keywords %>">
 <meta name="author" content="AdAm">
 <meta name="robots" content="index,follow">
 <meta name="googlebot" content="index,follow">
-
-<style>
-div {
-    color:red;
-}
-</style>
 </head>
 
 <body>
@@ -21,6 +15,11 @@ div {
 <h1><%= title %></h1>
 
 <p><%= p %></p>
+
+<br>
+<br>
+<br>
+<span style="font:12px Verdana;">See complete advert <a href="<%= pageURL %>">here</a>.</span>
 
 </body>
 </html>

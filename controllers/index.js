@@ -52,9 +52,10 @@ module.exports = function (router) {
 
         vdata = {
           title: moContent_arr[0].extract.title[2],
-          desc: moContent_arr[0].extract.title[2],
-          keywords: moContent_arr[0].extract.title[2],
-          p: moContent_arr[0].extract.description[2]
+          desc: moContent_arr[0].extract.description[2].substring(0, 120),
+          keywords: moContent_arr[0].extract.title[2].replace(/\s/, ','),
+          p: moContent_arr[0].extract.description[2],
+          pageURL: moContent_arr[0].pageURL
         };
 
         res.render('public/advert', vdata);
