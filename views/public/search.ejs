@@ -31,10 +31,10 @@
       <div class="list-group-item izlist">
 
         <!-- ad image -->
-        <% if (contentDocs[i].extract.image === undefined) { %>
-          <img alt="Web proxy" src="/images/noimage.jpg">
+        <% if (contentDocs[i].extract.image === undefined || contentDocs[i].extract.image[2] == '') { %>
+          <img alt="No Image" src="/images/noimage.jpg">
         <% } else { %>
-          <img alt="Web proxy" src="<%= contentDocs[i].extract.image[2] %>">
+          <img alt="" src="<%= contentDocs[i].extract.image[2] %>">
         <% } %>
         
         <h4 class="list-group-item-heading">
