@@ -31,7 +31,7 @@
       <div class="list-group-item izlist">
 
         <!-- ad image -->
-        <% if (contentDocs[i].extract.image === undefined || contentDocs[i].extract.image[2] == '') { %>
+        <% if (contentDocs[i].extract.image === undefined || contentDocs[i].extract.image[2] === '') { %>
           <img alt="No Image" src="/images/noimage.jpg">
         <% } else { %>
           <img alt="" src="<%= contentDocs[i].extract.image[2] %>">
