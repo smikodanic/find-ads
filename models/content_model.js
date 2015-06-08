@@ -89,11 +89,14 @@ module.exports.homeSearchOut = function (collName, q, req, res, cb_render) {
   if (q === 'all') {
     queryDB = {};
   } else {
-    var reg = new RegExp(q, 'ig'); //creating regular expression
-    queryDB = {
+    // var reg = new RegExp(q, 'ig'); //creating regular expression
+    /*queryDB = {
       "extract.description": {"$regex": reg}
-    };
+    };*/
     // queryDB = {"links.tekst": reg};
+    queryDB = {
+      $text: { $search: q }
+    };
   }
 
 
