@@ -10,7 +10,6 @@ var logg = require('libraries/loggLib');
 module.exports = function (router) {
 
 
-
   /* homepage */
   router.get('/', function (req, res) {
 

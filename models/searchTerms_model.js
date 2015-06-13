@@ -12,6 +12,7 @@ var pagination = require('libraries/pagination.js');
 var sett = require('settings/admin.js');
 var dbName = sett.mongo.dbName;
 var dbColl = sett.mongo.dbColl_searchTerms;
+var dbColl_category = sett.mongo.dbColl_category;
 
 
 module.exports.listPart = function (lim, res, cb_index) {
@@ -23,8 +24,8 @@ module.exports.listPart = function (lim, res, cb_index) {
       if (err) { logg.byWinston('error', __filename + ':23 ' + err); }
 
       cb_index(res, mo_searchTerms);
+      db.close();
     });
-
 
   });
 

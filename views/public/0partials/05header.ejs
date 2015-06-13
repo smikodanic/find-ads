@@ -24,11 +24,14 @@
         <li class="dropdown">
           <a class="dropdown-toggle" data-toggle="dropdown" href="#">Categories <span class="caret"></span></a>
           <ul class="dropdown-menu">
-            <li><a href="#">Business</a></li>
-            <li><a href="#">Real Estate</a></li>
-            <li><a href="#">Cars</a></li>
-            <li><a href="#">Personals</a></li>
-            <li><a href="#">Jobs</a></li>
+            
+            <% 
+              GLOBfindads.categories.forEach(function (elem) {
+              var catURL = elem.category.replace(/\s/g, '-'); //replace empty space with -
+            %>
+              <li><a href="/browse/<%= catURL %>/<%= elem.id %>" style="text-transform:capitalize;"><%= elem.category %></a></li>   
+            <% }) %>
+
           </ul>
         </li>
 

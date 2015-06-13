@@ -14,7 +14,7 @@ var settings = require('settings/admin.js');
 var dbName = settings.mongo.dbName;
 
 
-// HTTP client created by NodeJS module - http.request()
+// HTTP client created by NPM - follow-redirects
 module.exports.runURL = function (db, moTask, link, i, cb_outResults) {
 
   //vars

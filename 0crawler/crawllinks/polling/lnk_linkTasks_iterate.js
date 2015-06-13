@@ -77,7 +77,10 @@ module.exports.start = function (task_id, cb_outResults) {
 
 
       }, moTask.crawlInterval);
-
+      
+      var util = require('util');
+      console.log(util.inspect(intID));
+      
       //send intID to global scope to be accessible with /stop controller
       global.intId = intID;
 
