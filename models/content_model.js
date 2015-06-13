@@ -194,22 +194,21 @@ module.exports.getDataByCid = function (collName, cid, res, cb_advert) {
  * @param  {Function} cb_list  - callback function to display results
  * @return {[type]}          [description]
  */
-module.exports.browse = function (collName, req, res, cb_list) {
+module.exports.browse = function (collName, inputParams, req, res, cb_list) {
 
   /* define dbQuery */
   var dbQuery;
 
-  var cat = req.params.cat;
-  var catId = parseInt(req.params.catId, 10);
-  var subcat = req.params.subcat;
-  var subcatKey = parseInt(req.params.subcatKey, 10);
+  var cat = inputParams.cat;
+  var catId = inputParams.catId;
+  var subcat = inputParams.subcat;
+  var subcatKey = inputParams.subcatKey;
 
-  if (subcatKey === undefined) { //only category is defined
+  if (isNaN(subcatKey)) { //only category is defined
     dbQuery = {category: catId};
   } else { //when subcategory is also defined
     dbQuery = {category: catId, subcategory: subcatKey};
   }
-
 
 
   /* Mongo query */

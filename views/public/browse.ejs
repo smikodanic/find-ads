@@ -9,9 +9,17 @@
 <div class="row">
 
   <!-- filter -->
-  <aside class="col-sm-3 hidden-xs filter">
-    <h2><%= cat %></h2>
-  
+  <aside class="col-sm-3 filter">
+    <h2><a href="/browse/<%= inputParams.cat %>-id<%= inputParams.catId %>/"><%= cat_title %></a></h2>
+    <ul>
+      <% 
+        GLOBfindads.categories[inputParams.catId].subcats.forEach(function (elem, key) { 
+          var elemDashed = elem.replace(/\s/g, '-');
+      %>
+        
+        <li><a href="/browse/<%= inputParams.cat %>-id<%= inputParams.catId %>/<%= elemDashed%>-key<%= key %>/"><%= elem %></a></li>
+      <% }) %>
+    </ul>
 
   </aside>
   <!-- filter -->
@@ -21,7 +29,7 @@
   <div class="col-sm-9">
 
     <h2>
-      <small>Browse category:</small> <%= cat %>
+      <small>Browse category:</small> <%= cat_title %> <span style="font-size:smaller"><%= (subcat_title) ? ', ' + subcat_title : '' %></span>
       <small style="margin-left:30px;">Results: <%= pagination.countNum %></small>
     </h2>
 

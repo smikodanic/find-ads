@@ -108,4 +108,5 @@ h1,h2,h3 {
 .filter > h2 {
 	color: #2A8AF3;
 	text-transform: capitalize;
+	text-shadow: 2px 2px #999;
 }
