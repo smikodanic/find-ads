@@ -183,3 +183,62 @@ module.exports.getDataByCid = function (collName, cid, res, cb_advert) {
   });
 
 };
+
+
+
+/**
+ * Browse ads by category and subcategory
+ * @param  {String} collName - mongoDB collection name: 'content'
+ * @param  {Object} req      - request object
+ * @param  {Object} res      - respond object
+ * @param  {Function} cb_list  - callback function to display results
+ * @return {[type]}          [description]
+ */
+module.exports.browse = function (collName, req, res, cb_list) {
+
+  /* define dbQuery */
+  var dbQuery;
+
+  var cat = req.params.cat;
+  var catId = parseInt(req.params.catId, 10);
+  var subcat = req.params.subcat;
+  var subcatKey = parseInt(req.params.subcatKey, 10);
+
+  if (subcatKey === undefined) { //only category is defined
+    dbQuery = {category: catId};
+  } else { //when subcategory is also defined
+    dbQuery = {category: catId, subcategory: subcatKey};
+  }
+
+
+
+  /* Mongo query */
+  MongoClient.connect(dbName, function (err, db) {
+    if (err) { logg.byWinston('error', __filename + ':215 ' + err); }
+
+    db.collection(collName).count(dbQuery, function (err, countNum) {
+      if (err) { logg.byWinston('error', __filename + ':218 ' + err); }
+
+      /* create pagination object which is sent to view file */
+      var pagesPreURI;
+      if (subcat === undefined) { //only category is defined
+        pagesPreURI = '/browse/' + cat + '-id' + catId + '/';
+      } else { //category and subcategory are defined
+        pagesPreURI = '/browse/' + cat + '-id' + catId + '/' + subcat + '-key' + subcatKey + '/';
+      }
+      var perPage = 25; //show results per page
+      var spanNum = 10; //show pagination numbers. Must be even number (paran broj)
+      var pagination_obj = pagination.paginator(req, countNum, pagesPreURI, perPage, spanNum);
+
+      db.collection(collName).find(dbQuery).sort({cid: -1}).skip(pagination_obj.skipNum).limit(pagination_obj.perPage).toArray(function (err, mo_content) {
+        if (err) { logg.byWinston('error', __filename + ':234 ' + err); }
+
+        cb_list(res, mo_content, pagination_obj);
+        db.close();
+      });
+
+    });
+
+  });
+
+};

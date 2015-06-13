@@ -29,7 +29,7 @@
               GLOBfindads.categories.forEach(function (elem) {
               var catURL = elem.category.replace(/\s/g, '-'); //replace empty space with -
             %>
-              <li><a href="/browse/<%= catURL %>/<%= elem.id %>" style="text-transform:capitalize;"><%= elem.category %></a></li>   
+              <li><a href="/browse/<%= catURL %>-id<%= elem.id %>/" style="text-transform:capitalize;"><%= elem.category %></a></li>   
             <% }) %>
 
           </ul>

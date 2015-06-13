@@ -2,7 +2,7 @@
 require('rootpath')();
 var express = require('express');
 var router = express.Router();
-var nodedump = require('nodedump').dump;
+// var nodedump = require('nodedump').dump;
 var logg = require('libraries/loggLib');
 
 
