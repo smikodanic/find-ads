@@ -30,7 +30,7 @@ module.exports = function (router) {
     var cb_list = function (res, mo_content, pagination_obj) {
 
       var vdata = {
-        title: 'Find Ads in ' + cat_title + ' category',
+        title: 'Find Ads in ' + cat_title + ' category (' + pagination_obj.countNum + ')',
         desc: 'Browse classifed ads by categories and its subcategories. Current category: ' + cat_title,
         keywords: 'adverts, ads, ' + cat_title + ' category',
         cat_title: cat_title,
@@ -74,7 +74,7 @@ module.exports = function (router) {
     var cb_list = function (res, mo_content, pagination_obj) {
 
       var vdata = {
-        title: 'Find Ads in ' + cat_title + ', ' + subcat_title + ' category ' + '(' + pagination_obj.countNum + ')',
+        title: 'Find Ads in ' + cat_title + ', ' + subcat_title + ' category (' + pagination_obj.countNum + ')',
         desc: 'Browse classifed ads by categories and its subcategories. Current category: ' + cat_title + ' ' + subcat_title,
         keywords: 'adverts, ads, ' + cat_title + ' category,' + subcat_title + ' subcategory',
         cat_title: cat_title,
