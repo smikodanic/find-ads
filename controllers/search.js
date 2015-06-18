@@ -32,15 +32,18 @@ module.exports = function (router) {
   /* search results from form */
   router.post('/', function (req, res) {
 
-    var q;
+    //input vars
+    var q, category, country;
     if (req.body.q !== '') { //q comes from FORM via POST
       q = req.body.q;
     } else {
       q = 'all';
     }
+    category = parseInt(req.body.category, 10);
+    country = req.body.country;
 
     var content_model = require('models/content_model');
-    content_model.homeSearchOut('content', q, req, res, cb_render);
+    content_model.homeSearchOut('content', q, category, country, req, res, cb_render);
   });
 
 
@@ -48,14 +51,18 @@ module.exports = function (router) {
   /* search results from pagination link */
   router.get('/:q/(:currentPage([0-9]+))?', function (req, res) { //currentPage can only be a number
 
-    var q;
+    //input vars
+    var q, category, country;
     if (req.params.q !== '') { //q comes from FORM via POST
       q = req.params.q;
     } else {
       q = 'all';
     }
+    category = parseInt(req.params.category, 10);
+    country = req.params.country;
+
     var content_model = require('models/content_model');
-    content_model.homeSearchOut('content', q, req, res, cb_render);
+    content_model.homeSearchOut('content', q, category, country, req, res, cb_render);
 
     //logging visitors
     logg.visitors(req, 'home-search');

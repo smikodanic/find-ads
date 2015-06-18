@@ -4,6 +4,8 @@ var express = require('express');
 var router = express.Router();
 // var nodedump = require('nodedump').dump;
 var logg = require('libraries/loggLib');
+var setGlobal = require('libraries/setGlobalLib');
+var countries = require('country-data').countries;
 
 
 
@@ -13,6 +15,9 @@ module.exports = function (router) {
   /* homepage */
   router.get('/', function (req, res) {
 
+    //refresh global var dynamically
+    setGlobal.latestContent('content', 5);
+
     //view callback function
     var cb_index = function (res, mo_searchTerms) {
 
@@ -20,8 +25,8 @@ module.exports = function (router) {
         title: 'Find Ads - Search Free Classifieds',
         desc: 'Find Ads is your help when searching free classified ads. All adverts are sorted in categories and subcategories.',
         keywords: 'search classifieds, find ads, search adverts, clasifieds directory',
-        h1: 'Find Ads',
-        searchTerms: mo_searchTerms
+        searchTerms: mo_searchTerms,
+        countries: countries.all
       };
 
       res.render('public/index', vdata);
@@ -29,8 +34,7 @@ module.exports = function (router) {
 
     //call model and render homepage
     var searchTerms_model = require('models/searchTerms_model');
-    searchTerms_model.listPart(25, res, cb_index);
-
+    searchTerms_model.listPart(8, res, cb_index);
     //logging visitors
     logg.visitors(req, 'home');
   });

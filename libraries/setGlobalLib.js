@@ -1,5 +1,10 @@
 /**
  * Library which defines all global vars in app
+ *
+ * NOTICE: These global vars are updated on NodeJS restart. 
+ * When needed to update dynamically include this into controller:
+ *   var setGlobal = require('libraries/setGlobalLib');
+ *   setGlobal.latestContent('content', 5);
  */
 
 require('rootpath')();
@@ -25,17 +30,41 @@ global.GLOBfindads = {};
 module.exports.categories = function () {
 
   MongoClient.connect(dbName, function (err, db) {
-    if (err) { logg.byWinston('error', __filename + ':109 ' + err); }
+    if (err) { logg.byWinston('error', __filename + ':28 ' + err); }
 
     //list results
-    db.collection(collName).find({}).sort({id: 1}).toArray(function (err, mo_category) {
-      if (err) { logg.byWinston('error', __filename + ':113 ' + err); }
+    db.collection(collName).find({}).sort({"id": 1}).toArray(function (err, mo_category) {
+      if (err) { logg.byWinston('error', __filename + ':32 ' + err); }
 
       global.GLOBfindads.categories = mo_category;
       db.close();
     });
 
-  }); //connect
+  });
+
+};
+
+
+/**
+ * Latest docs from
+ * 
+ * @param {String} content - MongoDB Collection
+ * @param {String} lim - number of contents
+ */
+module.exports.latestContent = function (collName, lim) {
+
+  MongoClient.connect(dbName, function (err, db) {
+    if (err) { logg.byWinston('error', __filename + ':49 ' + err); }
+
+    //list results
+    db.collection(collName).find({}).sort({"cid": -1}).limit(lim).toArray(function (err, mo_docs) {
+      if (err) { logg.byWinston('error', __filename + ':53 ' + err); }
+
+      global.GLOBfindads.latestContent = mo_docs;
+      db.close();
+    });
+
+  });
 
 };
 

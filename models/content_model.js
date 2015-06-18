@@ -78,7 +78,7 @@ module.exports.insertContent = function (pageURL, db, contentCollection, insMoDo
 
 
 
-module.exports.homeSearchOut = function (collName, q, req, res, cb_render) {
+module.exports.homeSearchOut = function (collName, q, category, country, req, res, cb_render) {
 
   if (req.method === 'GET') { //when request comes from pagination link, not form's POST
     q = urlmod.unencodeParameter(q); //convert 'some-query' into 'some query'
@@ -95,11 +95,12 @@ module.exports.homeSearchOut = function (collName, q, req, res, cb_render) {
     };*/
     // queryDB = {"links.tekst": reg};
     queryDB = {
-      $text: { $search: q }
+      $text: { $search: q },
+      category: category
     };
   }
 
-
+console.log(JSON.stringify(queryDB, null, 2));
 
   MongoClient.connect(dbName, function (err, db) {
     if (err) { logg.byWinston('error', __filename + ':107 ' + err); }
@@ -112,8 +113,8 @@ module.exports.homeSearchOut = function (collName, q, req, res, cb_render) {
 
       /* create pagination object which is sent to view file */
       var pagesPreURI = '/search/' + q2 + '/';
-      var perPage = 25; //show results per page
-      var spanNum = 10; //show pagination numbers. Must be even number (paran broj)
+      var perPage = 10; //show results per page
+      var spanNum = 6; //show pagination numbers. Must be even number (paran broj)
       var pagination_obj = pagination.paginator(req, countNum, pagesPreURI, perPage, spanNum);
 
       db.collection(collName).find(queryDB).sort({cid: -1}).skip(pagination_obj.skipNum).limit(pagination_obj.perPage).toArray(function (err, moContent_arr) {

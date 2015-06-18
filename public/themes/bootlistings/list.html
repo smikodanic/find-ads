@@ -1,28 +1,101 @@
 <!doctype html> 
 <html lang="en"> 
 <head>
-    <%- include('0partials/01head'); -%>
+    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+    <meta charset="utf-8">
+      <!--[if IE]><meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'><![endif]-->
+      <!--[if lt IE 9]>
+          <script src="/javascriptss/ie/html5shiv.min.js"></script>
+          <script src="/javascriptss/ie/respond.min.js"></script>
+      <![endif]-->
+    <title>Find Ads</title>
+    <meta name="description" content="<%= desc %>">
+    <meta name="keywords" content="<%= keywords %>">
+    <meta name="author" content="AdAm">
+    <meta name="robots" content="index,follow">
+    <meta name="googlebot" content="index,follow">
+    <link rel="icon" href="/img/favicon.ico" type="image/ico">
+
+    <!-- bootstrap --> 
+    <meta name="viewport" content="width=device-width, maximum-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="css/bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="css/bootstrap-theme.css">
+
+    <!-- jquery must be loaded before bootstrap.min.js --> 
+    <script src="/javascripts/jquery/sys/1.11.1/jquery.min.js"></script>
+    <script src="js/bootstrap.js"></script>
+    <script src="js/bootstrap-tab.js"></script>
 
     <!-- fonts -->
     <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
 </head>
+
 <body>
 
-    <%- include('0partials/05header'); -%>
+<header class="container">
+
+    <!-- top navbar -->
+    <nav class="navbar navbar-default" role="navigation">
+
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+
+                <a href="index.html" class="navbar-brand ">
+                    <img src="img/find-ads-spider.png" alt="Find Ads Bot" width="120" height="60" class="img-responsive hidden-xs">
+                    <span>
+                        <strong>find - ads</strong>
+                        <br><small class="hidden-xs">Our spider collect ads for you !</small>
+                    </span>
+                </a>
+
+            </div>
+
+            <div class="collapse navbar-collapse">
+
+                <ul class="nav navbar-nav navbar-right visible-xs">
+                    <li class="active"><a href="#">Home</a></li>
+                    <li><a href="#">Categories</a></li>
+                    <li><a href="#">Services</a></li>
+                    <li><a href="http://www.adsuu.com/advert/post.php" target="_blank">Post Free Ads</a></li>
+                </ul>
+
+                <div class="nav navbar-nav navbar-right hidden-xs">
+                    <div class="row">
+                        <div class="pull-right">
+                            <a href="#">Home</a> &middot;
+                            <a href="#">Search</a> &middot;
+                            <a href="#">Categories</a> &middot;
+                            <a href="#">Services</a> &middot;
+                            <a href="http://www.adsuu.com/advert/post.php" target="_blank">Post Free Ads</a>
+                        </div>  
+                    </div>
+                </div>
+
+            </div>
+
+    </nav>
+    <!-- top navbar end -->
+
+
+</header>
 
 <div class="clearfix">&nbsp;</div>
 <br><br><br>
 
 <main class="container">
 
-    <!-- breadcrumb -->
+<!-- breadcrumb -->
 <div class="row">
     <div class="col-sm-12">
         <ol class="breadcrumb">
-            <li><a href="/">Home</a></li>
+            <li><a href="#">Home</a></li>
             <li><a href="#">Vehicles</a></li>
             <li class="active">Cars</li>
-            <li class="active"><%= pagination.countNum %> results for <strong>"<%= q %>"</strong> in London</li>
+            <li class="active">4,699 results for <strong>"Cars"</strong> in London</li>
         </ol>
     </div>
 </div>
@@ -100,107 +173,82 @@
         </div>
         <!-- premium ad end -->
 
-        <!-- ad -->
-        <% for(var i=0; i<contentDocs.length; i++) { %>
-        
+        <!-- ad1 -->
         <div class="row  listing-row">
-
             <div class="col-sm-2">
-                <a href="/<%= urlmod.strToURI(contentDocs[i].extract.title[2]) %>/cid<%= contentDocs[i].cid %>" class="thumbnail" >
-                    <!-- ad image -->
-                    <% if (contentDocs[i].extract.image === undefined || contentDocs[i].extract.image[2] === null) { %>
-                        <img alt="No Image" src="/images/noimage.jpg">
-                    <% } else { %>
-                        <img alt="" src="<%= contentDocs[i].extract.image[2] %>">
-                    <% } %>
-                </a>
+                <a href="details.html" class="thumbnail " ><img alt="176 * 120" src="img/ad.jpg"></a>
             </div>
-
             <div class="col-sm-10">
-                
-                <h3>
-                    <small><%= i+1+pagination.perPage*(pagination.currentPage-1) %>. </small>
-                    <a href="/<%= urlmod.strToURI(contentDocs[i].extract.title[2]) %>/cid<%= contentDocs[i].cid %>">
-                        <%= contentDocs[i].extract.title[2].substring(0, 50) %>
-                    </a>
-                    <a href="<%= contentDocs[i].pageURL %>" target="_blank" class="lnk-orange"><sup class="fa fa-link"></sup></a>
-                    
-                    <% //define price
-                        var price;
-                        if (contentDocs[i].extract.price !== undefined) {
-                            price = contentDocs[i].extract.price;
-                        } else {
-                            price = '';
-                        }
-                    %>
-                    &nbsp; <strong><%= price %></strong>
-
-                </h3>
-
-                <% //location
-                    var location;
-                    if (contentDocs[i].extract.location !== undefined) {
-                        location = contentDocs[i].extract.location;
-                %>
-                        <p class="muted">Location <strong><%= location %></strong></p>
-                <% } %>
-                
-                <p class="muted">
-                    Crawled <%= contentDocs[i].crawlDateTime.substring(4,16) %> 
-                    <%= contentDocs[i].crawlStatus %> to 
-                    
-                    <% //category and subcategory
-                        var cat = GLOBfindads.categories[contentDocs[i].category].category;
-                        var subcat = GLOBfindads.categories[contentDocs[i].category].subcats[contentDocs[i].subcategory];
-                    %>
-                    <a href="#" class="underline"><%= cat %> &raquo; <%= subcat %></a>
-                </p>
-                
-                <%//decrease description
-                var desc = contentDocs[i].extract.description[2];
-                var descLength = 250;
-
-                if (desc.length > descLength) {
-                  desc = desc.substring(0, descLength) + ' ...';
-                }
-                %>
-                <p><%= desc %></p>
+                <h3><a class=""  href="details.html">Renault Clio Dynamique 16v 1.2 51 plate - <strong>&pound;5,000</strong></a></h3>
+                <p class="muted">Located in <strong>Richmond, London</strong></p>
+                <p class="muted">Posted Feb 05, 2014 to <a href="#" class="underline">Cars, Vans & Motorbikes</a></p>
+                <p>Excellent Condition. Displacement: 2,900 cc Power Output: 250 bhp Drivetrain: 2-WD  Second hand car for sale – 7377790212 Available car – beat – blue color, Honda city –white /black Indica ecs – white Alto – white Nano – red /white...</p>
                 <p class="ad-description">
-                    <strong style="color:Green"><%= contentDocs[i].pageURL.substring(contentDocs[i].pageURL.lastIndexOf("//")+2, contentDocs[i].pageURL.lastIndexOf("/")) %></strong>                
+                    <strong>2006</strong> | 
+                    <strong>98,000 miles</strong> | 
+                    <strong>2,696 cc</strong> | 
+                    <strong>Diesel</strong>                
                 </p>
-
+                <p>
+                    <span class="classified_links pull-right">
+                        <a class="link-info underline" href="#">Share</a>&nbsp;
+                        <a class="link-info underline" href="#">Add to favorites</a>
+                        &nbsp;<a class="link-info underline" href="details.html">Details</a>&nbsp;
+                        &nbsp;<a class="link-info underline" href="#">Contact</a></span>
+                </p>
             </div>
-
         </div>
+        <!-- ad1 end -->
 
-        <% } %>
-        <!-- ad end -->
+        <!-- ad2 -->
+        <div class="row  listing-row">
+                                <div class="col-sm-2">
+                    <a href="details.html" class="thumbnail " ><img alt="176 * 120" src="img/ad.jpg"></a>
+                </div>
 
-        
+                <div class="col-sm-10">
+                    <h3><a class=""  href="details.html">Mercedes-Benz C Class C220 CDI Avantgarde SE - <strong>&pound;15,000</strong></a></h3>
+                    <p class="muted">Located in <strong>Richmond, London</strong></p>
+                    <p class="muted">Posted Feb 05, 2014 to <a href="#" class="underline">Cars, Vans & Motorbikes</a></p>
+                    <p>Excellent Condition. Displacement: 2,900 cc Power Output: 250 bhp Drivetrain: 2-WD  Second hand car for sale – 7377790212 Available car – beat – blue color, Honda city –white /black Indica ecs – white Alto – white Nano – red /white...</p>
+                    <p class="ad-description">
+                        <strong>2006</strong> | 
+
+                        <strong>98,000 miles</strong> | 
+
+                        <strong>2,696 cc</strong> | 
+
+                        <strong>Diesel</strong>                
+                    </p>
+                    <p>
+                        <span class="classified_links pull-right">
+                            <a class="link-info underline" href="#">Share</a>&nbsp;
+                            <a class="link-info underline" href="#">Add to favorites</a>
+                            &nbsp;<a class="link-info underline" href="details.html">Details</a>&nbsp;
+                            &nbsp;<a class="link-info underline" href="#">Contact</a></span>
+                    </p>
+                </div>
+            </div>
+        <!-- ad2 end -->
 
 
         <!-- pagination -->
         <div >
-            <ul class="pagination pull-left">
-                <li><a href="<%= pagination.pagesPreURI + '1' %>">First</a></li>
-                
-                <% 
-                    pagination.currentPage = parseInt(pagination.currentPage); //convert string into number
-                    
-                    pagination.pages_arr.forEach(function(elem){
-                      var hclass;
-                      if (elem === pagination.currentPage) {
-                        hclass = 'class="active"';
-                      } else {
-                        hclass = '';
-                      }
-                %>
-
-                <li <%- hclass %>><a href="<%= pagination.pagesPreURI + elem %>"><%= elem %></a></li>
-                    
-                <% }); %>
-
-                <li><a href="<%= pagination.pagesPreURI + pagination.pagesTotal %>">Last</a></li>
+            <ul class="pagination pull-right">
+                <li><a href="#">First</a></li>
+                <li class="active">
+                    <a href="#">1</a>
+                </li>
+                <li ><a href="#">2</a></li>
+                <li ><a href="#">3</a></li>
+                <li ><a href="#">4</a></li>
+                <li ><a href="#">5</a></li>
+                <li class="hidden-xs"><a href="#">6</a></li>
+                <li class="hidden-xs"><a href="#">7</a></li>
+                <li class="hidden-sm hidden-xs"><a href="#">8</a></li>
+                <li class="hidden-sm hidden-xs"><a href="#">9</a></li>
+                <li class="hidden-sm hidden-xs"><a href="#">10</a></li>
+                <li><a href="#">Last</a></li>
             </ul>
         </div>
         <!-- pagination end -->
@@ -209,12 +257,10 @@
     </section>
 
 
-
     <br><br>
 
 
-
-    <aside class="col-sm-4 hidden-xs">
+    <aside class="col-sm-4">
         
         <!-- car filter -->
         <div class="panel panel-default">
@@ -410,11 +456,34 @@
 
 
 
-</div>  			
+</div>		
 
 </main>
 
-<%- include('0partials/20footer'); -%>
+
+<!-- footer -->
+<footer class="footer">
+    <div class="container">
+        <div class="row">
+
+            <div class="col-sm-4 col-xs-12">
+                <p><strong>&copy; Find-Ads.com</strong></p>
+                <p>Classifed Ads Web Spider</p>
+            </div>          
+
+            <div class="col-sm-8 col-xs-12">
+                <p class="footer-links">
+                    <a href="#">Services</a>
+                    <a href="#">Terms of Use</a>
+                    <a href="#">Privacy Policy</a>
+                    <a href="#">Contact Us</a>
+                </p>
+            </div>
+
+        </div>
+    </div>
+</footer>
+<!-- footer end -->
 
 </body>
 </html>

@@ -1,56 +1,50 @@
-<header class="row">
+<header class="container">
 
-    <div class="col-sm-12">
-      
-<!-- NAVBAR -->
-<nav class="navbar navbar-default">
-  <div class="container-fluid">
+    <!-- top navbar -->
+    <nav class="navbar navbar-default" role="navigation">
 
-    <!-- Navbar button -->
-    <div class="navbar-header">
-      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#nv">
-        <span class="sr-only">Toggle navigation</span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-      </button>
-      <a class="navbar-brand" href="/"><span class="glyphicon glyphicon-home"></span></a>
-    </div>
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
 
-    <!-- Navbar -->
-    <div class="collapse navbar-collapse" id="nv">
-      <ul class="nav navbar-nav navbar-left">
+                <a href="/" class="navbar-brand">
+                    <img src="/themes/bootlistings/img/find-ads-spider.png" alt="Find Ads Bot" width="120" height="60" class="img-responsive hidden-xs">
+                    <span>
+                        <strong>find - ads</strong>
+                        <br><small class="hidden-xs">My cute spider collect ads for you !</small>
+                    </span>
+                </a>
 
-        <li class="dropdown">
-          <a class="dropdown-toggle" data-toggle="dropdown" href="#">Categories <span class="caret"></span></a>
-          <ul class="dropdown-menu">
-            
-            <% 
-              GLOBfindads.categories.forEach(function (elem) {
-              var catURL = elem.category.replace(/\s/g, '-'); //replace empty space with -
-            %>
-              <li><a href="/browse/<%= catURL %>-id<%= elem.id %>/" style="text-transform:capitalize;"><%= elem.category %></a></li>   
-            <% }) %>
+            </div>
 
-          </ul>
-        </li>
+            <div class="collapse navbar-collapse">
 
-        <li><a href="#">Marketing</a></li>
+                <ul class="nav navbar-nav navbar-right visible-xs">
+                    <li class="active"><a href="#">Home</a></li>
+                    <li><a href="#">Categories</a></li>
+                    <li><a href="#">Services</a></li>
+                    <li><a href="http://www.adsuu.com/advert/post.php" target="_blank">Post Free Ads</a></li>
+                </ul>
 
-      </ul>
+                <div class="nav navbar-nav navbar-right hidden-xs">
+                    <div class="row">
+                        <div class="pull-right">
+                            <a href="#">Home</a> &middot;
+                            <a href="#">Search</a> &middot;
+                            <a href="#">Categories</a> &middot;
+                            <a href="#">Services</a> &middot;
+                            <a href="#">Submit URL</a> &middot;
+                            <a href="http://www.adsuu.com/advert/post.php" target="_blank">Post Free Ads</a>
+                        </div>  
+                    </div>
+                </div>
 
-      <ul class="nav navbar-nav navbar-right">
-        
-        <li><a href="#"><span class="glyphicon glyphicon-user"></span></a></li>
-        <li><a href="#"><span class="glyphicon glyphicon-log-in"></span></a></li>
-      
-      </ul>
+            </div>
 
-    </div>
+    </nav>
+    <!-- top navbar end -->
 
-  </div>
-</nav>
-<!-- NAVBAR end -->
-
-    </div>
 </header>

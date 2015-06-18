@@ -1,14 +1,91 @@
 <!doctype html> 
 <html lang="en"> 
 <head>
-    <%- include('0partials/01head'); -%>
+    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+    <meta charset="utf-8">
+      <!--[if IE]><meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'><![endif]-->
+      <!--[if lt IE 9]>
+          <script src="/javascriptss/ie/html5shiv.min.js"></script>
+          <script src="/javascriptss/ie/respond.min.js"></script>
+      <![endif]-->
+    <title>Find Ads</title>
+    <meta name="description" content="<%= desc %>">
+    <meta name="keywords" content="<%= keywords %>">
+    <meta name="author" content="AdAm">
+    <meta name="robots" content="index,follow">
+    <meta name="googlebot" content="index,follow">
+    <link rel="icon" href="/img/favicon.ico" type="image/ico">
+
+    <!-- bootstrap --> 
+    <meta name="viewport" content="width=device-width, maximum-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="css/bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="css/bootstrap-theme.css">
+
+    <!-- jquery must be loaded before bootstrap.min.js --> 
+    <script src="/javascripts/jquery/sys/1.11.1/jquery.min.js"></script>
+    <script src="js/bootstrap.js"></script>
+    <script src="js/bootstrap-tab.js"></script>
 
     <!-- fonts -->
     <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
 </head>
+
 <body>
 
-    <%- include('0partials/05header'); -%>
+<header class="container">
+
+    <!-- top navbar -->
+    <nav class="navbar navbar-default" role="navigation">
+
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+
+                <a href="index.html" class="navbar-brand ">
+                    <img src="img/find-ads-spider.png" alt="Find Ads Bot" width="120" height="60" class="img-responsive hidden-xs">
+                    <span>
+                        <strong>find - ads</strong>
+                        <br><small class="hidden-xs">Our spider collect ads for you !</small>
+                    </span>
+                </a>
+
+            </div>
+
+            <div class="collapse navbar-collapse">
+
+                <ul class="nav navbar-nav navbar-right visible-xs">
+                    <li class="active"><a href="#">Home</a></li>
+                    <li><a href="#">Categories</a></li>
+                    <li><a href="#">Services</a></li>
+                    <li><a href="http://www.adsuu.com/advert/post.php" target="_blank">Post Free Ads</a></li>
+                </ul>
+
+                <div class="nav navbar-nav navbar-right hidden-xs">
+                    <div class="row">
+                        <div class="pull-right">
+                            <a href="#">Home</a> &middot;
+                            <a href="#">Search</a> &middot;
+                            <a href="#">Categories</a> &middot;
+                            <a href="#">Services</a> &middot;
+                            <a href="http://www.adsuu.com/advert/post.php" target="_blank">Post Free Ads</a>
+                        </div>  
+                    </div>
+                </div>
+
+            </div>
+
+    </nav>
+    <!-- top navbar end -->
+
+
+</header><!-- container end -->
+
+
+
+
 
 
 <main class="container">
@@ -22,7 +99,7 @@
                 <p class="main_description hidden-xs">Always fresh ads in our database !</p>
 
                 <!-- form -->
-                <form action="/search" method="POST" enctype="application/x-www-form-urlencoded" class="form-horizontal">
+                <form action="#" method="POST" enctype="application/x-www-form-urlencoded" class="form-horizontal">
  
                     <div class="form-group">
                     
@@ -34,18 +111,16 @@
                         <div class="col-sm-3">
                           <select name="category" id="category" class="form-control">
                                 <option value="" style="color:silver">All categories</option>
-                                <% GLOBfindads.categories.forEach(function (elem) { %>
-                                <option value="<%= elem.id %>"><%= elem.category %></option>
-                                <% }) %>
+                                <option value="">Cars</option>
+                                <option value="">Real Estate</option>
                           </select>
                         </div>
 
                         <div class="col-sm-3">
-                          <select name="country" id="country" class="form-control">
+                          <select name="category" id="category" class="form-control">
                                 <option value="" style="color:silver">All countries</option>
-                                <% countries.forEach(function (elem) { %>
-                                <option value="<%= elem.name %>"><%= elem.name %></option>
-                                <% }) %>
+                                <option value="">USA</option>
+                                <option value="">GB</option>
                           </select>
                         </div>
 
@@ -87,25 +162,113 @@
 
                 <div class="col-xs-12">
                     
-                    <% GLOBfindads.categories.forEach(function (elem) { %>
-
                     <div class="directory-block col-sm-4 col-xs-6">
                         <div class="row">
                             <div class="col-sm-3">
-                                <i class="<%= elem.fa %>"></i>
+                                <i class="fa fa-home"></i>
                             </div>
                             <div class="col-sm-9">
-                                <h4><a href=""><%= elem.category %></a></h4>
-                                <p>
-                                    <% elem.subcats.forEach(function (elem2) { %>
-                                    <a href="listings.html"><%= elem2 %></a> &middot;
-                                    <% }) %>
-                                </p>
+                                <h4>Houses and flats</h4>
+                                <p><a href="listings.html">Cars</a>, <a href="listings.html">Car Parts</a>, <a href="listings.html">Campervans</a>, <a href="listings.html">Motobikes</a>, <a href="listings.html">Scooters</a>, <a href="listings.html">Vans</a>, <a href="listings.html">Trucks</a></p>
                             </div>
                         </div>
                     </div>
 
-                    <% }) %>
+                    <div class="directory-block col-sm-4 col-xs-6">
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <i class="fa fa-truck"></i>
+                            </div>
+                            <div class="col-sm-9">
+                                <h4>Car and vehicles</h4>
+                                <p><a href="listings.html">Cars</a>, <a href="listings.html">Car Parts</a>, <a href="listings.html">Campervans</a>, <a href="listings.html">Motobikes</a>, <a href="listings.html">Scooters</a>, <a href="listings.html">Vans</a>, <a href="listings.html">Trucks</a></p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="directory-block col-sm-4 col-xs-6">
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <i class="fa fa-shopping-cart"></i>
+                            </div>
+                            <div class="col-sm-9">
+                                <h4>Shopping</h4>
+                                <p><a href="listings.html">Cars</a>, <a href="listings.html">Car Parts</a>, <a href="listings.html">Campervans</a>, <a href="listings.html">Motobikes</a>, <a href="listings.html">Scooters</a>, <a href="listings.html">Vans</a>, <a href="listings.html">Trucks</a></p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="directory-block col-sm-4 col-xs-6">
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <i class="fa fa-home"></i>
+                            </div>
+                            <div class="col-sm-9">
+                                <h4>Houses and flats</h4>
+                                <p><a href="listings.html">Cars</a>, <a href="listings.html">Car Parts</a>, <a href="listings.html">Campervans</a>, <a href="listings.html">Motobikes</a>, <a href="listings.html">Scooters</a>, <a href="listings.html">Vans</a>, <a href="listings.html">Trucks</a></p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="directory-block col-sm-4 col-xs-6">
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <i class="fa fa-truck"></i>
+                            </div>
+                            <div class="col-sm-9">
+                                <h4>Car and vehicles</h4>
+                                <p><a href="listings.html">Cars</a>, <a href="listings.html">Car Parts</a>, <a href="listings.html">Campervans</a>, <a href="listings.html">Motobikes</a>, <a href="listings.html">Scooters</a>, <a href="listings.html">Vans</a>, <a href="listings.html">Trucks</a></p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="directory-block col-sm-4 col-xs-6">
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <i class="fa fa-shopping-cart"></i>
+                            </div>
+                            <div class="col-sm-9">
+                                <h4>Shopping</h4>
+                                <p><a href="listings.html">Cars</a>, <a href="listings.html">Car Parts</a>, <a href="listings.html">Campervans</a>, <a href="listings.html">Motobikes</a>, <a href="listings.html">Scooters</a>, <a href="listings.html">Vans</a>, <a href="listings.html">Trucks</a></p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="directory-block col-sm-4 col-xs-6">
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <i class="fa fa-home"></i>
+                            </div>
+                            <div class="col-sm-9">
+                                <h4>Houses and flats</h4>
+                                <p><a href="listings.html">Cars</a>, <a href="listings.html">Car Parts</a>, <a href="listings.html">Campervans</a>, <a href="listings.html">Motobikes</a>, <a href="listings.html">Scooters</a>, <a href="listings.html">Vans</a>, <a href="listings.html">Trucks</a></p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="directory-block col-sm-4 col-xs-6">
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <i class="fa fa-truck"></i>
+                            </div>
+                            <div class="col-sm-9">
+                                <h4>Car and vehicles</h4>
+                                <p><a href="listings.html">Cars</a>, <a href="listings.html">Car Parts</a>, <a href="listings.html">Campervans</a>, <a href="listings.html">Motobikes</a>, <a href="listings.html">Scooters</a>, <a href="listings.html">Vans</a>, <a href="listings.html">Trucks</a></p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="directory-block col-sm-4 col-xs-6">
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <i class="fa fa-shopping-cart"></i>
+                            </div>
+                            <div class="col-sm-9">
+                                <h4>Shopping</h4>
+                                <p><a href="listings.html">Cars</a>, <a href="listings.html">Car Parts</a>, <a href="listings.html">Campervans</a>, <a href="listings.html">Motobikes</a>, <a href="listings.html">Scooters</a>, <a href="listings.html">Vans</a>, <a href="listings.html">Trucks</a></p>
+                            </div>
+                        </div>
+                    </div>
 
                 </div>
 
@@ -122,7 +285,7 @@
                     
                     <div class="row directory">
                         <div class="col-sm-12 ">
-                            <h2><span>Find Location</span></h2>
+                            <h2><span>Your Location</span></h2>
                         </div>
                     </div>
                     
@@ -252,21 +415,12 @@
                         <div class="panel-heading">Latest Searches</div>
 
                         <ul class="list-group">
-                        <% 
-                            searchTerms.forEach(function (elem) {
-
-                            //generate random font-size
-                            var fontSize = Math.random()*20;
-                            if (fontSize < 10) {
-                              fontSize = 10;
-                            } else if (fontSize > 16) {
-                              fontSize = 16;
-                            }
-                        %>
-                            <li class="list-group-item"><a href="<%= elem.url %>" style="font-size:<%= fontSize %>px;"><%= elem.term %>(<%= elem.results %>)</a></li>
-                        <% }) %>
-                        
-                            <li class="list-group-item" style="text-align:right;"><a href="/search/terms/list/" class="link-info">See all...</a></li>
+                            <li class="list-group-item"><a href="#">toyota 2012</a></li>
+                            <li class="list-group-item"><a href="#">job in London</a></li>
+                            <li class="list-group-item"><a href="#">rabbit</a></li>
+                            <li class="list-group-item"><a href="#">dogwatch</a></li>
+                            <li class="list-group-item"><a href="#">villa in uganda</a></li>
+                            <li class="list-group-item" style="text-align:right;"><a href="#" class="link-info">See all...</a></li>
                         </ul>
 
                     </div>
@@ -279,25 +433,12 @@
                         <div class="panel-heading">Latest Ads</div>
 
                         <ul class="list-group">
-                        <% 
-                            GLOBfindads.latestContent.forEach(function (elem) {
-                            
-                            var tit = elem.extract.title[2];
-                            if (tit.length > 28) {
-                                tit = tit.substring(0, 27) + '...';
-                            }
-
-                            var dat = elem.crawlDateTime.substring(0, 25);
-
-
-                        %>
-                            <li class="list-group-item">
-                                <a href="#"><%= tit %></a>
-                                <br><span style="font:8px Verdana;color:#888;float:right;"><%= dat %></span>
-                            </li>
-                        <% }) %>
-                        
-                            <li class="list-group-item" style="text-align:right;"><a href="/search/terms/list/" class="link-info">See all...</a></li>
+                            <li class="list-group-item"><a href="#">toyota 2012</a></li>
+                            <li class="list-group-item"><a href="#">job in London</a></li>
+                            <li class="list-group-item"><a href="#">rabbit</a></li>
+                            <li class="list-group-item"><a href="#">dogwatch</a></li>
+                            <li class="list-group-item"><a href="#">villa in uganda</a></li>
+                            <li class="list-group-item" style="text-align:right;"><a href="#" class="link-info">List all...</a></li>
                         </ul>
 
                     </div>
@@ -353,7 +494,29 @@
 </main>
 
 
-<%- include('0partials/20footer'); -%>
+<!-- footer -->
+<footer class="footer">
+    <div class="container">
+        <div class="row">
+
+            <div class="col-sm-4 col-xs-12">
+                <p><strong>&copy; Find-Ads.com</strong></p>
+                <p>Classifed Ads Web Spider</p>
+            </div>          
+
+            <div class="col-sm-8 col-xs-12">
+                <p class="footer-links">
+                    <a href="#">Services</a>
+                    <a href="#">Terms of Use</a>
+                    <a href="#">Privacy Policy</a>
+                    <a href="#">Contact Us</a>
+                </p>
+            </div>
+
+        </div>
+    </div>
+</footer>
+<!-- footer end -->
 
 
 <script>

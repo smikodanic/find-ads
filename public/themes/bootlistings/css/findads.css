@@ -1,0 +1,11 @@
+.row.directory h4 {
+	text-transform: uppercase;
+}
+
+a.lnk-orange {
+	color:#FD6F0D;
+	text-decoration: none;
+}
+a.lnk-orange:hover {
+	color: #4F9816;
+}

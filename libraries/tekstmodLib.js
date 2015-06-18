@@ -23,3 +23,13 @@ module.exports.strongtrim = function (str) {
 
   return str;
 };
+
+
+String.prototype.trunc = function (str, limitTo) {
+
+  if (this.length > limitTo) {
+    str = this.substring(0, limitTo) + '...';
+  }
+
+  return str;
+};

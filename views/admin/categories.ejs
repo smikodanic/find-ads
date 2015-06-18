@@ -66,15 +66,17 @@
                     <!-- form -->
                     <%
                     //fill form
-                    var category, subcats, btn;
+                    var category, subcats, fa, btn;
                     if (moDocEdit_arr !== undefined) {
                         category = moDocEdit_arr[0].category;
                         subcats = moDocEdit_arr[0].subcats;
+                        fa = moDocEdit_arr[0].fa;
                         btn = 'Update';
                         action = '/admin/categories/update/' + moDocEdit_arr[0].id;
                     } else {
                         category = '';
                         subcats = '';
+                        fa = '';
                         btn = 'Insert';
                         action = '/admin/categories/insert';
                     }
@@ -95,6 +97,14 @@
                           <div class="col-sm-8">
                             <textarea name="subcats" id="subcats" class="form-control" rows="5"
                               data-toggle="tooltip" data-placement="top" title="Insert subcategories under this category. Separate by comma. Example: houses, appartments"><%= subcats %></textarea>
+                          </div>
+                        </div>
+
+                        <div class="form-group">
+                          <label for="fa" class="col-sm-4  control-label">Font Awesome Icon:</label>
+                          <div class="col-sm-8">
+                            <input type="text" name="fa" id="fa" value="<%= fa %>" 
+                              class="form-control" data-toggle="tooltip" data-placement="top" title="Insert font awesome icon." placeholder="fa fa-home">
                           </div>
                         </div>
 

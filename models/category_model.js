@@ -29,6 +29,7 @@ module.exports.insertCategory = function (req, res) {
 
   //POST variables
   var cat = req.body.cat;
+  var fa = req.body.fa;
   var subcats = req.body.subcats; //string
   var subcats_arr = subcats.split(',');
 
@@ -41,7 +42,8 @@ module.exports.insertCategory = function (req, res) {
     insDoc = {
       "id": 0,
       "category": cat,
-      "subcats": subcats_arr
+      "subcats": subcats_arr,
+      "fa": fa
     };
   } else {
     insDoc = null;
@@ -172,6 +174,7 @@ module.exports.updateCategory = function (req, res) {
 
   //POST variables
   var cat = req.body.cat;
+  var fa = req.body.fa;
   var subcats = req.body.subcats; //string
   var subcats_arr = subcats.split(',');
 
@@ -186,7 +189,8 @@ module.exports.updateCategory = function (req, res) {
     newDoc = {
       "id": id_req,
       "category": cat,
-      "subcats": subcats_arr
+      "subcats": subcats_arr,
+      "fa": fa
     };
   } else {
     newDoc = null;
