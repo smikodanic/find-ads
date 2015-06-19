@@ -141,7 +141,7 @@ module.exports.homeSearchOut = function (collName, req, res, cb_render) {
         if (err) { logg.byWinston('error', __filename + ':141 ' + err); }
 
         /* insert search term into mongo collection */
-        if (countNum !== 0 && q !== '' && req.method === 'POST') {
+        if (countNum !== 0 && q !== 'all' && req.method === 'POST') {
 
           //IP
           var ip = urlmod.getIP(req);
