@@ -29,12 +29,19 @@
     
     <li><a href="/">Home</a></li>
 
-    <% //category and subcategory
+    <% //category
       var cat = GLOBfindads.categories[content.category].category;
-      var subcat = GLOBfindads.categories[content.category].subcats[content.subcategory];
     %>
     <li><a href="/browse/<%= cat.replace(/\s/g, '-') %>-id<%= content.category %>/"><%= cat %></a></li>
+    
+
+    <% //subcategory
+      if (!isNaN(content.subcategory)) {
+        var subcat = GLOBfindads.categories[content.category].subcats[content.subcategory];
+    %>
     <li><a href="/browse/<%= cat.replace(/\s/g, '-') %>-id<%= content.category %>/<%= subcat.replace(/\s/g, '-') %>-key<%= content.subcategory %>/"><%= subcat %></a></li>
+    <% } %>
+
   </ol>
   </div>
 </div>

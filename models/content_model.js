@@ -137,7 +137,7 @@ module.exports.homeSearchOut = function (collName, req, res, cb_render) {
       var spanNum = 6; //show pagination numbers. Must be even number (paran broj)
       var pagination_obj = pagination.paginator(req, countNum, pagesPreURI, perPage, spanNum);
 
-      db.collection(collName).find(queryDB).sort({cid: -1}).skip(pagination_obj.skipNum).limit(pagination_obj.perPage).toArray(function (err, moContent_arr) {
+      db.collection(collName).find(queryDB).skip(pagination_obj.skipNum).limit(pagination_obj.perPage).toArray(function (err, moContent_arr) {
         if (err) { logg.byWinston('error', __filename + ':141 ' + err); }
 
         /* insert search term into mongo collection */
