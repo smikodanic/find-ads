@@ -18,10 +18,10 @@ var dbColl_category = sett.mongo.dbColl_category;
 module.exports.listPart = function (lim, res, cb_index) {
 
   MongoClient.connect(dbName, function (err, db) {
-    if (err) { logg.byWinston('error', __filename + ':20 ' + err); }
+    if (err) { logg.byWinston('error', __filename + ':21 ' + err); }
 
     db.collection(dbColl).find({}).sort({_id: -1}).limit(lim).toArray(function (err, mo_searchTerms) {
-      if (err) { logg.byWinston('error', __filename + ':23 ' + err); }
+      if (err) { logg.byWinston('error', __filename + ':24 ' + err); }
 
       cb_index(res, mo_searchTerms);
       db.close();

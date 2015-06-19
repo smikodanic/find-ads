@@ -72,13 +72,12 @@ module.exports = function (router) {
   /* list all search terms */
   router.get('/terms/list/(:currentPage([0-9]+))?', function (req, res) { //currentPage can only be a number
 
-    var cb_terms = function (res, mo_searchTerms, pagination_obj) {
+    var cb_terms = function (res, mo_searchTerms) {
       var vdata = {
-        title: 'All serch terms',
+        title: 'Find Ads - search terms',
         desc: 'List all search queries.',
         keywords: 'search queries, search terms, list of all search terms',
-        searchTerms: mo_searchTerms,
-        pagination: pagination_obj
+        searchTerms: mo_searchTerms
       };
 
       res.render('public/terms', vdata);
@@ -86,7 +85,7 @@ module.exports = function (router) {
 
     //call model and render homepage
     var searchTerms_model = require('models/searchTerms_model');
-    searchTerms_model.listAll(req, res, cb_terms);
+    searchTerms_model.listPart(200, res, cb_terms);
   });
 
 
