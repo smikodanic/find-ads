@@ -4,6 +4,7 @@ var express = require('express');
 var router = express.Router();
 // var nodedump = require('nodedump').dump;
 var logg = require('libraries/loggLib');
+var tekstmod = require('libraries/tekstmodLib');
 var setGlobal = require('libraries/setGlobalLib');
 var countries = require('country-data').countries;
 
@@ -53,11 +54,13 @@ module.exports = function (router) {
       var vdata;
       if (moContent_arr[0] !== undefined) { //if cid exists
 
+        var title = tekstmod.beautifyText(moContent_arr[0].extract.title[2]);
+
         vdata = {
-          title: moContent_arr[0].extract.title[2],
+          title: title,
           desc: moContent_arr[0].extract.description[2].substring(0, 120),
           keywords: moContent_arr[0].extract.title[2].replace(/\s/, ','),
-          p: moContent_arr[0].extract.description[2],
+          content: moContent_arr[0],
           pageURL: moContent_arr[0].pageURL
         };
 
