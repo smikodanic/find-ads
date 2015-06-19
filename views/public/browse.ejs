@@ -109,7 +109,7 @@
 
                     <a href="/browse/<%= cat.replace(/\s/g, '-') %>-id<%= contentDocs[i].category %>/" class="underline"><%= cat %></a>
                     &raquo;
-                    <% if (subcat !== '') { %>
+                    <% if (subcat !== undefined) { %>
                     <a href="/browse/<%= cat.replace(/\s/g, '-') %>-id<%= contentDocs[i].category %>/<%= subcat.replace(/\s/g, '-') %>-key<%= contentDocs[i].subcategory %>/"  class="underline"><%= subcat %></a>
                     <% } %>
 
