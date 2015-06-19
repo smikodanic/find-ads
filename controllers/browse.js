@@ -11,7 +11,12 @@ var urlmod = require('libraries/urlmod');
 module.exports = function (router) {
 
 
-  /* browse by category */
+  /**
+   * Browse by category.
+   * @param  {String} cat -category name with -
+   * @param  {Number} catId -category ID
+   * @return {Number} currentPage -current page
+   */
   router.get('/:cat-id:catId/(:currentPage([0-9]+))?', function (req, res) {
 
     //input vars
@@ -54,7 +59,14 @@ module.exports = function (router) {
 
 
 
-  /* browse by subcategory */
+  /**
+   * Browse by subcategory.
+   * @param  {String} cat -category name with -
+   * @param  {Number} catId -category ID
+   * @param  {String} subcat -subcategory category name with -
+   * @param  {Number} subcatKey -subcategory array key
+   * @return {Number} currentPage -current page
+   */
   router.get('/:cat-id:catId/:subcat-key:subcatKey/(:currentPage([0-9]+))?', function (req, res) {
 
     //input vars

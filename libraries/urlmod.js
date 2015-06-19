@@ -32,7 +32,7 @@ module.exports.toAbsolute = function (pageURL, inurl) {
  *
  */
 module.exports.encodeParameter = function (q) {
-  var q = q.replace(/\s/g, '-');
+  q = q.replace(/\s/g, '-');
   q = encodeURI(q);
   return q;
 };
@@ -63,4 +63,16 @@ module.exports.strToURI = function (s) {
   s = encodeURI(s);
   s = s.replace(/[\-]{1,}/ig, '-'); //replace --- with -
   return s;
+};
+
+
+/**
+ * get browser's IP address
+ */
+module.exports.getIP = function (req) {
+  var ip = req.headers['x-forwarded-for'] ||
+    req.connection.remoteAddress ||
+    req.socket.remoteAddress ||
+    req.connection.socket.remoteAddress;
+  return ip;
 };

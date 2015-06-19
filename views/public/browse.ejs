@@ -15,28 +15,35 @@
 
 <main class="container">
 
-    <!-- breadcrumb -->
+<!-- breadcrumb -->
 <div class="row">
     <div class="col-sm-12">
         <ol class="breadcrumb">
             <li><a href="/">Home</a></li>
-            <li><%= categoryName %></li>
-            <li class="active"><%= pagination.countNum %> results for <strong>"<%= q %>"</strong> in <%= countryName %></li>
+            
+            <li><a href="/browse/<%= inputParams.cat %>-id<%= inputParams.catId %>/"><%= cat_title %></a></li>
+            
+            <% if (subcat_title !== '') { %>
+            <li><a href="/browse/<%= inputParams.cat %>-id<%= inputParams.catId %>/<%= inputParams.subcat %>-key<%= inputParams.subcatKey %>/"><%= subcat_title %></a></li>
+            <% } %>
+
+            <li class="active" style="color:#999"><%= pagination.countNum %> results</li>
         </ol>
     </div>
 </div>
 <!-- breadcrumb end -->
 
+
 <%- include('0partials/08featured'); -%>
 
 <!-- row -->
 <div class="row">
-    <section class="col-sm-8 pull- listings">
+    <section class="col-sm-8 listings">
 
         <!-- listing info -->
         <div class="row listing-row" style="margin-top: -10px;">
             <div class="pull-left">
-                <strong>Find Ads - term "<%= q %>"</strong>
+                <strong>Browsing ads in "<%= cat_title %>" category</strong>
             </div>
             <div class="pull-right">
                 <span style="">Sort by:&nbsp;&nbsp;&nbsp;</span>   
@@ -102,9 +109,10 @@
 
                     <a href="/browse/<%= cat.replace(/\s/g, '-') %>-id<%= contentDocs[i].category %>/" class="underline"><%= cat %></a>
                     &raquo;
-                    <% if (subcat !== undefined) { %>
+                    <% if (subcat !== '') { %>
                     <a href="/browse/<%= cat.replace(/\s/g, '-') %>-id<%= contentDocs[i].category %>/<%= subcat.replace(/\s/g, '-') %>-key<%= contentDocs[i].subcategory %>/"  class="underline"><%= subcat %></a>
                     <% } %>
+
                 </p>
                 
                 <%//decrease description
@@ -160,7 +168,6 @@
     </section>
 
 
-
     <br><br>
 
 
@@ -174,17 +181,15 @@
             <div class="panel-body">
                 <ul class="nav nav-category">
                     <li>
-                        <a class="active" href="category.html">All categories</a>
                         <ul>
-                            <li><a href="listings.html">Cars, Vans & Motorbikes</a>
+                            <li><a href="/browse/<%= inputParams.cat %>-id<%= inputParams.catId %>/"><%= cat_title %></a></li>
                             <ul>
-                                <li><a class="active" href="listings.html">Cars</a>
-                                    <ul>
-                                        <li><a class="active" href="listings.html">
-                                            <strong>Porsche</strong></a> (66)
-                                            <a href="#" class="remove-category"><i class="fa fa-times"></i></a></li>
-                                    </ul>
-                                </li>
+                                <% 
+                                    GLOBfindads.categories[inputParams.catId].subcats.forEach(function (elem, key) { 
+                                    var elemDashed = elem.replace(/\s/g, '-');
+                                %>
+                                <li><a href="/browse/<%= inputParams.cat %>-id<%= inputParams.catId %>/<%= elemDashed%>-key<%= key %>/"><%= elem %></a></li>
+                                <% }) %>
                             </ul>
                                 </li>
                         </ul>
@@ -197,11 +202,8 @@
 
     </aside>
 
-
-
-
-</div>
-<!-- row end -->  			
+</div> 
+<!-- row end -->			
 
 </main>
 

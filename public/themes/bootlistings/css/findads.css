@@ -9,3 +9,7 @@ a.lnk-orange {
 a.lnk-orange:hover {
 	color: #4F9816;
 }
+
+.breadcrumb > li > a {
+	text-transform: capitalize;
+}

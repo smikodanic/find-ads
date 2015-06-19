@@ -78,56 +78,73 @@ module.exports.insertContent = function (pageURL, db, contentCollection, insMoDo
 
 
 
-module.exports.homeSearchOut = function (collName, q, category, country, req, res, cb_render) {
+module.exports.homeSearchOut = function (collName, req, res, cb_render) {
 
-  if (req.method === 'GET') { //when request comes from pagination link, not form's POST
-    q = urlmod.unencodeParameter(q); //convert 'some-query' into 'some query'
+  /**
+   * INPUT VARS
+   * String q ('all' for empty query)
+   * Number category (-1 for all categories)
+   * Number country (-1 for all countries)
+   */
+  var q, category, country;
+
+  if (req.method === 'POST') {
+
+    q = (req.body.q === '') ? 'all' : req.body.q;
+    category = parseInt(req.body.category, 10);
+    country = parseInt(req.body.country, 10);
+
+  } else { //GET method (request comes from pagination link)
+
+    q = (req.params.q === '') ? 'all' : req.params.q;
+    category = parseInt(req.params.category, 10);
+    country = parseInt(req.params.country, 10);
   }
 
-  //define query
+
+  /* define mongo query */
   var queryDB;
-  if (q === 'all') {
+  if (q === 'all' && category === -1 && country === -1) {
     queryDB = {};
+  } else if (q !== 'all' && category === -1 && country === -1) {
+    queryDB = { $text: { $search: q } };
+  } else if (q !== 'all' && category !== -1 && country === -1) {
+    queryDB = { $text: { $search: q }, category: category };
+  } else if (q !== 'all' && category !== -1 && country !== -1) {
+    queryDB = { $text: { $search: q }, category: category, country: country };
+  } else if (q !== 'all' && category === -1 && country !== -1) {
+    queryDB = { $text: { $search: q }, country: country };
+  } else if (q === 'all' && category !== -1 && country === -1) {
+    queryDB = { category: category };
   } else {
-    // var reg = new RegExp(q, 'ig'); //creating regular expression
-    /*queryDB = {
-      "extract.description": {"$regex": reg}
-    };*/
-    // queryDB = {"links.tekst": reg};
-    queryDB = {
-      $text: { $search: q },
-      category: category
-    };
+    queryDB = {cid: -1};
   }
 
-console.log(JSON.stringify(queryDB, null, 2));
+  // console.log(JSON.stringify(queryDB, null, 2));
 
   MongoClient.connect(dbName, function (err, db) {
-    if (err) { logg.byWinston('error', __filename + ':107 ' + err); }
+    if (err) { logg.byWinston('error', __filename + ':126 ' + err); }
 
     db.collection(collName).count(queryDB, function (err, countNum) {
-      if (err) { logg.byWinston('error', __filename + ':110 ' + err); }
+      if (err) { logg.byWinston('error', __filename + ':129 ' + err); }
 
       //convert 'some query' INTO 'some+query'
       var q2 = urlmod.encodeParameter(q);
 
       /* create pagination object which is sent to view file */
-      var pagesPreURI = '/search/' + q2 + '/';
+      var pagesPreURI = '/search/' + q2 + '/' + category + '/' + country + '/';
       var perPage = 10; //show results per page
       var spanNum = 6; //show pagination numbers. Must be even number (paran broj)
       var pagination_obj = pagination.paginator(req, countNum, pagesPreURI, perPage, spanNum);
 
       db.collection(collName).find(queryDB).sort({cid: -1}).skip(pagination_obj.skipNum).limit(pagination_obj.perPage).toArray(function (err, moContent_arr) {
-        if (err) { logg.byWinston('error', __filename + ':122 ' + err); }
+        if (err) { logg.byWinston('error', __filename + ':141 ' + err); }
 
         /* insert search term into mongo collection */
-        if (countNum !== 0 && pagination_obj.currentPage < 2 && q !== 'all' && req.method === 'POST') {
+        if (countNum !== 0 && q !== '' && req.method === 'POST') {
 
           //IP
-          var ip = req.headers['x-forwarded-for'] ||
-            req.connection.remoteAddress ||
-            req.socket.remoteAddress ||
-            req.connection.socket.remoteAddress;
+          var ip = urlmod.getIP(req);
 
           var insMoDoc = {
             term: q,
@@ -138,14 +155,14 @@ console.log(JSON.stringify(queryDB, null, 2));
           };
 
           db.collection(dbColl_searchTerms).insert(insMoDoc, function (err) { //insert search query
-            if (err) { logg.byWinston('error', __filename + ':136 ' + err); }
+            if (err) { logg.byWinston('error', __filename + ':158 ' + err); }
 
-            cb_render(q, res, moContent_arr, pagination_obj);
+            cb_render(q, category, country, res, moContent_arr, pagination_obj);
           });
 
         } else {
 
-          cb_render(q, res, moContent_arr, pagination_obj);
+          cb_render(q, category, country, res, moContent_arr, pagination_obj);
         }
 
 
@@ -193,18 +210,18 @@ module.exports.getDataByCid = function (collName, cid, res, cb_advert) {
  * @param  {Object} req      - request object
  * @param  {Object} res      - respond object
  * @param  {Function} cb_list  - callback function to display results
- * @return {[type]}          [description]
  */
 module.exports.browse = function (collName, inputParams, req, res, cb_list) {
 
-  /* define dbQuery */
-  var dbQuery;
-
+  /* input vars*/
   var cat = inputParams.cat;
   var catId = inputParams.catId;
   var subcat = inputParams.subcat;
   var subcatKey = inputParams.subcatKey;
 
+
+  /* define dbQuery */
+  var dbQuery;
   if (isNaN(subcatKey)) { //only category is defined
     dbQuery = {category: catId};
   } else { //when subcategory is also defined
@@ -214,10 +231,10 @@ module.exports.browse = function (collName, inputParams, req, res, cb_list) {
 
   /* Mongo query */
   MongoClient.connect(dbName, function (err, db) {
-    if (err) { logg.byWinston('error', __filename + ':215 ' + err); }
+    if (err) { logg.byWinston('error', __filename + ':234 ' + err); }
 
     db.collection(collName).count(dbQuery, function (err, countNum) {
-      if (err) { logg.byWinston('error', __filename + ':218 ' + err); }
+      if (err) { logg.byWinston('error', __filename + ':237 ' + err); }
 
       /* create pagination object which is sent to view file */
       var pagesPreURI;
@@ -226,12 +243,12 @@ module.exports.browse = function (collName, inputParams, req, res, cb_list) {
       } else { //category and subcategory are defined
         pagesPreURI = '/browse/' + cat + '-id' + catId + '/' + subcat + '-key' + subcatKey + '/';
       }
-      var perPage = 25; //show results per page
-      var spanNum = 10; //show pagination numbers. Must be even number (paran broj)
+      var perPage = 10; //show results per page
+      var spanNum = 6; //show pagination numbers. Must be even number (paran broj)
       var pagination_obj = pagination.paginator(req, countNum, pagesPreURI, perPage, spanNum);
 
       db.collection(collName).find(dbQuery).sort({cid: -1}).skip(pagination_obj.skipNum).limit(pagination_obj.perPage).toArray(function (err, mo_content) {
-        if (err) { logg.byWinston('error', __filename + ':234 ' + err); }
+        if (err) { logg.byWinston('error', __filename + ':251 ' + err); }
 
         cb_list(res, mo_content, pagination_obj);
         db.close();

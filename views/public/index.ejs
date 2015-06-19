@@ -33,7 +33,7 @@
     
                         <div class="col-sm-3">
                           <select name="category" id="category" class="form-control">
-                                <option value="" style="color:silver">All categories</option>
+                                <option value="-1" style="color:silver">All categories</option>
                                 <% GLOBfindads.categories.forEach(function (elem) { %>
                                 <option value="<%= elem.id %>"><%= elem.category %></option>
                                 <% }) %>
@@ -42,9 +42,9 @@
 
                         <div class="col-sm-3">
                           <select name="country" id="country" class="form-control">
-                                <option value="" style="color:silver">All countries</option>
-                                <% countries.forEach(function (elem) { %>
-                                <option value="<%= elem.name %>"><%= elem.name %></option>
+                                <option value="-1" style="color:silver">All countries</option>
+                                <% countries.forEach(function (elem, key) { %>
+                                <option value="<%= key %>"><%= elem.name %></option>
                                 <% }) %>
                           </select>
                         </div>
@@ -83,6 +83,7 @@
                 </div>
             </div>
 
+
             <section class="row directory">
 
                 <div class="col-xs-12">
@@ -95,10 +96,12 @@
                                 <i class="<%= elem.fa %>"></i>
                             </div>
                             <div class="col-sm-9">
-                                <h4><a href=""><%= elem.category %></a></h4>
+                                <h4><a href="/browse/<%= elem.category.replace(/\s/g, '-') %>-id<%= elem.id %>/"><%= elem.category %></a></h4>
                                 <p>
-                                    <% elem.subcats.forEach(function (elem2) { %>
-                                    <a href="listings.html"><%= elem2 %></a> &middot;
+                                    <% elem.subcats.forEach(function (elem2, key) { %>
+                                    <a href="/browse/<%= elem.category.replace(/\s/g, '-') %>-id<%= elem.id %>/<%= elem2.replace(/\s/g, '-') %>-key<%= key %>/">
+                                        <%= elem2 %>
+                                    </a> &middot;
                                     <% }) %>
                                 </p>
                             </div>
