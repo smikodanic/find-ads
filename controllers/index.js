@@ -6,6 +6,7 @@ var router = express.Router();
 var logg = require('libraries/loggLib');
 var tekstmod = require('libraries/tekstmodLib');
 var setGlobal = require('libraries/setGlobalLib');
+var urlmod = require('libraries/urlmod');
 var countries = require('country-data').countries;
 
 
@@ -16,18 +17,20 @@ module.exports = function (router) {
   /* homepage */
   router.get('/', function (req, res) {
 
-    //refresh global var dynamically
-    setGlobal.latestContent('content', 5);
+    //update categories
+    setGlobal.categories();
 
     //view callback function
-    var cb_index = function (res, mo_searchTerms) {
+    var cb_index = function (res, mo_searchTerms, mo_content) {
 
       var vdata = {
         title: 'Find Ads - Search Free Classifieds',
         desc: 'Find Ads is your help when searching free classified ads. All adverts are sorted in categories and subcategories.',
         keywords: 'search classifieds, find ads, search adverts, clasifieds directory',
         searchTerms: mo_searchTerms,
-        countries: countries.all
+        content: mo_content,
+        countries: countries.all,
+        urlmod: urlmod
       };
 
       res.render('public/index', vdata);

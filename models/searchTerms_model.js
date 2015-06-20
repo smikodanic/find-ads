@@ -13,6 +13,7 @@ var sett = require('settings/admin.js');
 var dbName = sett.mongo.dbName;
 var dbColl = sett.mongo.dbColl_searchTerms;
 var dbColl_category = sett.mongo.dbColl_category;
+var dbColl_content = sett.mongo.dbColl_content;
 
 
 module.exports.listPart = function (lim, res, cb_index) {
@@ -20,11 +21,16 @@ module.exports.listPart = function (lim, res, cb_index) {
   MongoClient.connect(dbName, function (err, db) {
     if (err) { logg.byWinston('error', __filename + ':21 ' + err); }
 
-    db.collection(dbColl).find({}).sort({_id: -1}).limit(lim).toArray(function (err, mo_searchTerms) {
+    db.collection(dbColl).find({}).sort({_id: -1}).limit(lim).toArray(function (err, mo_searchTerms) { //last lim searchTerms
       if (err) { logg.byWinston('error', __filename + ':24 ' + err); }
 
-      cb_index(res, mo_searchTerms);
-      db.close();
+      db.collection(dbColl_content).find({}).sort({_id: -1}).limit(lim).toArray(function (err, mo_content) { //last lim content ads (required for homepage)
+        if (err) { logg.byWinston('error', __filename + ':27 ' + err); }
+
+        cb_index(res, mo_searchTerms, mo_content);
+        db.close();
+      });
+
     });
 
   });

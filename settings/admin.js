@@ -28,7 +28,8 @@ module.exports = {
     dbColl_category: 'category',
     dbColl_tasksLnk_iterate: 'linkTasks_iterate',
     dbColl_tasksCnt: 'contentTasks',
-    dbColl_searchTerms: 'searchTerms'
+    dbColl_searchTerms: 'searchTerms',
+    dbColl_content: 'content'
   }
 
 };

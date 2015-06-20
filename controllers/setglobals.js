@@ -16,4 +16,4 @@ setGlobal.categories();
  * @global GLOBfindads.latestContent
  *
  */
-setGlobal.latestContent('content', 5);
+// setGlobal.latestContent('content', 5);
