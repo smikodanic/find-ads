@@ -123,20 +123,6 @@ module.exports = function (router) {
 
   });
 
-  //delete task from MongoDB
-  router.get('/delete/:id', function (req, res) {
-
-    //check if username and password are good in session storage
-    var sess_tf = login.checksess_user_pass(req);
-
-    if (sess_tf) {
-      taskContent_model.deleteTask(req, res);
-    } else {
-      res.redirect('/admin');
-    }
-
-  });
-
 
   /**
    * Start crawling task from browser
