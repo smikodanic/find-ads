@@ -153,17 +153,17 @@ module.exports = function (router) {
       var logg = require('libraries/loggLib');
       var settings = require('settings/admin.js');
       var dbName = settings.mongo.dbName;
-      var collName_tasksCnt = settings.mongo.dbColl_tasksCnt;
+      var collName_robotTasks = settings.mongo.dbColl_robotTasks;
 
-      // Connect to MongoDB 'contentTasks' collection to get 'pollScript' value
+      // Connect to MongoDB 'robot_tasks' collection to get 'pollScript' value
       MongoClient.connect(dbName, function (err, db) {
-        if (err) { logg.me('error', __filename + ':175 ' + err); }
+        if (err) { logg.me('error', __filename + ':160 ' + err); }
 
-        db.collection(collName_tasksCnt).find({"id": task_id}).toArray(function (err, contentTasks_arr) { //get pollScript for a given task ID
-          if (err) { logg.me('error', __filename + ':178 ' + err); }
+        db.collection(collName_robotTasks).find({"id": task_id}).toArray(function (err, contentTasks_arr) { //get pollScript for a given task ID
+          if (err) { logg.me('error', __filename + ':163 ' + err); }
 
-          //activate poll script for content crawling: 0crawler/crawlcontent/polling/linkQueue_polling.js
-          var pollContentLinks = require('0crawler/crawlcontent/polling/' + contentTasks_arr[0].pollScript);
+          //activate poll script for content crawling: 0crawler/robot/polling/rob_linkQueue.js
+          var pollContentLinks = require('0crawler/robot/polling/' + contentTasks_arr[0].pollScript);
           pollContentLinks.start(task_id, cb_outResults);
 
           db.close(); //close DB connection
@@ -188,7 +188,7 @@ module.exports = function (router) {
 
     if (sess_tf) {
       clearInterval(global.intId);
-      res.redirect('/admin/crawlcontent/tasks');
+      res.redirect('/admin/robot/tasks');
     } else {
       res.redirect('/admin');
     }
