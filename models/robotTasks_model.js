@@ -1,5 +1,5 @@
 /**
- * crawler.robotTasks model
+ * crawler.robot_tasks model
  */
 
 require('rootpath')();
@@ -127,6 +127,7 @@ module.exports.insertTask = function (req, res) {
         /* define doc for inserting into robot_linkqueu_* */
         var timeLib = require('libraries/timeLib');
         var linkqueueDoc = {
+          "lid": 0,
           "task_collection": "robot_tasks",
           "task_id": insDoc.id,
           "referer": "",
@@ -295,6 +296,7 @@ module.exports.updateTask = function (req, res) {
           //update robot_linkqueue_*
           var timeLib = require('libraries/timeLib');
           var linkqueueDoc = {
+            "lid": 0,
             "task_collection": "robot_tasks",
             "task_id": id_req,
             "referer": "",

@@ -48,11 +48,12 @@
                             <tr>
                                 <th title="content task ID">id</th>
                                 <th title="content task name">name</th>
-                                <th title="linkQueue collection">link queue</th>
+                                <th title="linkQueue collection">link queue coll.</th>
                                 <th title="CSS selectors for extracting data">extracted data</th>
-                                <th title="MongoDB collection name">collection</th>
-                                <th>cron</th>
-                                <th title="cron job status: on or off">status</th>
+                                <th title="MongoDB collection name">content coll.</th>
+                                <th title="Crawling depth">depth</th>
+                                <th title="Poll interval in miliseconds">poll (ms)</th>
+                                <th title="cron job - status">cron</th>
                                 <th style="width:130px">action</th>
                             </tr>
 
@@ -61,15 +62,16 @@
                             <tr style="font-size:smaller">
                               <td><%= elem.id %></td>
                               <td><%= elem.name %></td>
-                              <td><%= elem.linkQueue %></td>
+                              <td><%= elem.linkqueueCollection %></td>
                               <td>
                                 <% elem.selectors.forEach(function (elem) { %>
                                   <%= elem.name %>,
                                 <% }); %>
                               </td>
                               <td><%= elem.contentCollection %></td>
-                              <td><%= elem.cron %></td>
-                              <td><%= elem.cronStatus %></td>
+                              <td style="text-align:center"><%= elem.crawlDepth %></td>
+                              <td  style="text-align:center"><%= elem.pollInterval %></td>
+                              <td  style="text-align:center"><%= elem.cron + ' - ' + elem.cronStatus %></td>
 
                               <td>
                                 

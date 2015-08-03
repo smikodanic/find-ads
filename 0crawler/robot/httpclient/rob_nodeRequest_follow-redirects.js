@@ -6,24 +6,20 @@ var logg = require('libraries/loggLib');
 var tekstmod = require('libraries/tekstmodLib');
 var urlmod = require('libraries/urlmod');
 var timeLib = require('libraries/timeLib');
-var links_model = require('models/linkQueue_model');
-
+var lc_model = require('models/robotLinksContent_model'); //link-content model
 
 /**
  * HTTP client created by NodeJS module - http.request()
  * @param  {object} db            - database
- * @param  {string} collName      - collection name where is task: for example linkTasks_iterate
- * @param  {object} moTask        - document inside collName. Contains all taks variables
+ * @param  {object} moTask        - document inside 'robot_tasks'. Contains all task variables.
+ * @param  {object} moLink        - document inside 'robot_linkqueue_*'. Contains link URL to be crwaled.
  * @param  {function} cb_outResults - callback function for displaying results in browser or console
  * @return {object}               null
  */
-module.exports.runURL = function (db, collNameTask, moTask, cb_outResults) {
-
-  //MongoDB collection name
-  var collName = 'linkQueue_' + moTask.name;
+module.exports.runURL = function (moTask, moLink, cb_outResults) {
 
   //vars
-  var url_obj = url.parse(moTask.iteratingurl2);
+  var url_obj = url.parse(moLink.link.href);
   var pageURL = url_obj.protocol + '//' + url_obj.hostname + url_obj.path;
 
   //select http or https module
@@ -53,7 +49,16 @@ module.exports.runURL = function (db, collNameTask, moTask, cb_outResults) {
 
   // HTTP request using NodeJS 'http' module (http.request)
   var req2 = http_s.request(options, function (res2) {
-      if (res2.statusCode !== 200) { logg.craw(false, moTask.loggFileName, 'ERROR: Response not 200: ' + pageURL + '; Response is:' + res2.statusCode, null); }
+
+      var crawlStatus;
+
+      if (res2.statusCode !== 200) {
+        crawlStatus = 'error: Response is ' + res2.statusCode;
+        logg.craw(false, moTask.loggFileName, 'ERROR: Response not 200: ' + pageURL + '; Response is:' + res2.statusCode, null);
+      } else {
+        crawlStatus = 'crawled';
+        logg.craw(false, moTask.loggFileName, 'RESPONSE: ' + pageURL + '; Response is:' + res2.statusCode, null);
+      }
 
       //get htmlDoc from chunks of data
       var htmlDoc = '';
@@ -63,25 +68,24 @@ module.exports.runURL = function (db, collNameTask, moTask, cb_outResults) {
 
       res2.on('end', function () {
 
-        //doc to be inserted into mongoDB
-        var insMoDoc = {
-          "task_collection": collNameTask,
-          "task_id": moTask.id,
-          "pageURL": pageURL,
-          "crawlTime": timeLib.nowLocale(),
-          "links": []
-        };
-
         //messaging page URL
         var msg_rez = '+ URL in httpClient: ' + pageURL;
         cb_outResults.send(msg_rez + '\n');
         logg.craw(false, moTask.loggFileName, msg_rez);
 
+        //***** update crawlStatus from 'pending' to 'crawled' or 'error'
+        lc_model.updateCrawlStatus(moTask.linkqueueCollection, moLink.link.href, crawlStatus);
+
         //get array of links using cherrio module
         $ = cheerio.load(htmlDoc);
 
+
+        /************* EXTRACT LINKS **************/
+        /**
+         * Extract links from pageURL and insert into robot_linkqueu_*
+         */
         var n = 1, href, tekst;
-        $(moTask.aselector).each(function () {
+        $('a').each(function () {
           // tekst = $(this).children().remove().end().text(); //get text from A tag without children tag texts
           tekst = $(this).text();
           href = $(this).attr('href');
@@ -90,18 +94,30 @@ module.exports.runURL = function (db, collNameTask, moTask, cb_outResults) {
           tekst = tekstmod.strongtrim(tekst);
 
           //correct url (relative convert to absolute)
-          href = urlmod.toAbsolute(moTask.iteratingurl2, href);
+          href = urlmod.toAbsolute(pageURL, href);
 
-          // fill insMoDoc.link array
-          insMoDoc.links.push({
-            "tekst": tekst,
-            "href": href
-          });
+          //doc to be inserted into robot_linkqueue_*
+          var insLinkqueueDoc = {
+            "lid": 0,
+            "task_collection": "robot_tasks",
+            "task_id": moTask.id,
+            "referer": pageURL,
+            "crawlTime": timeLib.nowLocale(),
+            "link": {
+              "tekst": tekst,
+              "href": href
+            },
+            "crawlStatus" : "pending",
+            "crawlDepth" : moLink.crawlDepth + 1
+          };
+
+          //***** insert into 'robot_linkqueue_*'
+          lc_model.insertNewLink(moTask.linkqueueCollection, insLinkqueueDoc);
 
 
           //message hrefs
           var msg_href = '----- ' + n + '. ' + href + ' --- ' + tekst;
-          logg.craw(false, moTask.loggFileName, msg_href); //log to file
+          // logg.craw(false, moTask.loggFileName, msg_href); //log to file
           cb_outResults.send(msg_href  + '\n');
 
           n++;
@@ -111,11 +127,7 @@ module.exports.runURL = function (db, collNameTask, moTask, cb_outResults) {
         n = n - 1;
         var msg_num = '-------- Extracted links: ' + n;
         cb_outResults.send(msg_num + '\n\n'); //send to browser
-        logg.craw(false, moTask.loggFileName, msg_num); //log to file
-
-
-        //insert into MongoDB linkQueue_* collection
-        links_model.insertLinks(pageURL, db, collName, insMoDoc);
+        // logg.craw(false, moTask.loggFileName, msg_num); //log to file
 
       });
 
