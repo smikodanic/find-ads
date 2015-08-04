@@ -76,3 +76,12 @@ module.exports.getIP = function (req) {
     req.connection.socket.remoteAddress;
   return ip;
 };
+
+/**
+ * Get hostname from a link: http://www.foo.com/some/file.php -> www.foo.com
+ * @param {string} linkURL -link URL: http://www.foo.com/some/file.php
+ */
+module.exports.getHostname = function (linkURL) {
+  var url_obj = url.parse(linkURL);
+  return url_obj.hostname;
+};

@@ -98,7 +98,7 @@ module.exports.runURL = function (db, moTask, link, i, cb_outResults) {
               extractedData = $(cssSel.value).attr('href');
             } else if (cssSel.type === 'src') {
               extractedData = $(cssSel.value).attr('src');
-            } else { //cssSel.tyle === 'attr'
+            } else { //cssSel.type === 'attr'
               extractedData = $(cssSel.value[0]).attr(cssSel.value[1]);
             }
 

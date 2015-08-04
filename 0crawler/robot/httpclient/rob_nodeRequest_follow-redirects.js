@@ -3,10 +3,10 @@ var url = require('url');
 var folred = require('follow-redirects');
 var cheerio = require('cheerio');
 var logg = require('libraries/loggLib');
-var tekstmod = require('libraries/tekstmodLib');
-var urlmod = require('libraries/urlmod');
-var timeLib = require('libraries/timeLib');
+
+var rob = require('0crawler/robot/extractors/rob_extractors');
 var lc_model = require('models/robotLinksContent_model'); //link-content model
+
 
 /**
  * HTTP client created by NodeJS module - http.request()
@@ -46,18 +46,15 @@ module.exports.runURL = function (moTask, moLink, cb_outResults) {
     }
   };
 
-
-  // HTTP request using NodeJS 'http' module (http.request)
+  /**** HTTP request using NodeJS 'http' module (http.request) ****/
   var req2 = http_s.request(options, function (res2) {
 
       var crawlStatus;
 
       if (res2.statusCode !== 200) {
-        crawlStatus = 'error: Response is ' + res2.statusCode;
-        logg.craw(false, moTask.loggFileName, 'ERROR: Response not 200: ' + pageURL + '; Response is:' + res2.statusCode, null);
+        crawlStatus = 'error response: ' + res2.statusCode;
       } else {
         crawlStatus = 'crawled';
-        logg.craw(false, moTask.loggFileName, 'RESPONSE: ' + pageURL + '; Response is:' + res2.statusCode, null);
       }
 
       //get htmlDoc from chunks of data
@@ -69,65 +66,21 @@ module.exports.runURL = function (moTask, moLink, cb_outResults) {
       res2.on('end', function () {
 
         //messaging page URL
-        var msg_rez = '+ URL in httpClient: ' + pageURL;
+        var msg_rez = '+ URL in httpClient: ' + pageURL + ' - response:' + res2.statusCode;
         cb_outResults.send(msg_rez + '\n');
         logg.craw(false, moTask.loggFileName, msg_rez);
 
         //***** update crawlStatus from 'pending' to 'crawled' or 'error'
         lc_model.updateCrawlStatus(moTask.linkqueueCollection, moLink.link.href, crawlStatus);
 
-        //get array of links using cherrio module
+        //load pageURL HTML into cheerio object
         $ = cheerio.load(htmlDoc);
 
+        //extract content
+        rob.extractContent($, pageURL, moTask, cb_outResults);
 
-        /************* EXTRACT LINKS **************/
-        /**
-         * Extract links from pageURL and insert into robot_linkqueu_*
-         */
-        var n = 1, href, tekst;
-        $('a').each(function () {
-          // tekst = $(this).children().remove().end().text(); //get text from A tag without children tag texts
-          tekst = $(this).text();
-          href = $(this).attr('href');
-
-          //prettify tekst
-          tekst = tekstmod.strongtrim(tekst);
-
-          //correct url (relative convert to absolute)
-          href = urlmod.toAbsolute(pageURL, href);
-
-          //doc to be inserted into robot_linkqueue_*
-          var insLinkqueueDoc = {
-            "lid": 0,
-            "task_collection": "robot_tasks",
-            "task_id": moTask.id,
-            "referer": pageURL,
-            "crawlTime": timeLib.nowLocale(),
-            "link": {
-              "tekst": tekst,
-              "href": href
-            },
-            "crawlStatus" : "pending",
-            "crawlDepth" : moLink.crawlDepth + 1
-          };
-
-          //***** insert into 'robot_linkqueue_*'
-          lc_model.insertNewLink(moTask.linkqueueCollection, insLinkqueueDoc);
-
-
-          //message hrefs
-          var msg_href = '----- ' + n + '. ' + href + ' --- ' + tekst;
-          // logg.craw(false, moTask.loggFileName, msg_href); //log to file
-          cb_outResults.send(msg_href  + '\n');
-
-          n++;
-        });
-
-        //message number of extracted links
-        n = n - 1;
-        var msg_num = '-------- Extracted links: ' + n;
-        cb_outResults.send(msg_num + '\n\n'); //send to browser
-        // logg.craw(false, moTask.loggFileName, msg_num); //log to file
+        // extract links and insert into 'robot_linkqueue_*'
+        rob.extractLinks($, pageURL, moTask, moLink, cb_outResults);
 
       });
 

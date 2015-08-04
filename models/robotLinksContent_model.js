@@ -28,19 +28,15 @@ module.exports.insertNewLink = function (linkqueueCollection, insLinkqueueDoc) {
       if (err) { logg.byWinston('error', __filename + ':28 ' + err); }
 
       var moLink = moLink_arr[0];
-      console.log(JSON.stringify(moLink_arr, null, 2));
 
       if (moLink === undefined) {//if link doesn't exist in database
 
         db.collection(linkqueueCollection).insert(insLinkqueueDoc, function (err) { //insert new link into robot_linkqueue_*
           if (err) { logg.byWinston('error', __filename + ':31 ' + err); }
-
-          console.log('INSERTED: ' + linkqueueCollection + ' - ' + insLinkqueueDoc.link.href);
           db.close();
         });
       } else { //if link already exist in databse
 
-        console.log('NOT INSERTED: ' + linkqueueCollection + ' - ' + insLinkqueueDoc.link.href);
         logg.craw(false, 'robot_linkExists', 'Link already exists in DB ' + linkqueueCollection + ': ' + insLinkqueueDoc.link.href);
         db.close();
       }
