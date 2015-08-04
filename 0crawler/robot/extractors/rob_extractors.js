@@ -28,7 +28,7 @@ module.exports.extractContent = function ($, pageURL, moTask, cb_outResults) {
     // cssSel.value is CSS selector from MongoDB 'contentTask' collection
     if (cssSel.type === 'text') {
       // extract pure text with no text inside script, input and textarea
-      extractedData = $(cssSel.value + ' *:not(textarea, input:text, script, option)').text();
+      extractedData = $(cssSel.value + ' *:not(textarea, input:text, script, option, style)').text();
     } else if (cssSel.type === 'html') {
       extractedData = $(cssSel.value).html();
     } else if (cssSel.type === 'href') {
