@@ -37,7 +37,7 @@ module.exports.insertNewLink = function (linkqueueCollection, insLinkqueueDoc) {
         });
       } else { //if link already exist in databse
 
-        logg.craw(false, 'robot_linkExists', 'Link already exists in DB ' + linkqueueCollection + ': ' + insLinkqueueDoc.link.href);
+        // logg.craw(false, 'robot_linkExists', 'Link already exists in DB ' + linkqueueCollection + ': ' + insLinkqueueDoc.link.href);
         db.close();
       }
 
@@ -61,6 +61,30 @@ module.exports.updateCrawlStatus = function (linkqueueCollection, linkHref, craw
 
     db.collection(linkqueueCollection).update({"link.href": linkHref}, {$set: {"crawlStatus": crawlStatus}}, function (err) {
       if (err) { logg.byWinston('error', __filename + ':65 ' + err); }
+
+      db.close();
+    });
+
+  });
+
+};
+
+
+/**
+ * Insert content into 'robot_content' collection during crawling
+ * @param  {String} pageURL  - url of pagination link: http://www.adsuu.com/business-offer-9/
+ * @param  {Object} db       - db mongo object
+ * @param  {String} contentCollection - MongoDB collection name: content_business
+ * @param  {Object} insMoDoc - MongoDB document to be inserted: {_id, task_is, page, dateTime, links[]}
+ * @return {[type]}          [description]
+ */
+module.exports.insertNewContent = function (contentCollection, insContentDoc) {
+
+  MongoClient.connect(dbName, function (err, db) {
+    if (err) { logg.byWinston('error', __filename + ':84 ' + err); }
+
+    db.collection(contentCollection).insert(insContentDoc, function (err) { //insert new link into robot_linkqueue_*
+      if (err) { logg.byWinston('error', __filename + ':87 ' + err); }
 
       db.close();
     });

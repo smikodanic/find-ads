@@ -91,7 +91,7 @@ module.exports.runURL = function (db, moTask, link, i, cb_outResults) {
             // extract data from pageURL using CSS selectors: text, html, image or URL
             // cssSel.value is CSS selector from MongoDB 'contentTask' collection
             if (cssSel.type === 'text') {
-              extractedData = $(cssSel.value).text();
+              extractedData = $(cssSel.value + ' *:not(textarea, input:text, script, option)').text();
             } else if (cssSel.type === 'html') {
               extractedData = $(cssSel.value).html();
             } else if (cssSel.type === 'href') {

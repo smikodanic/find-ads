@@ -4,6 +4,60 @@ var timeLib = require('libraries/timeLib');
 var lc_model = require('models/robotLinksContent_model'); //link-content model
 var logg = require('libraries/loggLib');
 
+
+/**
+ * Extract content from pageURL and insert into 'robot_content'
+ * @param  {object} $ -cheerio object
+ */
+module.exports.extractContent = function ($, pageURL, moTask, cb_outResults) {
+
+  /* doc schema to be inserted into mongoDB */
+  var insContentDoc = {
+    "cid": undefined,
+    "pageURL": pageURL,
+    "crawlDateTime": timeLib.nowLocale(),
+    "category": parseInt(moTask.category, 10),
+    "subcategory": parseInt(moTask.subcategory, 10),
+    "extract": {} //will be an object
+  };
+
+  var extractedData;
+  moTask.selectors.forEach(function (cssSel) { //iterate through CSS selectors defined in 'robot_tasks'
+
+    // extract data from pageURL using CSS selectors: text, html, image or URL
+    // cssSel.value is CSS selector from MongoDB 'contentTask' collection
+    if (cssSel.type === 'text') {
+      // extract pure text with no text inside script, input and textarea
+      extractedData = $(cssSel.value + ' *:not(textarea, input:text, script, option)').text();
+    } else if (cssSel.type === 'html') {
+      extractedData = $(cssSel.value).html();
+    } else if (cssSel.type === 'href') {
+      extractedData = $(cssSel.value).attr('href');
+    } else if (cssSel.type === 'src') {
+      extractedData = $(cssSel.value).attr('src');
+    } else { //cssSel.tyle === 'attr'
+      extractedData = $(cssSel.value[0]).attr(cssSel.value[1]);
+    }
+
+    //prettify tekst
+    extractedData = tekstmod.strongtrim(extractedData);
+
+    //fill extracted data into 'extract' property: extract.title[1] gives web page title
+    insContentDoc.extract[cssSel.name] = [cssSel.type, cssSel.value, extractedData];
+
+    //messaging extracted data
+    var msg_extracted = '-----  ' + cssSel.name + ': ' + extractedData;
+    cb_outResults.send(msg_extracted + '\n');
+    // logg.craw(false, moTask.loggFileName, msg_extracted);
+
+  }); //forEach end
+
+  //***** insert into 'robot_content'
+  lc_model.insertNewContent(moTask.contentCollection, insContentDoc);
+
+};//extractContent end
+
+
 /**
  * Extract links from pageURL and inserting into 'robot_linkqueue_*'
  * @param  {object} $ -cheerio object
@@ -58,54 +112,3 @@ module.exports.extractLinks = function ($, pageURL, moTask, moLink, cb_outResult
   // logg.craw(false, moTask.loggFileName, msg_num); //log to file
 
 }; //extractLinks end
-
-
-
-
-/**
- * Extract content from pageURL
- * @param  {object} $ -cheerio object
- */
-module.exports.extractContent = function ($, pageURL, moTask, cb_outResults) {
-
-  /* doc skeleton to be inserted into mongoDB */
-  var insMoDoc = {
-    "cid": undefined,
-    "pageURL": pageURL,
-    "crawlDateTime": timeLib.nowLocale(),
-    "category": parseInt(moTask.category, 10),
-    "subcategory": parseInt(moTask.subcategory, 10),
-    "extract": {} //will be an object
-  };
-
-  var extractedData;
-  moTask.selectors.forEach(function (cssSel) { //iterate through CSS selectors defined in 'robot_tasks'
-
-    // extract data from pageURL using CSS selectors: text, html, image or URL
-    // cssSel.value is CSS selector from MongoDB 'contentTask' collection
-    if (cssSel.type === 'text') {
-      extractedData = $(cssSel.value).text();
-    } else if (cssSel.type === 'html') {
-      extractedData = $(cssSel.value).html();
-    } else if (cssSel.type === 'href') {
-      extractedData = $(cssSel.value).attr('href');
-    } else if (cssSel.type === 'src') {
-      extractedData = $(cssSel.value).attr('src');
-    } else { //cssSel.tyle === 'attr'
-      extractedData = $(cssSel.value[0]).attr(cssSel.value[1]);
-    }
-
-    //prettify tekst
-    extractedData = tekstmod.strongtrim(extractedData);
-
-    //fill extracted data into 'extract' property: extract.title[1] gives web page title
-    insMoDoc.extract[cssSel.name] = [cssSel.type, cssSel.value, extractedData];
-
-    //messaging extracted data
-    var msg_extracted = '-----  ' + cssSel.name + ': ' + extractedData;
-    cb_outResults.send(msg_extracted + '\n');
-    logg.craw(false, moTask.loggFileName, msg_extracted);
-
-  }); //forEach end
-
-};//extractContent end

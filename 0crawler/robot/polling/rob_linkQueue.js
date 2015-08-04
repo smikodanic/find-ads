@@ -19,25 +19,22 @@ var collName_tasksCnt = settings.mongo.dbColl_robotTasks;
 /* start polling links from robot_linkQueue_* collection */
 module.exports.start = function (task_id, cb_outResults) {
 
-  var selector = {"id": task_id};
-
   MongoClient.connect(dbName, function (err, db) { //mongoDB connection
     if (err) { logg.byWinston('error', __filename + ':22 ' + err); }
 
-    db.collection(collName_tasksCnt).find(selector).toArray(function (err, moTask_arr) { //get task data using 'task_id' from 'contentTasks'
+    db.collection(collName_tasksCnt).find({"id": task_id}).toArray(function (err, moTask_arr) { //get task data using 'task_id' from 'contentTasks'
       if (err) { logg.byWinston('error', __filename + ':25 ' + err); }
 
       //MongoDB doc object
       var moTask = moTask_arr[0];
 
       //define logg file name and put in moTask object
-      // moTask.loggFileName = collName_tasksCnt + '.' + task_id + 'FROM' + moTask.linkQueue + 'TO' + moTask.contentCollection;
       moTask.loggFileName = 'robot_dump';
 
       //log crawling start
       var msg_start = '--------- ROBOT STARTED by rob_linkQueue.js \ntask ID: ' + collName_tasksCnt + '.' + moTask.id + '\nFROM ' + moTask.linkqueueCollection + ' TO ' + moTask.contentCollection + '; \npollScript=' + moTask.pollScript + '; \nhttpclientScript=' + moTask.httpclientScript;
       logg.craw(false, moTask.loggFileName, msg_start);
-      logg.craw(false, 'cronList', msg_start);
+      // logg.craw(false, 'cronList', msg_start);
 
 
 
@@ -60,30 +57,31 @@ module.exports.start = function (task_id, cb_outResults) {
           var maxDepth = parseInt(moTask.crawlDepth, 10);
           var seedURL_hostname = urlmod.getHostname(moTask.seedURL);
 
-          var regExpSeed;
+          var regExpSeedDomainOnly;
           if (moTask.seedDomainOnly === "yes") {
-            regExpSeed = new RegExp('.*' + seedURL_hostname + '.*');
+            regExpSeedDomainOnly = new RegExp('.*' + seedURL_hostname + '.*');
           } else {
-            regExpSeed = new RegExp('.*');
+            regExpSeedDomainOnly = new RegExp('.*');
           }
 
           var linkSelector = {
             "crawlStatus": "pending",
             "crawlDepth": {$lt: maxDepth},
-            "link.href": {$regex: regExpSeed}
+            "link.href": {$regex: regExpSeedDomainOnly}
           };
 
 
 
-
+          //get link to be crawled
           db.collection(moTask.linkqueueCollection).find(linkSelector).sort({lid: 1}).toArray(function (err, moLink_arr) { //robot_linkqueue_* docs
-            if (err) { logg.byWinston('error', __filename + ':55 ' + err); }
+            if (err) { logg.byWinston('error', __filename + ':77 ' + err); }
+
 
             var moLink = moLink_arr[0];
 
-            //get http client script: httpClient_noderequest.js in /0crawler/crawlercontent/httpclient/ directory
             if (moLink !== undefined) {
 
+              /***** HTTP client *****/
               var httpClient = require('0crawler/robot/httpclient/' + moTask.httpclientScript);
               httpClient.runURL(moTask, moLink, cb_outResults);
 
@@ -95,6 +93,7 @@ module.exports.start = function (task_id, cb_outResults) {
               cb_outResults.end();
               logg.craw(false, moTask.loggFileName, msg_end);
             }
+
 
             db.close();
           });

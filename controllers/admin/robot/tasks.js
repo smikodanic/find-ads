@@ -54,7 +54,6 @@ module.exports = function (router) {
     var sess_tf = login.checksess_user_pass(req);
 
     if (sess_tf) {
-      console.log('works !!!');
       robotTasks_model.insertTask(req, res);
     } else {
       res.redirect('/admin');

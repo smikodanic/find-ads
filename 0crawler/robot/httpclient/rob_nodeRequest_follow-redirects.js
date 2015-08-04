@@ -19,6 +19,7 @@ var lc_model = require('models/robotLinksContent_model'); //link-content model
 module.exports.runURL = function (moTask, moLink, cb_outResults) {
 
   //vars
+  //Notice: Problem can occur if moLink.link.href is not equal to pageURL
   var url_obj = url.parse(moLink.link.href);
   var pageURL = url_obj.protocol + '//' + url_obj.hostname + url_obj.path;
 
@@ -73,10 +74,12 @@ module.exports.runURL = function (moTask, moLink, cb_outResults) {
         //***** update crawlStatus from 'pending' to 'crawled' or 'error'
         lc_model.updateCrawlStatus(moTask.linkqueueCollection, moLink.link.href, crawlStatus);
 
+        
+
         //load pageURL HTML into cheerio object
         $ = cheerio.load(htmlDoc);
 
-        //extract content
+        //extract content and insert into 'robot_content'
         rob.extractContent($, pageURL, moTask, cb_outResults);
 
         // extract links and insert into 'robot_linkqueue_*'
