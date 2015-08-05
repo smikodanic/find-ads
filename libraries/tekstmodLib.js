@@ -12,9 +12,9 @@ module.exports.strongtrim = function (str) {
   if (str !== undefined) {
 
     str = str.trim();
-    str = str.replace(/\t/g, '');
-    str = str.replace(/\n/g, '');
-    str = str.replace(/\r/g, '');
+    str = str.replace(/\t/g, ' ');
+    str = str.replace(/\n/g, ' ');
+    str = str.replace(/\r/g, ' ');
 
   } else {
     str = null;

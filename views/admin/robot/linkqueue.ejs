@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <%- include('../0partials/01head'); -%>
+</head>
+
+<body>
+
+    <div id="wrapper">
+
+        <!-- Navigation -->
+        <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+            <%- include('../0partials/05top_menu'); -%>
+            <%- include('../0partials/10left_menu'); -%>
+        </nav>
+
+        <div id="page-wrapper">
+
+            <div class="container-fluid">
+
+                <!-- Page Heading -->
+                <div class="row">
+                    <div class="col-lg-12">
+                        <h1 class="page-header">
+                            Robot Link Queue
+                        </h1>
+                        
+                        <ol class="breadcrumb">
+                          <li>Web Robot</li>
+                          <li><a href="/admin/robot/linkqueue/">Link Queue</a></li>
+                        </ol>
+                        This is a list of links collected by web robot and stored in link queue MongoDB collection.
+                        <br>Filter results by search query e.g. a string which is contained in link's URL or Text.
+                        <br>Delete any task in 'pending' state, and it will not be crawled. 
+                        If link has 'crawled' state then it is already crawled.
+
+                    </div>
+                </div>
+
+                <div class="clearfix">&nbsp;</div>
+                <br><br>
+
+                <div class="row">
+                    <div class="col-sm-12">
+
+                            <!-- FORM -->
+                            <form action="/admin/robot/linkqueue/" method="POST" enctype="application/<x-www->    </x-www->form-urlencoded" class="form-horizontal">
+
+                                <div class="form-group">
+                                    <label for="q" class="col-sm-2  control-label" >Filter results:</label>
+                                    
+                                    <div class="col-sm-5">
+                                      <input type="text" name="q" id="q" value="" class="form-control" title="Insert search term to filter results">
+                                    </div>
+
+                                    <div class="col-sm-2">
+                                        <select name="task_id" id="task_id" class="form-control" title="Select robot task">
+                                            <option value="">SELECT TASK</option>
+                                            <% tasks.forEach(function (elem) { %>
+                                                <option value="<%= elem.id %>"><%= elem.name %> (id: <%= elem.id %>)</option>
+                                            <% }); %>
+                                        </select>
+                                    </div>
+
+                                    <div class="col-sm-2">
+                                        <input type="submit" value="Search" class="btn btn-default">
+                                    </div>
+
+                                </div>
+    
+                            </form>
+                            <!-- FORM end -->
+
+                    </div>
+                </div>
+
+
+                <div class="row">
+                    <div class="well">
+                        <p>
+                          Task name (id): <b><%= tasks[task_id].name %> (<%= tasks[task_id].id %>)</b> |
+                          Linkqueue collection: <b><%= tasks[task_id].linkqueueCollection %></b> |
+                          Search results: <b><%= pagination.countNum %></b>
+                        </p>
+
+                        <!-- results displayed in Bootstrap Accordition -->
+                        <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+                          
+                        <%
+                          var i = 0;
+                          queue.forEach(function (elem) { 
+                        %>
+                          <div class="panel panel-default">
+                            <div class="panel-heading" role="tab" id="heading<%= i %>">
+                              <h4 class="panel-title">
+                                <a data-toggle="collapse" data-parent="#accordion" href="#collapse<%= i %>" aria-expanded="true" aria-controls="collapse<%= i %>">
+                                  <%= i+1+pagination.perPage*(pagination.currentPage-1) %>. <%= elem.link.tekst %>
+                                  <span style="font-size: 10px; color:#8D8D8D;">
+                                    (lid: <%= elem.lid %>, crawlDepth: <%= elem.crawlDepth %>)
+                                    <b style="padding-left:25px"><%= elem.crawlStatus %></b>
+                                    <br><a href="<%= elem.link.href %>" target="_blank" style="color:Silver;font-size:smaller"><%= elem.link.href %></a>
+                                  </span>
+                                </a>
+
+                                <a href="/admin/robot/linkqueue/delete/<%= tasks[task_id].linkqueueCollection %>/<%= elem.lid %>/<%= tasks[task_id].id %>/"><span style="float:right;color:red;" class="fa fa-times"></span></a>
+                              </h4>
+                            </div>
+                            <div id="collapse<%= i %>" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading<%= i %>">
+                              <div class="panel-body">
+                                
+                                <pre>
+                                <%-
+                                  JSON.stringify(elem, null, 2);
+                                %>
+                                </pre>
+                        
+                              </div>
+                            </div>
+                          </div>
+                        
+                        <% 
+                           i++;
+                           });
+                        %>
+                        
+                        </div>
+                        <!-- results displayed in Bootstrap Accordition END -->
+
+                        <!-- Pagination -->
+                        <nav>
+                          <ul class="pagination">
+                            <li><a href="<%= pagination.pagesPreURI + '1' %>"> &laquo;</a></li>
+        
+                            <% 
+                            pagination.currentPage = parseInt(pagination.currentPage); //convert string into number
+                            
+                            pagination.pages_arr.forEach(function(elem){
+                              var hclass;
+                              if (elem === pagination.currentPage) {
+                                hclass = 'class="active"';
+                              } else {
+                                hclass = '';
+                              }
+                            %>
+        
+                              <li <%- hclass %>><a href="<%= pagination.pagesPreURI + elem %>"><%= elem %></a></li>
+                            
+                            <% }); %>
+        
+                            <li><a href="<%= pagination.pagesPreURI + pagination.pagesTotal %>"> &raquo;</a></li>
+                          </ul>
+                        </nav>
+                        <!-- Pagination END -->
+
+                    </div>
+                </div>
+
+                <a href="/admin/robot/linkqueue/delete/<%= tasks[task_id].linkqueueCollection %>/all/<%= tasks[task_id].id %>/" class="btn btn-lg btn-danger">Delete All Links in linkqueue</a>
+
+            </div>
+            <!-- /.container-fluid -->
+
+        </div>
+        <!-- /#page-wrapper -->
+
+    </div>
+    <!-- /#wrapper -->
+
+
+    
+
+
+<script>
+
+$(document).ready(function(){
+ //$("input[name='first_name']").focus();
+ $("*").tooltip();
+
+});
+</script>
+</body>
+
+</html>

@@ -31,10 +31,23 @@ module.exports.insertNewLink = function (linkqueueCollection, insLinkqueueDoc) {
 
       if (moLink === undefined) {//if link doesn't exist in database
 
-        db.collection(linkqueueCollection).insert(insLinkqueueDoc, function (err) { //insert new link into robot_linkqueue_*
-          if (err) { logg.byWinston('error', __filename + ':31 ' + err); }
-          db.close();
+        db.collection(linkqueueCollection).find().sort({lid: -1}).limit(1).toArray(function (err, moMax_arr) { //find max ID
+          if (err) { logg.byWinston('error', __filename + ':35 ' + err); }
+
+          //set new insLinkqueueDoc.id from max id value
+          if (moMax_arr[0] !== undefined) {
+            insLinkqueueDoc.lid = moMax_arr[0].lid + 1;
+          } else {
+            insLinkqueueDoc.lid = 0;
+          }
+
+          db.collection(linkqueueCollection).insert(insLinkqueueDoc, function (err) { //insert new link into robot_linkqueue_*
+            if (err) { logg.byWinston('error', __filename + ':45 ' + err); }
+            db.close();
+          });
+
         });
+
       } else { //if link already exist in databse
 
         // logg.craw(false, 'robot_linkExists', 'Link already exists in DB ' + linkqueueCollection + ': ' + insLinkqueueDoc.link.href);
@@ -81,12 +94,26 @@ module.exports.updateCrawlStatus = function (linkqueueCollection, linkHref, craw
 module.exports.insertNewContent = function (contentCollection, insContentDoc) {
 
   MongoClient.connect(dbName, function (err, db) {
-    if (err) { logg.byWinston('error', __filename + ':84 ' + err); }
+    if (err) { logg.byWinston('error', __filename + ':97 ' + err); }
 
-    db.collection(contentCollection).insert(insContentDoc, function (err) { //insert new link into robot_linkqueue_*
-      if (err) { logg.byWinston('error', __filename + ':87 ' + err); }
+    db.collection(contentCollection).find().sort({cid: -1}).limit(1).toArray(function (err, moMax_arr) { //find max ID
+      if (err) { logg.byWinston('error', __filename + ':100 ' + err); }
 
-      db.close();
+
+      //set new insContentDoc.id from max id value
+      if (moMax_arr[0] !== undefined) {
+        insContentDoc.cid = moMax_arr[0].cid + 1;
+      } else {
+        insContentDoc.cid = 0;
+      }
+
+
+      db.collection(contentCollection).insert(insContentDoc, function (err) { //insert new content into robot_content
+        if (err) { logg.byWinston('error', __filename + ':103 ' + err); }
+
+        db.close();
+      });
+
     });
 
   });

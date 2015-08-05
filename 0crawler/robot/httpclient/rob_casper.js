@@ -45,8 +45,8 @@ module.exports.runURL = function (moTask, moLink, cb_outResults) {
       var htmlDoc = stdout;
 
       var crawlStatus;
-      if (htmlDoc !== '' && htmlDoc !== undefined) {
-        crawlStatus = 'error: empty htmlDoc';
+      if (htmlDoc === '' && htmlDoc === undefined) {
+        crawlStatus = 'error: empty htmlDoc returned from CasperJS';
       } else {
         crawlStatus = 'crawled';
       }
