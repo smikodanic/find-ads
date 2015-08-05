@@ -24,12 +24,16 @@ module.exports.extractContent = function ($, pageURL, moTask, cb_outResults) {
   var extractedData;
   moTask.selectors.forEach(function (cssSel) { //iterate through CSS selectors defined in 'robot_tasks'
 
+    //removing tags from extracted htmlDoc
+    $('script, style, form, textarea, option, input').remove();
+
+
     // extract data from pageURL using CSS selectors: text, html, image or URL
     // cssSel.value is CSS selector from MongoDB 'contentTask' collection
     if (cssSel.type === 'text') {
       // extract pure text with no text inside script, input and textarea
       // extractedData = $(cssSel.value + ' *:not(textarea, input:text, script, option, style, form)').text();
-      extractedData = $(cssSel.value).not('textarea, input:text, script, option, style, form').text();
+      extractedData = $(cssSel.value).text();
     } else if (cssSel.type === 'html') {
       extractedData = $(cssSel.value).html();
     } else if (cssSel.type === 'href') {

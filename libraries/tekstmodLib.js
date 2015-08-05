@@ -13,8 +13,9 @@ module.exports.strongtrim = function (str) {
 
     str = str.trim();
     str = str.replace(/\t/g, ' ');
-    str = str.replace(/\n/g, ' ');
-    str = str.replace(/\r/g, ' ');
+    str = str.replace(/\s\s+/g, ' ')
+    str = str.replace(/\n/g, '');
+    str = str.replace(/\r/g, '');
 
   } else {
     str = null;
