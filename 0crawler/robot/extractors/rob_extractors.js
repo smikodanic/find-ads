@@ -25,7 +25,7 @@ module.exports.extractContent = function ($, pageURL, moTask, cb_outResults) {
   moTask.selectors.forEach(function (cssSel) { //iterate through CSS selectors defined in 'robot_tasks'
 
     //removing tags from extracted htmlDoc
-    $('script, style, form, textarea, option, input').remove();
+    $('script, style, form, textarea, option, input, img').remove();
 
 
     // extract data from pageURL using CSS selectors: text, html, image or URL
