@@ -12,10 +12,12 @@ module.exports.strongtrim = function (str) {
   if (str !== undefined) {
 
     str = str.trim();
-    str = str.replace(/\t/g, ' ');
-    str = str.replace(/\s\s+/g, ' ')
-    str = str.replace(/\n/g, '');
-    str = str.replace(/\r/g, '');
+    str = str.replace(/\t\t+/g, ' ');
+    str = str.replace(/\s\s+/g, ' ');
+    str = str.replace(/\n\n+/g, '\n');
+    str = str.replace(/\r\r+/g, '\r');
+
+    str = str.replace(/\. /g, '\.\r'); //new sentence in new line
 
   } else {
     str = null;
