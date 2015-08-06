@@ -28,7 +28,7 @@ module.exports.runURL = function (moTask, moLink, cb_outResults) {
   var pageURL = url_obj.protocol + '//' + url_obj.hostname + url_obj.path;
 
   //casper exe file
-  var casperBinFile = '/usr/lib/node_modules/casperjs/bin/casperjs';
+  var casperBinFile = sett.casperBinFile;
 
   var casperCommandlineArgs = [
     appDir + '/0crawler/robot/casperjs/rob_casper_cli.js',

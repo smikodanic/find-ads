@@ -22,6 +22,7 @@ module.exports = {
   logDir: appDir + '/tmp/logs/',
   cronInitFile: appDir + '/1cron/cronInitCrawlers.js',
   timeZone: 'Europe/Zagreb',
+  casperBinFile: '/usr/local/bin/casperjs',
   mongo: {
     dbName: 'mongodb://crawler_user:gmhmln123@192.99.21.142:27017/crawler',
     dbColl_category: 'category',
