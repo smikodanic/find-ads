@@ -23,7 +23,9 @@ module.exports = {
   cronInitFile: appDir + '/1cron/cronInitCrawlers.js',
   timeZone: 'Europe/Zagreb',
   mongo: {
-    dbName: 'mongodb://crawler_user:gmhmln123@192.99.21.142:27017/crawler',
+    dbName: 'mongodb://crawler_user:astra1971@localhost:27017/crawler',
+    // dbName: 'mongodb://crawler_user:gmhmln123@192.99.21.142:27017/crawler',
+    // dbName: 'mongodb://crawler_user:astra1971@vps.mikosoft.info:27017/crawler',
     dbColl_category: 'category',
     dbColl_tasksLnk_iterate: 'linkTasks_iterate',
     dbColl_tasksCnt: 'contentTasks',
