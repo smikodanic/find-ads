@@ -100,7 +100,7 @@ app.use(function (err, req, res, next) {
 
 //uncaughtExceptions
 process.on('uncaughtException', function (err) {
-  console.log('Caught exception: ' + err);
+  console.log('Caught exception: ' + err.stack);
 });
 
 module.exports = app;
