@@ -71,63 +71,75 @@ module.exports.extractContent = function ($, pageURL, moTask, cb_outResults) {
 
 
 /**
- * Extract links from pageURL and inserting into 'robot_linkqueue_*'
+ * Extract links from pageURL and creating docs array
  * @param  {object} $ -cheerio object
  */
 module.exports.extractLinks = function ($, pageURL, moTask, moLink, cb_outResults) {
 
-  // mongo connect is outside each loop beacuse of preventing too many connections to remote mongo server: mongodb://crawler_user:gmhmln123@192.99.21.142:27017/crawler
-  MongoClient.connect(dbName, function (err, db) {
-    if (err) { logg.byWinston('error', __filename + ':73 ' + err); }
+  /**
+   * Extract links from pageURL and insert into robot_linkqueu_*
+   */
+  var n = 1, href, tekst, insLinkqueueDoc_arr = [];
+  $('a').each(function () { //jQuery each function
 
-    /**
-     * Extract links from pageURL and insert into robot_linkqueu_*
-     */
-    var n = 1, href, tekst;
-    $('a').each(function () { //jQuery each function
-      // tekst = $(this).children().remove().end().text(); //get text from A tag without children tag texts
-      tekst = $(this).text();
-      href = $(this).attr('href');
+    // tekst = $(this).children().remove().end().text(); //get text from A tag without children tag texts
+    tekst = $(this).text();
+    href = $(this).attr('href');
 
-      //prettify tekst
-      tekst = tekstmod.strongtrim(tekst);
+    //prettify tekst
+    tekst = tekstmod.strongtrim(tekst);
 
-      //correct url (relative convert to absolute)
-      href = urlmod.toAbsolute(pageURL, href);
+    //correct url (relative convert to absolute)
+    href = urlmod.toAbsolute(pageURL, href);
 
-      //doc to be inserted into robot_linkqueue_*
-      var insLinkqueueDoc = {
-        "lid": 0,
-        "task_collection": "robot_tasks",
-        "task_id": moTask.id,
-        "referer": pageURL,
-        "crawlTime": timeLib.nowLocale(),
-        "link": {
-          "tekst": tekst,
-          "href": href
-        },
-        "crawlStatus" : "pending",
-        "crawlDepth" : moLink.crawlDepth + 1
-      };
+    //doc to be inserted into robot_linkqueue_*
+    var insLinkqueueDoc = {
+      "lid": 0,
+      "task_collection": "robot_tasks",
+      "task_id": moTask.id,
+      "referer": pageURL,
+      "crawlTime": timeLib.nowLocale(),
+      "link": {
+        "tekst": tekst,
+        "href": href
+      },
+      "crawlStatus" : "pending",
+      "crawlDepth" : moLink.crawlDepth + 1
+    };
 
-      //***** insert into 'robot_linkqueue_*'
-      lc_model.insertNewLink(db, moTask.linkqueueCollection, insLinkqueueDoc);
+    //push elements into array
+    insLinkqueueDoc_arr.push(insLinkqueueDoc);
 
-      //message hrefs
-      var msg_href = '----- ' + n + '. ' + href + ' --- ' + tekst;
-      // logg.craw(false, moTask.loggFileName, msg_href); //log to file
-      cb_outResults.send(msg_href  + '\n');
+    //message hrefs
+    var msg_href = '----- ' + n + '. ' + href + ' --- ' + tekst;
+    // logg.craw(false, moTask.loggFileName, msg_href); //log to file
+    cb_outResults.send(msg_href  + '\n');
 
-      n++;
-    }); //each end
+    n++;
+  }); //each end
 
 
-    //message number of extracted links
-    n = n - 1;
-    var msg_num = '-------- Extracted links: ' + n;
-    cb_outResults.send(msg_num + '\n\n'); //send to browser
-    // logg.craw(false, moTask.loggFileName, msg_num); //log to file
+  //*** inserting into 'robot_linkqueue_*' 
+  // with some delay because of slow connection with Mongo server
+  // jQuery's .each() function is to fast for inserting into monog db
+  var key = 0;
+  var intINSID = setInterval(function () {
+    lc_model.insertNewLink(moTask.linkqueueCollection, insLinkqueueDoc_arr[key]);
+    console.log('InsLinkqueue: ' + insLinkqueueDoc_arr[key].link.href);
+    key++;
 
-  }); //mongo end
+    //stop iteration
+    if (key === insLinkqueueDoc_arr.length) {
+      clearInterval(intINSID);
+    }
+  }, 80); //mongo insertion delay in ms
+
+
+
+  //message number of extracted links
+  n = n - 1;
+  var msg_num = '-------- Extracted links: ' + n;
+  cb_outResults.send(msg_num + '\n\n'); //send to browser
+  // logg.craw(false, moTask.loggFileName, msg_num); //log to file
 
 }; //extractLinks end

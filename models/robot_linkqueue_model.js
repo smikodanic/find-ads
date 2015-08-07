@@ -80,31 +80,45 @@ module.exports.deleteLink = function (req, res) {
 
   //input
   var coll = req.params.coll;
+  var lid = req.params.lid;
   var task_id = parseInt(req.params.task_id, 10);
+
 
   //define selector and deleting options
   var selector, options;
-  if (req.params.lid === 'all') {
+  if (lid === 'all') {
     selector = {"lid": { $ne: 0 }}; //delete all except lid=0
-    // selector = {}; //delete all except lid=0
+    // selector = {}; //delete all
     options = {};
+
+    //update first link in 'robot_linkqueue_*'
+    MongoClient.connect(dbName, function (err, db) {
+      if (err) { logg.byWinston('error', __filename + ':95 ' + err); }
+
+      db.collection(coll).update({"lid": 0}, {$set: {"crawlStatus": "pending"}}, function (err) {
+        if (err) { logg.byWinston('error', __filename + ':97 ' + err); }
+        db.close();
+      });
+
+    });
+
   } else {
-    var lid = parseInt(req.params.lid, 10);
-    selector = {"lid": lid};
+    var lid2 = parseInt(lid, 10);
+    selector = {"lid": lid2};
     options = {};
   }
 
   MongoClient.connect(dbName, function (err, db) {
-    if (err) { logg.byWinston('error', __filename + ':96 ' + err); }
+    if (err) { logg.byWinston('error', __filename + ':107 ' + err); }
 
     db.collection(coll).remove(selector, options, function (err) {
-      if (err) { logg.byWinston('error', __filename + ':99 ' + err); }
+      if (err) { logg.byWinston('error', __filename + ':110 ' + err); }
 
       res.redirect('/admin/robot/linkqueue/?task_id=' + task_id);
-      console.log(selector);
 
       // logg.byWinston('info', __filename + ':103 Deleted records:' + status, null);
       db.close();
+
     });
 
   }); //connect
