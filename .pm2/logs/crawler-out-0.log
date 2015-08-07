@@ -1,0 +1,194 @@
+[2015-08-07 01:15:05] --------- ROBOT STARTED by rob_linkQueue.js 
+task ID: robot_tasks.0
+FROM robot_linkqueue_edition.cnn.com TO robot_content; 
+pollScript=rob_linkQueue.js; 
+httpclientScript=rob_casper.js
+
+[2015-08-07 01:15:23] + URL in httpClient: http://edition.cnn.com/tech
+
+[2015-08-07 01:15:38] + URL in httpClient: http://edition.cnn.com/sport
+
+[2015-08-07 01:15:53] + URL in httpClient: http://edition.cnn.com/china
+
+[2015-08-07 01:16:08] + URL in httpClient: http://edition.cnn.com/entertainment
+
+[2015-08-07 01:16:22] + URL in httpClient: http://edition.cnn.com/middle-east
+
+[2015-08-07 01:16:29] Cron server restarted with pm2!
+
+[2015-08-07 01:16:32] --------- ROBOT STARTED by rob_linkQueue.js 
+task ID: robot_tasks.1
+FROM robot_linkqueue_www.yahoo.com TO robot_content; 
+pollScript=rob_linkQueue.js; 
+httpclientScript=rob_nodeRequest_follow-redirects.js
+
+[2015-08-07 01:16:37] + URL in httpClient: http://edition.cnn.com/asia
+
+[2015-08-07 01:16:49] + URL in httpClient: https://www.yahoo.com/ - response:200
+
+[2015-08-07 01:16:55] + URL in httpClient: http://edition.cnn.com/africa
+
+[2015-08-07 01:17:03] + URL in httpClient: https://www.yahoo.com/ - response:200
+
+[2015-08-07 01:17:08] + URL in httpClient: http://edition.cnn.com/europe
+
+[2015-08-07 01:17:18] + URL in httpClient: https://www.yahoo.com/ - response:200
+
+[2015-08-07 01:17:22] + URL in httpClient: http://edition.cnn.com/americas
+
+[2015-08-07 01:17:33] + URL in httpClient: https://www.yahoo.com/ - response:200
+
+[2015-08-07 01:17:48] + URL in httpClient: https://www.yahoo.com/ - response:200
+
+[2015-08-07 01:17:53] + URL in httpClient: http://edition.cnn.com/specials/stories-worth-watching-video
+
+[2015-08-07 01:17:54] + URL in httpClient: http://edition.cnn.com/specials/stories-worth-watching-video
+
+[2015-08-07 01:18:02] All pending links crawled in robot_linkqueue_www.yahoo.com at Thu Aug 06 2015 19:18:02 GMT-0400 (EDT)
+
+[2015-08-07 01:18:18] + URL in httpClient: http://edition.cnn.com/videos
+
+Caught exception: TypeError: Cannot read property 'collection' of null
+    at /home/crawler/models/robotLinksContent_model.js:27:7
+    at /usr/local/lib/node_modules/mongodb/lib/mongo_client.js:267:20
+    at /usr/local/lib/node_modules/mongodb/lib/db.js:218:14
+    at null.<anonymous> (/usr/local/lib/node_modules/mongodb/lib/server.js:226:9)
+    at g (events.js:199:16)
+    at emit (events.js:110:17)
+    at /usr/local/lib/node_modules/mongodb/node_modules/mongodb-core/lib/topologies/server.js:367:23
+    at /usr/local/lib/node_modules/mongodb/node_modules/mongodb-core/lib/topologies/server.js:750:20
+    at Callbacks.flush (/usr/local/lib/node_modules/mongodb/node_modules/mongodb-core/lib/topologies/server.js:87:7)
+    at null.<anonymous> (/usr/local/lib/node_modules/mongodb/node_modules/mongodb-core/lib/topologies/server.js:325:41)
+Caught exception: TypeError: Cannot read property 'collection' of null
+    at /home/crawler/models/robotLinksContent_model.js:27:7
+    at /usr/local/lib/node_modules/mongodb/lib/mongo_client.js:267:20
+    at /usr/local/lib/node_modules/mongodb/lib/db.js:218:14
+    at null.<anonymous> (/usr/local/lib/node_modules/mongodb/lib/server.js:226:9)
+    at g (events.js:199:16)
+    at emit (events.js:110:17)
+    at /usr/local/lib/node_modules/mongodb/node_modules/mongodb-core/lib/topologies/server.js:367:23
+    at /usr/local/lib/node_modules/mongodb/node_modules/mongodb-core/lib/topologies/server.js:750:20
+    at Callbacks.flush (/usr/local/lib/node_modules/mongodb/node_modules/mongodb-core/lib/topologies/server.js:87:7)
+    at null.<anonymous> (/usr/local/lib/node_modules/mongodb/node_modules/mongodb-core/lib/topologies/server.js:325:41)
+Caught exception: TypeError: Cannot read property 'collection' of null
+    at /home/crawler/models/robotLinksContent_model.js:27:7
+    at /usr/local/lib/node_modules/mongodb/lib/mongo_client.js:267:20
+    at /usr/local/lib/node_modules/mongodb/lib/db.js:218:14
+    at null.<anonymous> (/usr/local/lib/node_modules/mongodb/lib/server.js:226:9)
+    at g (events.js:199:16)
+    at emit (events.js:110:17)
+    at /usr/local/lib/node_modules/mongodb/node_modules/mongodb-core/lib/topologies/server.js:367:23
+    at /usr/local/lib/node_modules/mongodb/node_modules/mongodb-core/lib/topologies/server.js:750:20
+    at Callbacks.flush (/usr/local/lib/node_modules/mongodb/node_modules/mongodb-core/lib/topologies/server.js:87:7)
+    at null.<anonymous> (/usr/local/lib/node_modules/mongodb/node_modules/mongodb-core/lib/topologies/server.js:325:41)
+Caught exception: TypeError: Cannot read property 'collection' of null
+    at /home/crawler/models/robotLinksContent_model.js:27:7
+    at /usr/local/lib/node_modules/mongodb/lib/mongo_client.js:267:20
+    at /usr/local/lib/node_modules/mongodb/lib/db.js:218:14
+    at null.<anonymous> (/usr/local/lib/node_modules/mongodb/lib/server.js:226:9)
+    at g (events.js:199:16)
+    at emit (events.js:110:17)
+    at /usr/local/lib/node_modules/mongodb/node_modules/mongodb-core/lib/topologies/server.js:367:23
+    at /usr/local/lib/node_modules/mongodb/node_modules/mongodb-core/lib/topologies/server.js:750:20
+    at Callbacks.flush (/usr/local/lib/node_modules/mongodb/node_modules/mongodb-core/lib/topologies/server.js:87:7)
+    at null.<anonymous> (/usr/local/lib/node_modules/mongodb/node_modules/mongodb-core/lib/topologies/server.js:325:41)
+Caught exception: TypeError: Cannot read property 'collection' of null
+    at /home/crawler/models/robotLinksContent_model.js:27:7
+    at /usr/local/lib/node_modules/mongodb/lib/mongo_client.js:267:20
+    at /usr/local/lib/node_modules/mongodb/lib/db.js:218:14
+    at null.<anonymous> (/usr/local/lib/node_modules/mongodb/lib/server.js:226:9)
+    at g (events.js:199:16)
+    at emit (events.js:110:17)
+    at /usr/local/lib/node_modules/mongodb/node_modules/mongodb-core/lib/topologies/server.js:367:23
+    at /usr/local/lib/node_modules/mongodb/node_modules/mongodb-core/lib/topologies/server.js:750:20
+    at Callbacks.flush (/usr/local/lib/node_modules/mongodb/node_modules/mongodb-core/lib/topologies/server.js:87:7)
+    at null.<anonymous> (/usr/local/lib/node_modules/mongodb/node_modules/mongodb-core/lib/topologies/server.js:325:41)
+Caught exception: TypeError: Cannot read property 'collection' of null
+    at /home/crawler/models/robotLinksContent_model.js:27:7
+    at /usr/local/lib/node_modules/mongodb/lib/mongo_client.js:267:20
+    at /usr/local/lib/node_modules/mongodb/lib/db.js:218:14
+    at null.<anonymous> (/usr/local/lib/node_modules/mongodb/lib/server.js:226:9)
+    at g (events.js:199:16)
+    at emit (events.js:110:17)
+    at /usr/local/lib/node_modules/mongodb/node_modules/mongodb-core/lib/topologies/server.js:367:23
+    at /usr/local/lib/node_modules/mongodb/node_modules/mongodb-core/lib/topologies/server.js:750:20
+    at Callbacks.flush (/usr/local/lib/node_modules/mongodb/node_modules/mongodb-core/lib/topologies/server.js:87:7)
+    at null.<anonymous> (/usr/local/lib/node_modules/mongodb/node_modules/mongodb-core/lib/topologies/server.js:325:41)
+[retry] will retry, error on last attempt: SyntaxError: Unexpected end of input
+Caught exception: TypeError: Cannot read property 'listCollections' of null
+    at /home/crawler/models/robot_content_model.js:55:7
+    at /usr/local/lib/node_modules/mongodb/lib/mongo_client.js:267:20
+    at /usr/local/lib/node_modules/mongodb/lib/db.js:218:14
+    at null.<anonymous> (/usr/local/lib/node_modules/mongodb/lib/server.js:226:9)
+    at g (events.js:199:16)
+    at emit (events.js:110:17)
+    at /usr/local/lib/node_modules/mongodb/node_modules/mongodb-core/lib/topologies/server.js:367:23
+    at /usr/local/lib/node_modules/mongodb/node_modules/mongodb-core/lib/topologies/server.js:750:20
+    at Callbacks.flush (/usr/local/lib/node_modules/mongodb/node_modules/mongodb-core/lib/topologies/server.js:87:7)
+    at null.<anonymous> (/usr/local/lib/node_modules/mongodb/node_modules/mongodb-core/lib/topologies/server.js:325:41)
+Caught exception: TypeError: Cannot read property 'listCollections' of null
+    at /home/crawler/models/robot_content_model.js:55:7
+    at /usr/local/lib/node_modules/mongodb/lib/mongo_client.js:267:20
+    at /usr/local/lib/node_modules/mongodb/lib/db.js:218:14
+    at null.<anonymous> (/usr/local/lib/node_modules/mongodb/lib/server.js:226:9)
+    at g (events.js:199:16)
+    at emit (events.js:110:17)
+    at /usr/local/lib/node_modules/mongodb/node_modules/mongodb-core/lib/topologies/server.js:367:23
+    at /usr/local/lib/node_modules/mongodb/node_modules/mongodb-core/lib/topologies/server.js:750:20
+    at Callbacks.flush (/usr/local/lib/node_modules/mongodb/node_modules/mongodb-core/lib/topologies/server.js:87:7)
+    at null.<anonymous> (/usr/local/lib/node_modules/mongodb/node_modules/mongodb-core/lib/topologies/server.js:325:41)
+[2015-08-07 01:23:46] --------- ROBOT STARTED by rob_linkQueue.js 
+task ID: robot_tasks.1
+FROM robot_linkqueue_www.yahoo.com TO robot_content; 
+pollScript=rob_linkQueue.js; 
+httpclientScript=rob_nodeRequest_follow-redirects.js
+
+Caught exception: TypeError: Cannot read property 'collection' of null
+    at /home/crawler/0crawler/robot/polling/rob_linkQueue.js:76:13
+    at /usr/local/lib/node_modules/mongodb/lib/mongo_client.js:267:20
+    at /usr/local/lib/node_modules/mongodb/lib/db.js:218:14
+    at null.<anonymous> (/usr/local/lib/node_modules/mongodb/lib/server.js:226:9)
+    at g (events.js:199:16)
+    at emit (events.js:110:17)
+    at /usr/local/lib/node_modules/mongodb/node_modules/mongodb-core/lib/topologies/server.js:367:23
+    at /usr/local/lib/node_modules/mongodb/node_modules/mongodb-core/lib/topologies/server.js:750:20
+    at Callbacks.flush (/usr/local/lib/node_modules/mongodb/node_modules/mongodb-core/lib/topologies/server.js:87:7)
+    at null.<anonymous> (/usr/local/lib/node_modules/mongodb/node_modules/mongodb-core/lib/topologies/server.js:325:41)
+[session-file-store] Deleting expired sessions
+[session-file-store] Deleting expired sessions
+[session-file-store] Deleting expired sessions
+[session-file-store] Deleting expired sessions
+[session-file-store] Deleting expired sessions
+[session-file-store] Deleting expired sessions
+[2015-08-07 10:26:28] --------- ROBOT STARTED by rob_linkQueue.js 
+task ID: robot_tasks.0
+FROM robot_linkqueue_edition.cnn.com TO robot_content; 
+pollScript=rob_linkQueue.js; 
+httpclientScript=rob_nodeRequest_follow-redirects.js
+
+[2015-08-07 10:26:44] + URL in httpClient: http://edition.cnn.com/ - response:200
+
+Caught exception: TypeError: Cannot read property 'collection' of null
+    at /home/crawler/models/robotLinksContent_model.js:27:7
+    at /usr/local/lib/node_modules/mongodb/lib/mongo_client.js:389:11
+    at process._tickDomainCallback (node.js:381:11)
+Caught exception: TypeError: Cannot read property 'collection' of null
+    at /home/crawler/models/robotLinksContent_model.js:27:7
+    at /usr/local/lib/node_modules/mongodb/lib/mongo_client.js:389:11
+    at process._tickDomainCallback (node.js:381:11)
+Caught exception: TypeError: Cannot read property 'collection' of null
+    at /home/crawler/models/robotLinksContent_model.js:27:7
+    at /usr/local/lib/node_modules/mongodb/lib/mongo_client.js:389:11
+    at process._tickDomainCallback (node.js:381:11)
+Caught exception: TypeError: Cannot read property 'collection' of null
+    at /home/crawler/models/robotLinksContent_model.js:27:7
+    at /usr/local/lib/node_modules/mongodb/lib/mongo_client.js:389:11
+    at process._tickDomainCallback (node.js:381:11)
+Caught exception: TypeError: Cannot read property 'collection' of null
+    at /home/crawler/models/robotLinksContent_model.js:27:7
+    at /usr/local/lib/node_modules/mongodb/lib/mongo_client.js:389:11
+    at process._tickDomainCallback (node.js:381:11)
+Caught exception: TypeError: Cannot read property 'collection' of null
+    at /home/crawler/models/robotLinksContent_model.js:27:7
+    at /usr/local/lib/node_modules/mongodb/lib/mongo_client.js:389:11
+    at process._tickDomainCallback (node.js:381:11)

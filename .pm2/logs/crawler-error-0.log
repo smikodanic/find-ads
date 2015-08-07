@@ -1,0 +1,95 @@
+error: /home/crawler/libraries/cronLib.js:70 Error: Command failed: /bin/sh -c pm2 restart /home/crawler/1cron/cronInitCrawlers.js
+[PM2][ERROR] Process /home/crawler/1cron/cronInitCrawlers.js not found
+
+error: /home/crawler/models/robotLinksContent_model.js:25 MongoError: server 192.99.21.142:27017 sockets closed
+TypeError: Cannot read property 'collection' of null
+    at /home/crawler/models/robotLinksContent_model.js:27:7
+    at /usr/local/lib/node_modules/mongodb/lib/mongo_client.js:267:20
+    at /usr/local/lib/node_modules/mongodb/lib/db.js:218:14
+    at null.<anonymous> (/usr/local/lib/node_modules/mongodb/lib/server.js:226:9)
+    at g (events.js:199:16)
+    at emit (events.js:110:17)
+    at /usr/local/lib/node_modules/mongodb/node_modules/mongodb-core/lib/topologies/server.js:367:23
+    at /usr/local/lib/node_modules/mongodb/node_modules/mongodb-core/lib/topologies/server.js:750:20
+    at Callbacks.flush (/usr/local/lib/node_modules/mongodb/node_modules/mongodb-core/lib/topologies/server.js:87:7)
+    at null.<anonymous> (/usr/local/lib/node_modules/mongodb/node_modules/mongodb-core/lib/topologies/server.js:325:41)
+error: /home/crawler/models/robotLinksContent_model.js:25 MongoError: server 192.99.21.142:27017 sockets closed
+TypeError: Cannot read property 'collection' of null
+    at /home/crawler/models/robotLinksContent_model.js:27:7
+    at /usr/local/lib/node_modules/mongodb/lib/mongo_client.js:267:20
+    at /usr/local/lib/node_modules/mongodb/lib/db.js:218:14
+    at null.<anonymous> (/usr/local/lib/node_modules/mongodb/lib/server.js:226:9)
+    at g (events.js:199:16)
+    at emit (events.js:110:17)
+    at /usr/local/lib/node_modules/mongodb/node_modules/mongodb-core/lib/topologies/server.js:367:23
+    at /usr/local/lib/node_modules/mongodb/node_modules/mongodb-core/lib/topologies/server.js:750:20
+    at Callbacks.flush (/usr/local/lib/node_modules/mongodb/node_modules/mongodb-core/lib/topologies/server.js:87:7)
+    at null.<anonymous> (/usr/local/lib/node_modules/mongodb/node_modules/mongodb-core/lib/topologies/server.js:325:41)
+error: /home/crawler/models/robotLinksContent_model.js:25 MongoError: server 192.99.21.142:27017 sockets closed
+TypeError: Cannot read property 'collection' of null
+    at /home/crawler/models/robotLinksContent_model.js:27:7
+    at /usr/local/lib/node_modules/mongodb/lib/mongo_client.js:267:20
+    at /usr/local/lib/node_modules/mongodb/lib/db.js:218:14
+    at null.<anonymous> (/usr/local/lib/node_modules/mongodb/lib/server.js:226:9)
+    at g (events.js:199:16)
+    at emit (events.js:110:17)
+    at /usr/local/lib/node_modules/mongodb/node_modules/mongodb-core/lib/topologies/server.js:367:23
+    at /usr/local/lib/node_modules/mongodb/node_modules/mongodb-core/lib/topologies/server.js:750:20
+    at Callbacks.flush (/usr/local/lib/node_modules/mongodb/node_modules/mongodb-core/lib/topologies/server.js:87:7)
+    at null.<anonymous> (/usr/local/lib/node_modules/mongodb/node_modules/mongodb-core/lib/topologies/server.js:325:41)
+error: /home/crawler/models/robotLinksContent_model.js:25 MongoError: server 192.99.21.142:27017 sockets closed
+error: /home/crawler/models/robot_content_model.js:47 MongoError: server 192.99.21.142:27017 sockets closed
+TypeError: Cannot read property 'listCollections' of null
+    at /home/crawler/models/robot_content_model.js:55:7
+    at /usr/local/lib/node_modules/mongodb/lib/mongo_client.js:267:20
+    at /usr/local/lib/node_modules/mongodb/lib/db.js:218:14
+    at null.<anonymous> (/usr/local/lib/node_modules/mongodb/lib/server.js:226:9)
+    at g (events.js:199:16)
+    at emit (events.js:110:17)
+    at /usr/local/lib/node_modules/mongodb/node_modules/mongodb-core/lib/topologies/server.js:367:23
+    at /usr/local/lib/node_modules/mongodb/node_modules/mongodb-core/lib/topologies/server.js:750:20
+    at Callbacks.flush (/usr/local/lib/node_modules/mongodb/node_modules/mongodb-core/lib/topologies/server.js:87:7)
+    at null.<anonymous> (/usr/local/lib/node_modules/mongodb/node_modules/mongodb-core/lib/topologies/server.js:325:41)
+error: /home/crawler/models/robot_content_model.js:47 MongoError: server 192.99.21.142:27017 sockets closed
+TypeError: Cannot read property 'listCollections' of null
+    at /home/crawler/models/robot_content_model.js:55:7
+    at /usr/local/lib/node_modules/mongodb/lib/mongo_client.js:267:20
+    at /usr/local/lib/node_modules/mongodb/lib/db.js:218:14
+    at null.<anonymous> (/usr/local/lib/node_modules/mongodb/lib/server.js:226:9)
+    at g (events.js:199:16)
+    at emit (events.js:110:17)
+    at /usr/local/lib/node_modules/mongodb/node_modules/mongodb-core/lib/topologies/server.js:367:23
+    at /usr/local/lib/node_modules/mongodb/node_modules/mongodb-core/lib/topologies/server.js:750:20
+    at Callbacks.flush (/usr/local/lib/node_modules/mongodb/node_modules/mongodb-core/lib/topologies/server.js:87:7)
+    at null.<anonymous> (/usr/local/lib/node_modules/mongodb/node_modules/mongodb-core/lib/topologies/server.js:325:41)
+error: /home/crawler/0crawler/robot/polling/rob_linkQueue.js:47 MongoError: server 192.99.21.142:27017 sockets closed
+TypeError: Cannot read property 'collection' of null
+    at /home/crawler/0crawler/robot/polling/rob_linkQueue.js:76:13
+    at /usr/local/lib/node_modules/mongodb/lib/mongo_client.js:267:20
+    at /usr/local/lib/node_modules/mongodb/lib/db.js:218:14
+    at null.<anonymous> (/usr/local/lib/node_modules/mongodb/lib/server.js:226:9)
+    at g (events.js:199:16)
+    at emit (events.js:110:17)
+    at /usr/local/lib/node_modules/mongodb/node_modules/mongodb-core/lib/topologies/server.js:367:23
+    at /usr/local/lib/node_modules/mongodb/node_modules/mongodb-core/lib/topologies/server.js:750:20
+    at Callbacks.flush (/usr/local/lib/node_modules/mongodb/node_modules/mongodb-core/lib/topologies/server.js:87:7)
+    at null.<anonymous> (/usr/local/lib/node_modules/mongodb/node_modules/mongodb-core/lib/topologies/server.js:325:41)
+error: /home/crawler/libraries/cronLib.js:23 Error: Command failed: /bin/sh -c ps aux | grep -v grep | grep /home/crawler/1cron/cronInitCrawlers.js
+
+error: /home/crawler/models/robotLinksContent_model.js:25 MongoError: connection 456 to 192.99.21.142:27017 closed
+TypeError: Cannot read property 'collection' of null
+    at /home/crawler/models/robotLinksContent_model.js:27:7
+    at /usr/local/lib/node_modules/mongodb/lib/mongo_client.js:389:11
+    at process._tickDomainCallback (node.js:381:11)
+error: /home/crawler/models/robotLinksContent_model.js:25 MongoError: connection 454 to 192.99.21.142:27017 closed
+TypeError: Cannot read property 'collection' of null
+    at /home/crawler/models/robotLinksContent_model.js:27:7
+    at /usr/local/lib/node_modules/mongodb/lib/mongo_client.js:389:11
+    at process._tickDomainCallback (node.js:381:11)
+error: /home/crawler/models/robotLinksContent_model.js:25 MongoError: connection 453 to 192.99.21.142:27017 closed
+TypeError: Cannot read property 'collection' of null
+    at /home/crawler/models/robotLinksContent_model.js:27:7
+    at /usr/local/lib/node_modules/mongodb/lib/mongo_client.js:389:11
+    at process._tickDomainCallback (node.js:381:11)
+error: /home/crawler/libraries/cronLib.js:23 Error: Command failed: /bin/sh -c ps aux | grep -v grep | grep /home/crawler/1cron/cronInitCrawlers.js
+

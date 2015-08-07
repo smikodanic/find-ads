@@ -1,0 +1,17 @@
+{
+  "root": "/home/crawler/.forever",
+  "pidPath": "/home/crawler/.forever/pids",
+  "sockPath": "/home/crawler/.forever/sock",
+  "loglength": 100,
+  "logstream": false,
+  "columns": [
+    "uid",
+    "command",
+    "script",
+    "forever",
+    "pid",
+    "id",
+    "logfile",
+    "uptime"
+  ]
+}
