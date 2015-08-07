@@ -9,5 +9,5 @@ npm-debug.log
 settings/*
 !settings/main.js
 
-.pm2/*
+.*
 !/.gitignore
