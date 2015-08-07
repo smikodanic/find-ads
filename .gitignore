@@ -1,8 +1,10 @@
-/tmp/*
-/tmp/sessions/*
-/tmp/logs/*
-/tmp/logs/crawler/*
-/tmp/logs/winston/*
+tmp/*
+tmp/sessions/*
+tmp/logs/*
+tmp/logs/crawler/*
+tmp/logs/winston/*
 exceptions.log
 npm-debug.log
-settings/admin.js
+
+settings/*
+!settings/main.js
