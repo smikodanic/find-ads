@@ -194,3 +194,10 @@ nodemon bin/www
 pm2 list
 pm2 start crawler
 exit
+cd /home/crawler
+ls
+git pull
+git add --all
+git commit -m 'mongo pass'
+git push
+exit

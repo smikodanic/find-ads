@@ -26,7 +26,7 @@ module.exports = {
   casperBinFile: '/usr/local/bin/casperjs', //CentOS
   mongo: {
     // dbName: 'mongodb://crawler_user:astra1971@localhost:27017/crawler', //Ubuntu
-    dbName: 'mongodb://crawler_user:gmhmln123@localhost:27017/crawler', //CentOS
+    dbName: 'mongodb://crawler_user:gmhmln123@1localhost:27017/crawler', //CentOS
     dbColl_category: 'category',
     dbColl_tasksLnk_iterate: 'linkTasks_iterate',
     dbColl_tasksCnt: 'contentTasks',
