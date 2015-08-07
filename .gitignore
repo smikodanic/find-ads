@@ -5,4 +5,4 @@
 /tmp/logs/winston/*
 exceptions.log
 npm-debug.log
-settings/admin.js
+/settings/admin.js

@@ -20,7 +20,7 @@ var dbName = settings.mongo.dbName;
  * 
  */
 module.exports.insertNewLink = function (linkqueueCollection, insLinkqueueDoc) {
-
+console.log(dbName);
   MongoClient.connect(dbName, function (err, db) {
     if (err) { logg.byWinston('error', __filename + ':25 ' + err); }
 
