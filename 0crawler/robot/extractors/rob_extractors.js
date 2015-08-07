@@ -76,6 +76,7 @@ module.exports.extractContent = function ($, pageURL, moTask, cb_outResults) {
  */
 module.exports.extractLinks = function ($, pageURL, moTask, moLink, cb_outResults) {
 
+  // mongo connect is outside each loop beacuse of preventing too many connections to remote mongo server: mongodb://crawler_user:gmhmln123@192.99.21.142:27017/crawler
   MongoClient.connect(dbName, function (err, db) {
     if (err) { logg.byWinston('error', __filename + ':73 ' + err); }
 
@@ -83,7 +84,7 @@ module.exports.extractLinks = function ($, pageURL, moTask, moLink, cb_outResult
      * Extract links from pageURL and insert into robot_linkqueu_*
      */
     var n = 1, href, tekst;
-    $('a').each(function () {
+    $('a').each(function () { //jQuery each function
       // tekst = $(this).children().remove().end().text(); //get text from A tag without children tag texts
       tekst = $(this).text();
       href = $(this).attr('href');
@@ -112,7 +113,6 @@ module.exports.extractLinks = function ($, pageURL, moTask, moLink, cb_outResult
       //***** insert into 'robot_linkqueue_*'
       lc_model.insertNewLink(db, moTask.linkqueueCollection, insLinkqueueDoc);
 
-
       //message hrefs
       var msg_href = '----- ' + n + '. ' + href + ' --- ' + tekst;
       // logg.craw(false, moTask.loggFileName, msg_href); //log to file
@@ -120,6 +120,7 @@ module.exports.extractLinks = function ($, pageURL, moTask, moLink, cb_outResult
 
       n++;
     }); //each end
+
 
     //message number of extracted links
     n = n - 1;

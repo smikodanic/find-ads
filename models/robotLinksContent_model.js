@@ -40,7 +40,7 @@ module.exports.insertNewLink = function (db, linkqueueCollection, insLinkqueueDo
 
         db.collection(linkqueueCollection).insert(insLinkqueueDoc, function (err) { //insert new link into robot_linkqueue_*
           if (err) { logg.byWinston('error', __filename + ':45 ' + err); }
-          db.close();
+          // db.close();
         });
 
       });
@@ -48,7 +48,7 @@ module.exports.insertNewLink = function (db, linkqueueCollection, insLinkqueueDo
     } else { //if link already exist in databse
 
       // logg.craw(false, 'robot_linkExists', 'Link already exists in DB ' + linkqueueCollection + ': ' + insLinkqueueDoc.link.href);
-      db.close();
+      // db.close();
     }
 
   });
