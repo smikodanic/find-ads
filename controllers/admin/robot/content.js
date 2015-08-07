@@ -22,7 +22,7 @@ module.exports = function (router) {
   /**
    * Delete one link from linkqueue
    */
-  router.get('/delete/:coll/:lid/:task_id', function (req, res) {
+  router.get('/delete/:coll/:cid/', function (req, res) {
 
     //check if username and password are good in session storage
     var sess_tf = login.checksess_user_pass(req);

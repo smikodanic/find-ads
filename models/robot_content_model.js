@@ -88,23 +88,23 @@ module.exports.listContent = function (req, res, cb_list) {
 
 
 
-module.exports.deleteLink = function (req, res) {
+module.exports.deleteContent = function (req, res) {
 
   //input
   var coll = req.params.coll;
-  var task_id = parseInt(req.params.task_id, 10);
 
   //define selector and deleting options
   var selector, options;
-  if (req.params.lid === 'all') {
-    selector = {"lid": { $ne: 0 }}; //delete all except lid=0
-    // selector = {}; //delete all except lid=0
+  if (req.params.cid === 'all') {
+    selector = {}; //delete all content, empty collection
     options = {};
   } else {
-    var lid = parseInt(req.params.lid, 10);
-    selector = {"lid": lid};
+    var cid = parseInt(req.params.cid, 10);
+    selector = {"cid": cid};
     options = {};
   }
+
+  console.log(JSON.stringify(selector, null, 2));
 
   MongoClient.connect(dbName, function (err, db) {
     if (err) { logg.byWinston('error', __filename + ':96 ' + err); }
@@ -112,7 +112,7 @@ module.exports.deleteLink = function (req, res) {
     db.collection(coll).remove(selector, options, function (err) {
       if (err) { logg.byWinston('error', __filename + ':99 ' + err); }
 
-      res.redirect('/admin/robot/linkqueue/?task_id=' + task_id);
+      res.redirect('/admin/robot/content/?currentColl=' + coll);
       console.log(selector);
 
       // logg.byWinston('info', __filename + ':103 Deleted records:' + status, null);
