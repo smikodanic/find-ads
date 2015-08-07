@@ -78,8 +78,7 @@
                                 <a href="/admin/robot/tasks/delete/<%= elem.id %>" class="fa fa-trash deleteTask" title="delete"></a>
                                 <a href="/admin/robot/tasks/edit/<%= elem.id %>" class="fa fa-pencil-square-o editTask" title="edit"></a>
                                 <a href="/admin/robot/tasks/start/<%= elem.id %>" class="fa fa-play crawlStart" title="crawl now" data-taskid="<%= elem.id %>"></a>
-                                <a href="/admin/robot/test/oneurl/<%= elem.id %>/<%= elem.linkQueue %>" class="fa fa-play-circle-o" title="test one url for content crawling"></a>
-                                <a href="/admin/robot/results/?q=&amp;taskName=<%= elem.name %>&amp;currentPage=1" class="fa fa-eye" title="see results" data-taskid="<%= elem.id %>"></a>
+                                <a href="/admin/robot/linkqueue/?q=&task_id=<%= elem.id %>&currentPage=1" class="fa fa-eye" title="see link queue" data-taskid="<%= elem.id %>"></a>
                               
                               </td>
 
