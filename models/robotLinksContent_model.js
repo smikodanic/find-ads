@@ -19,42 +19,37 @@ var dbName = settings.mongo.dbName;
  * @param {object} insLinkqueueDoc -- doc to be inserted - contains new link href
  * 
  */
-module.exports.insertNewLink = function (linkqueueCollection, insLinkqueueDoc) {
-console.log(dbName);
-  MongoClient.connect(dbName, function (err, db) {
-    if (err) { logg.byWinston('error', __filename + ':25 ' + err); }
+module.exports.insertNewLink = function (db, linkqueueCollection, insLinkqueueDoc) {
 
-    db.collection(linkqueueCollection).find({"link.href": insLinkqueueDoc.link.href}).toArray(function (err, moLink_arr) { //check if link already exists
-      if (err) { logg.byWinston('error', __filename + ':28 ' + err); }
+  db.collection(linkqueueCollection).find({"link.href": insLinkqueueDoc.link.href}).toArray(function (err, moLink_arr) { //check if link already exists
+    if (err) { logg.byWinston('error', __filename + ':28 ' + err); }
 
-      var moLink = moLink_arr[0];
+    var moLink = moLink_arr[0];
 
-      if (moLink === undefined) {//if link doesn't exist in database
+    if (moLink === undefined) {//if link doesn't exist in database
 
-        db.collection(linkqueueCollection).find().sort({lid: -1}).limit(1).toArray(function (err, moMax_arr) { //find max ID
-          if (err) { logg.byWinston('error', __filename + ':35 ' + err); }
+      db.collection(linkqueueCollection).find().sort({lid: -1}).limit(1).toArray(function (err, moMax_arr) { //find max ID
+        if (err) { logg.byWinston('error', __filename + ':35 ' + err); }
 
-          //set new insLinkqueueDoc.id from max id value
-          if (moMax_arr[0] !== undefined) {
-            insLinkqueueDoc.lid = moMax_arr[0].lid + 1;
-          } else {
-            insLinkqueueDoc.lid = 0;
-          }
+        //set new insLinkqueueDoc.id from max id value
+        if (moMax_arr[0] !== undefined) {
+          insLinkqueueDoc.lid = moMax_arr[0].lid + 1;
+        } else {
+          insLinkqueueDoc.lid = 0;
+        }
 
-          db.collection(linkqueueCollection).insert(insLinkqueueDoc, function (err) { //insert new link into robot_linkqueue_*
-            if (err) { logg.byWinston('error', __filename + ':45 ' + err); }
-            db.close();
-          });
-
+        db.collection(linkqueueCollection).insert(insLinkqueueDoc, function (err) { //insert new link into robot_linkqueue_*
+          if (err) { logg.byWinston('error', __filename + ':45 ' + err); }
+          db.close();
         });
 
-      } else { //if link already exist in databse
+      });
 
-        // logg.craw(false, 'robot_linkExists', 'Link already exists in DB ' + linkqueueCollection + ': ' + insLinkqueueDoc.link.href);
-        db.close();
-      }
+    } else { //if link already exist in databse
 
-    });
+      // logg.craw(false, 'robot_linkExists', 'Link already exists in DB ' + linkqueueCollection + ': ' + insLinkqueueDoc.link.href);
+      db.close();
+    }
 
   });
 
