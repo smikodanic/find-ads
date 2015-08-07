@@ -10,6 +10,7 @@
 # Command Line History (newest to oldest):
 :wq
 :q
+:q!
 
 # Search String History (newest to oldest):
 
@@ -21,24 +22,34 @@
 
 # Registers:
 ""1	LINE	0
-	<<<<<<< HEAD
+	};
 "2	LINE	0
-	    dbName: 'mongodb://crawler_user:gmhmln123@localhost:27017/crawler', //CentOS
+	
 "3	LINE	0
-	=======
+	  }
 "4	LINE	0
-	>>>>>>> 8b9c9f27b064ccb4c3361e799a6116b88c276a2c
+	    dbColl_robotTasks: 'robot_tasks'
+"5	LINE	0
+	    dbColl_content: 'content',
+"6	LINE	0
+	    dbColl_searchTerms: 'searchTerms',
+"7	LINE	0
+	    dbColl_tasksCnt: 'contentTasks',
+"8	LINE	0
+	    dbColl_tasksLnk_iterate: 'linkTasks_iterate',
+"9	LINE	0
+	    dbColl_category: 'category',
 
 # File marks:
-'0  29  4  ~/settings/admin.js
-'1  26  4  ~/settings/admin.js
-'2  1  0  ~/.bashrc
-'3  15  49  ~/bin/www
-'4  7  1  ~/bin/www
+'0  37  0  ~/settings/admin.js
+'1  1  4  ~/settings/admin.js
+'2  1  4  ~/settings/admin.js
+'3  1  0  ~/.bashrc
+'4  15  49  ~/bin/www
+'5  7  1  ~/bin/www
 
 # Jumplist (newest first):
--'  29  4  ~/settings/admin.js
--'  26  2  ~/settings/admin.js
+-'  37  0  ~/settings/admin.js
 -'  1  0  ~/settings/admin.js
 -'  1  0  ~/.bashrc
 -'  15  49  ~/bin/www
@@ -132,15 +143,20 @@
 -'  7  0  ~/bin/www
 -'  1  0  ~/bin/www
 -'  1  0  ~/.bashrc
+-'  29  4  ~/settings/admin.js
+-'  26  2  ~/settings/admin.js
 
 # History of marks within files (newest to oldest):
 
 > ~/settings/admin.js
-	"	29	4
-	.	29	0
-	+	29	54
-	+	30	0
-	+	29	0
+	"	37	0
+	^	37	61
+	.	37	59
+	+	1	54
+	+	1	0
+	+	1	0
+	+	1	7
+	+	37	59
 
 > ~/.bashrc
 	"	1	0
