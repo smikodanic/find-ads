@@ -17,14 +17,19 @@ var timeZone = sett.timeZone;
 var dbName = sett.mongo.dbName;
 var collLinkTasks = sett.mongo.dbColl_tasksLnk_iterate;
 var collContentTasks = sett.mongo.dbColl_tasksCnt;
+var robotTasks = sett.mongo.dbColl_robotTasks;
 var nodeBinFile = sett.nodeBinFile;
 var appDir = sett.appDir;
 
 
 /**
  * Define cron job
+ * @param {Object} elem - an object that represent a row in task collection: {id: , name: , category: ....}
+ * @param {Number} key - key value of array 'Tasks_arr'
+ * @param {Array} job_arr - array of job object created with   new CronJob();
+ * @param {String} scriptFilePath - path to the CLI script that will be executed by cron job: '/0crawler/crawllinks/tasksiteration_cli.js'
  */
-function defineCron(elem, key, jobCnt, scriptFilePath) {
+function defineCron(elem, key, job_arr, scriptFilePath) {
 
   //logging file
   var loggFileName = 'cronStdout_lastCrawlingDump';
@@ -66,8 +71,17 @@ function defineCron(elem, key, jobCnt, scriptFilePath) {
     logg.byWinston('info', '----- CRON stopped: ' + scriptFilePath);
   };
 
-  //define cron job
-  jobCnt[key] = new CronJob(elem.cron, onStartExe, onStopExe, false, timeZone);
+  /**
+   * EXECUTE onStartExe FUNCTION PERIODICALLY
+   * @param {String} elem.cron - cron definition (6 fields: sec[0-59] min[0-59] hours[0-23] dayOfMonth[1-31] Months[0-11] dayOfWeek[0-6]):
+   * example: 00 30 11 * * 1-5 Runs every weekday (Monday through Friday)at 11:30:00 AM. It does not run on Saturday or Sunday.
+   *
+   * @param {Function} onStartExe - function that will be called periodically (cron scheduled)
+   * @param {Function} onStopExe - function that will be called when we stop cron
+   * @param {Boolean} false - true starts cron job right now; false will not start cron job right now 
+   * @param {String} timeZone - time zone: Europe/Zagreb
+   */
+  job_arr[key] = new CronJob(elem.cron, onStartExe, onStopExe, false, timeZone);
 
 }
 
@@ -79,25 +93,25 @@ function cronInitCrawlers(scriptFilePath, collName) {
   MongoClient.connect(dbName, function (err, db) {
     if (err) { logg.byWinston('error', __filename + ':28 ' + err); }
 
-    db.collection(collName).find({}).sort({id: 1}).toArray(function (err, linkTasks_arr) { //link tasks
+    db.collection(collName).find({}).sort({id: 1}).toArray(function (err, Tasks_arr) { //Tasks from collection defined with 'collName' variable
       if (err) { logg.byWinston('error', __filename + ':31 ' + err); }
 
       //cron jobs for crawling link
-      var jobCnt = [];
-      linkTasks_arr.forEach(function (elem, key) {
+      var job_arr = [];
+      Tasks_arr.forEach(function (elem, key) {
 
 
         //define cron job
-        defineCron(elem, key, jobCnt, scriptFilePath);
+        defineCron(elem, key, job_arr, scriptFilePath);
 
         //start or stop cron job -depends on cronStatus variable
         if (elem.cronStatus === 'on') {
 
-          jobCnt[key].start();
+          job_arr[key].start();
 
         } else {
 
-          jobCnt[key].stop();
+          job_arr[key].stop();
         }
 
       });
@@ -114,6 +128,7 @@ function cronInitCrawlers(scriptFilePath, collName) {
 
 
 //execute function
-cronInitCrawlers('/0crawler/crawllinks/tasksiteration_cli.js', collLinkTasks); //cron link crawling
-cronInitCrawlers('/0crawler/crawlcontent/linkQueue_cli.js', collContentTasks); //cron content crawling
+cronInitCrawlers('/0crawler/crawllinks/tasksiteration_cli.js', collLinkTasks); //cron for link crawling
+cronInitCrawlers('/0crawler/crawlcontent/linkQueue_cli.js', collContentTasks); //cron for content crawling
+cronInitCrawlers('/0crawler/robot/robot_cli.js', robotTasks); //cron for robot crawling
 
