@@ -1,4 +1,5 @@
 /**
+ * This is a polling CLOCK with setInterval()
  * Get links 'robot_linkQueue_*' and sending to httpClient
  * Polling links in time interval defined by setInterval()
  * Polling interval is in miliseconds and defined by moTask.pollInterval
