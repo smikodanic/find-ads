@@ -93,7 +93,7 @@ function cronInitCrawlers(scriptFilePath, collName) {
   MongoClient.connect(dbName, function (err, db) {
     if (err) { logg.byWinston('error', __filename + ':28 ' + err); }
 
-    db.collection(collName).find({}).sort({id: 1}).toArray(function (err, Tasks_arr) { //Tasks from collection defined with 'collName' variable
+    db.collection(collName).find({"cronStatus": "on"}).sort({id: 1}).toArray(function (err, Tasks_arr) { //Tasks from collection defined with 'collName' variable
       if (err) { logg.byWinston('error', __filename + ':31 ' + err); }
 
       //cron jobs for crawling link
