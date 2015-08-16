@@ -152,3 +152,50 @@ module.exports.getContentCollections = function (req, res, cb_render) {
   });
 
 };
+
+
+/**
+ * ========== https://www.smartsearch.tv , https://www.smartsearch.tv/admin/users , http://192.99.18.15/phpmyadmin/
+ * Exporter to MySQL databse: 'smartsearch.links' ; crawler_user; mycr321;
+ * @param  {Object} req     - request
+ * @param  {Object} res     - response
+ * @param  {Function} cb_render - callback view function
+ * @return null
+ */
+module.exports.exportMysqlSmartsearch = function (req, res, cb_render) {
+
+  //input
+  var contentcol = req.body.contentcol;
+  var myhost = req.body.myhost;
+  var myuser = req.body.myuser;
+  var mypass = req.body.mypass;
+  var delcoll = req.body.delcoll;
+
+  MongoClient.connect(dbName, function (err, db) {
+    if (err) { logg.byWinston('error', __filename + ':175 ' + err); }
+
+    db.collection(contentcol).find({}).sort({cid: 1}).toArray(function (err, colls_arr) { //all collections in mongodb 'robot_content' sort by 'cid' ascending
+      if (err) { logg.byWinston('error', __filename + ':178 ' + err); }
+
+      //iteration with time delay
+      var i = 0;
+      var intExpID = setInterval(function () {
+
+        if (i < colls_arr.length) {
+
+          console.log(JSON.stringify(colls_arr[i].extract.title[2], null, 2));
+          res.write('\n' + colls_arr[i].extract.title[2]);
+          i++;
+        } else {
+          clearInterval(intExpID);
+          db.close();
+          res.end();
+        }
+
+      }, 1000);
+
+    });
+
+  });
+
+};

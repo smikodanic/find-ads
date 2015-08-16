@@ -49,10 +49,10 @@
                 <div class="row">
                     
                     <!-- form -->
-                    <form action="/admin/tests/httpclient" method="POST" enctype="application/x-www-form-urlencoded" class="form-horizontal" autocomplete="off">
+                    <form action="/admin/robot/exporter/mysql/transfer" method="POST" enctype="application/x-www-form-urlencoded" class="form-horizontal" autocomplete="off">
 
                         <div class="form-group">
-                          <label for="httpclientScript" class="col-sm-3 control-label" title="Select content collection.">MongoDB collection:</label>
+                          <label for="contentcol" class="col-sm-3 control-label" title="Select content collection.">MongoDB collection:</label>
                           <div class="col-sm-4">
                             <select name="contentcol" id="contentcol" class="form-control">
 
@@ -67,14 +67,14 @@
                         <div class="form-group">
                           <label for="myhost" class="col-sm-3 control-label" title="MySQL hostname or IP address">MySQL host or IP:</label>
                           <div class="col-sm-6">
-                            <input type="text" name="myhost" id="myhost" value="localhost" class="form-control">
+                            <input type="text" name="myhost" id="myhost" value="192.99.18.15" class="form-control">
                           </div>
                         </div>
 
                         <div class="form-group">
                           <label for="myuser" class="col-sm-3 control-label" title="MySQL username">MySQL username:</label>
                           <div class="col-sm-4">
-                            <input type="text" name="myuser" id="myuser" value="" class="form-control">
+                            <input type="text" name="myuser" id="myuser" value="crawler_user" class="form-control">
                           </div>
                         </div>
 
@@ -84,6 +84,18 @@
                             <input type="password" name="mypass" id="mypass" value="" class="form-control">
                           </div>
                         </div>
+
+                        <div class="form-group">
+                          <label class="col-sm-3 control-label">Options:</label>
+                            <div class="col-sm-5">
+                              <label  style="font-weight:normal"><br>
+                                <input type="checkbox" name="delcoll" value="1" checked> delete collection (row) from MongoDB after transfer to MySQL
+                            </label>
+                          </div>
+                        </div>
+
+                        <div class="clearfix">&nbsp;</div>
+                        <br>
 
 
                         <div class="form-group">
