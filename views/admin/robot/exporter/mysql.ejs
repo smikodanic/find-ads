@@ -64,6 +64,17 @@
                           </div>
                         </div>
 
+
+                        <div class="form-group">
+                          <label for="docLimit" class="col-sm-3 control-label" title="Number of documents that will be taken from Mongo and transfered into MySQL">Limit documents to #:</label>
+                          <div class="col-sm-2">
+                            <input type="text" name="docLimit" id="docLimit" value="2000" class="form-control">
+                          </div>
+                        </div>
+
+
+                        <hr>
+
                         <div class="form-group">
                           <label for="myhost" class="col-sm-3 control-label" title="MySQL hostname or IP address">MySQL host or IP:</label>
                           <div class="col-sm-6">
@@ -81,15 +92,31 @@
                         <div class="form-group">
                           <label for="mypass" class="col-sm-3 control-label" title="MySQL password">MySQL password:</label>
                           <div class="col-sm-4">
-                            <input type="password" name="mypass" id="mypass" value="" class="form-control">
+                            <input type="text" name="mypass" id="mypass" value="mycr321" class="form-control">
                           </div>
                         </div>
+
+                        <div class="form-group">
+                          <label for="mydb" class="col-sm-3 control-label" title="MySQL database">MySQL database:</label>
+                          <div class="col-sm-4">
+                            <input type="text" name="mydb" id="mydb" value="smartsearch" class="form-control">
+                          </div>
+                        </div>
+
+                        <div class="form-group">
+                          <label for="mytable" class="col-sm-3 control-label" title="MySQL database">MySQL table:</label>
+                          <div class="col-sm-4">
+                            <input type="text" name="mytable" id="mytable" value="links" class="form-control">
+                          </div>
+                        </div>
+
+                        <hr>
 
                         <div class="form-group">
                           <label class="col-sm-3 control-label">Options:</label>
                             <div class="col-sm-5">
                               <label  style="font-weight:normal"><br>
-                                <input type="checkbox" name="delcoll" value="1" checked> delete collection (row) from MongoDB after transfer to MySQL
+                                <input type="checkbox" name="delcoll" value="1" checked> delete collection (row) from MongoDB after transfer to MySQL (recommended)
                             </label>
                           </div>
                         </div>

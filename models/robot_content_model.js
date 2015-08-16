@@ -6,6 +6,7 @@ require('rootpath')();
 var MongoClient = require('mongodb').MongoClient;
 var logg = require('libraries/loggLib');
 var pagination = require('libraries/pagination.js');
+var mysql      = require('mysql');
 // var nodedump = require('nodedump').dump;
 
 //mongo parameters
@@ -166,16 +167,50 @@ module.exports.exportMysqlSmartsearch = function (req, res, cb_render) {
 
   //input
   var contentcol = req.body.contentcol;
+  var docLimit = parseInt(req.body.docLimit, 10);
   var myhost = req.body.myhost;
   var myuser = req.body.myuser;
   var mypass = req.body.mypass;
+  var mydb = req.body.mydb;
+  var mytable = req.body.mytable;
   var delcoll = req.body.delcoll;
 
   MongoClient.connect(dbName, function (err, db) {
     if (err) { logg.byWinston('error', __filename + ':175 ' + err); }
 
-    db.collection(contentcol).find({}).sort({cid: 1}).toArray(function (err, colls_arr) { //all collections in mongodb 'robot_content' sort by 'cid' ascending
+    db.collection(contentcol).find({}).sort({cid: 1}).limit(docLimit).toArray(function (err, colls_arr) { //all collections in mongodb 'robot_content' sort by 'cid' ascending
       if (err) { logg.byWinston('error', __filename + ':178 ' + err); }
+
+
+      //connection to MySQL server
+      var myDB = mysql.createConnection({
+        host     : myhost,
+        user     : myuser,
+        password : mypass,
+        database : mydb
+      });
+      myDB.connect(function (err) {
+        if (err) {
+          logg.byWinston('error', __filename + ':192 -MySQL Error: ' + err);
+          myDB.end();
+        } else {
+
+          var myVal = '"", 1, 1, "keywords macke naglavacke", "http://www.adsuu.com", "http://dreamatico.com/tpl/images/1.png", "Macka", "description about mackama", "free", NULL, NULL';
+          var myQuery = 'INSERT INTO ' + mytable + ' VALUES (' + myVal + ')';
+          console.log(myQuery);
+          myDB.query(myQuery, function (err, rows, fields) {
+            if (err) {
+              logg.byWinston('error', __filename + ':201 -MySQL Error: ' + err);
+            } else {
+              console.log(JSON.stringify(rows, null, 2));
+            }
+          });
+
+        }
+      });
+
+      
+
 
       //iteration with time delay
       var i = 0;
@@ -183,13 +218,14 @@ module.exports.exportMysqlSmartsearch = function (req, res, cb_render) {
 
         if (i < colls_arr.length) {
 
-          console.log(JSON.stringify(colls_arr[i].extract.title[2], null, 2));
-          res.write('\n' + colls_arr[i].extract.title[2]);
+          // console.log(JSON.stringify(colls_arr[i].extract.title[2], null, 2));
+          // res.write('\n' + colls_arr[i].extract.title[2]);
           i++;
         } else {
-          clearInterval(intExpID);
-          db.close();
-          res.end();
+          clearInterval(intExpID); //stop iteration
+          myDB.end(); //closing connection to MySQL server
+          db.close(); //cloing connection to MongoDB database
+          res.end(); //ending with response
         }
 
       }, 1000);
