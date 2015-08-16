@@ -84,3 +84,17 @@ a.fa:hover {
 	border: 5px solid #E0DEDC;
 	overflow: scroll;
 }
+
+
+ul.nav-sublinks > li {
+	list-style:none;
+	padding-left:10px;
+	margin-top:5px;
+}
+ul.nav-sublinks > li > a {
+	color: #f0f0f0;
+	text-decoration: none;
+}
+ul.nav-sublinks > li > a:hover {
+	color: #FE8D1B;
+}

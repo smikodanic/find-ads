@@ -122,3 +122,33 @@ module.exports.deleteContent = function (req, res) {
   }); //connect
 
 };
+
+
+
+/**
+ * Used in /admin/robot/exporter/mysql.js to list all 'content_*' colletions in collect tag.
+ * @param  {Object} req     - request
+ * @param  {Object} res     - response
+ * @param  {Function} cb_render - callback view function
+ * @return null
+ */
+module.exports.getContentCollections = function (req, res, cb_render) {
+
+  MongoClient.connect(dbName, function (err, db) {
+    if (err) { logg.byWinston('error', __filename + ':138 ' + err); }
+
+    db.listCollections().toArray(function (err, collections_arr) { //all collections in db
+      if (err) { logg.byWinston('error', __filename + ':141 ' + err); }
+
+      //filter only 'content' and 'content_*' MongoDB collections
+      var contentcolls = collections_arr.filter(function (elem) {
+        var reg = new RegExp('^robot_content.*');
+        return reg.test(elem.name); //returns true or false
+      });
+
+      cb_render(req, res, contentcolls);
+    });
+
+  });
+
+};
