@@ -173,13 +173,14 @@ module.exports.exportMysqlSmartsearch = function (req, res, cb_render) {
   var mypass = req.body.mypass;
   var mydb = req.body.mydb;
   var mytable = req.body.mytable;
-  var delcoll = req.body.delcoll;
+  var deldoc = req.body.deldoc;
+  var transInt = req.body.transInt;
 
   MongoClient.connect(dbName, function (err, db) {
-    if (err) { logg.byWinston('error', __filename + ':175 ' + err); }
+    if (err) { logg.byWinston('error', __filename + ':179 ' + err); }
 
     db.collection(contentcol).find({}).sort({cid: 1}).limit(docLimit).toArray(function (err, colls_arr) { //all collections in mongodb 'robot_content' sort by 'cid' ascending
-      if (err) { logg.byWinston('error', __filename + ':178 ' + err); }
+      if (err) { logg.byWinston('error', __filename + ':182 ' + err); }
 
 
       //connection to MySQL server
@@ -189,28 +190,13 @@ module.exports.exportMysqlSmartsearch = function (req, res, cb_render) {
         password : mypass,
         database : mydb
       });
+
       myDB.connect(function (err) {
         if (err) {
-          logg.byWinston('error', __filename + ':192 -MySQL Error: ' + err);
+          logg.byWinston('error', __filename + ':195 -MySQL Error: ' + err);
           myDB.end();
-        } else {
-
-          var myVal = '"", 1, 1, "keywords macke naglavacke", "http://www.adsuu.com", "http://dreamatico.com/tpl/images/1.png", "Macka", "description about mackama", "free", NULL, NULL';
-          var myQuery = 'INSERT INTO ' + mytable + ' VALUES (' + myVal + ')';
-          console.log(myQuery);
-          myDB.query(myQuery, function (err, rows, fields) {
-            if (err) {
-              logg.byWinston('error', __filename + ':201 -MySQL Error: ' + err);
-            } else {
-              console.log(JSON.stringify(rows, null, 2));
-            }
-          });
-
         }
       });
-
-      
-
 
       //iteration with time delay
       var i = 0;
@@ -218,9 +204,51 @@ module.exports.exportMysqlSmartsearch = function (req, res, cb_render) {
 
         if (i < colls_arr.length) {
 
-          // console.log(JSON.stringify(colls_arr[i].extract.title[2], null, 2));
-          // res.write('\n' + colls_arr[i].extract.title[2]);
+          //MAPING DATA: MySQL filed = Mongo field
+          var keywords = colls_arr[i].extract.body_text[2];
+          keywords = keywords.replace(/\"/gi, '');
+          keywords = keywords.replace(/\'/gi, '');
+          var link = colls_arr[i].pageURL;
+          var title = colls_arr[i].extract.title[2];
+          var description = keywords.substring(0, 35) + '...';
+          var image;
+          if (colls_arr[i].extract.image[2] === '' || colls_arr[i].extract.image[2] === undefined || colls_arr[i].extract.image[2] === null) {
+            image = '';
+          } else {
+            image = colls_arr[i].extract.image[2];
+          }
+
+          var myVal = '"", 1, 1, "' + keywords + '", "' + link + '", "' + image + '", "' + title + '", "' + description + '", "free", "", ""';
+          var myQuery = 'INSERT INTO ' + mytable + ' VALUES (' + myVal + ')';
+
+          myDB.query(myQuery, function (err, rows) { //insertion into MySQL
+            if (err) {
+              logg.byWinston('info', __filename + ':217 -MySQL Error: ' + err + '\nNOTEXPORTED:' + link + ' - ' + title);
+            } else {
+
+              //message after successfull insertion into MySQL
+              var expMsg = '\nEXPORTED:' + link + ' - ' + title;
+              res.write(expMsg);
+              logg.byWinston('info', expMsg);
+
+              //delete doc from Mongo collection 'robot_content' after insertion
+              if (deldoc === 'yes' && colls_arr[i] !== undefined) {
+                var cid = colls_arr[i].cid;
+                db.collection(contentcol).remove({cid: cid}, function (err, removed) { //remove doc from 'robot_content'
+                  if (err) {
+                    logg.byWinston('info', __filename + ':182 NOTREMOVED: ' + err);
+                  } else {
+                    logg.byWinston('info', __filename + ':182 REMOVED: ' + removed);
+                  }
+                });
+              } //if end
+
+            } //else end
+
+          });
+
           i++;
+
         } else {
           clearInterval(intExpID); //stop iteration
           myDB.end(); //closing connection to MySQL server
@@ -228,7 +256,7 @@ module.exports.exportMysqlSmartsearch = function (req, res, cb_render) {
           res.end(); //ending with response
         }
 
-      }, 1000);
+      }, transInt);
 
     });
 

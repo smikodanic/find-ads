@@ -49,7 +49,7 @@
                 <div class="row">
                     
                     <!-- form -->
-                    <form action="/admin/robot/exporter/mysql/transfer" method="POST" enctype="application/x-www-form-urlencoded" class="form-horizontal" autocomplete="off">
+                    <form action="/admin/robot/exporter/mysql/transfer" method="POST" enctype="application/x-www-form-urlencoded" class="form-horizontal" autocomplete="off" target="_blank">
 
                         <div class="form-group">
                           <label for="contentcol" class="col-sm-3 control-label" title="Select content collection.">MongoDB collection:</label>
@@ -115,8 +115,9 @@
                         <div class="form-group">
                           <label class="col-sm-3 control-label">Options:</label>
                             <div class="col-sm-5">
-                              <label  style="font-weight:normal"><br>
-                                <input type="checkbox" name="delcoll" value="1" checked> delete collection (row) from MongoDB after transfer to MySQL (recommended)
+                              <label  style="font-weight:normal">
+                                <br><input type="checkbox" name="deldoc" value="yes" checked> delete document (row) from MongoDB after transfer to MySQL
+                                <br><br>Transfer interval: <input type="text" name="transInt" value="800" style="width:80px"> ms
                             </label>
                           </div>
                         </div>
