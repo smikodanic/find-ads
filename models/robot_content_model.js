@@ -182,6 +182,8 @@ module.exports.exportMysqlSmartsearch = function (req, res, cb_render) {
     db.collection(contentcol).find({}).sort({cid: 1}).limit(docLimit).toArray(function (err, colls_arr) { //all collections in mongodb 'robot_content' sort by 'cid' ascending
       if (err) { logg.byWinston('error', __filename + ':182 ' + err); }
 
+      res.write('========= Export Started ===========');
+      
 
       //connection to MySQL server
       var myDB = mysql.createConnection({
@@ -227,7 +229,7 @@ module.exports.exportMysqlSmartsearch = function (req, res, cb_render) {
             } else {
 
               //message after successfull insertion into MySQL
-              var expMsg = '\nEXPORTED:' + link + ' - ' + title;
+              var expMsg = '\n' + i + '. EXPORTED:' + link + ' - ' + title;
               res.write(expMsg);
               logg.byWinston('info', expMsg);
 
@@ -253,6 +255,7 @@ module.exports.exportMysqlSmartsearch = function (req, res, cb_render) {
           clearInterval(intExpID); //stop iteration
           myDB.end(); //closing connection to MySQL server
           db.close(); //cloing connection to MongoDB database
+          res.write('========= Export Finished !!! ===========');
           res.end(); //ending with response
         }
 
