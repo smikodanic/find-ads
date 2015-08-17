@@ -255,7 +255,7 @@ module.exports.exportMysqlSmartsearch = function (req, res, cb_render) {
           clearInterval(intExpID); //stop iteration
           myDB.end(); //closing connection to MySQL server
           db.close(); //cloing connection to MongoDB database
-          res.write('========= Export Finished !!! ===========');
+          res.write('\n========= Export Finished !!! ===========');
           res.end(); //ending with response
         }
 
