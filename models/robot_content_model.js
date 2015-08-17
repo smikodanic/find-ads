@@ -208,10 +208,12 @@ module.exports.exportMysqlSmartsearch = function (req, res, cb_render) {
 
           //MAPING DATA: MySQL filed = Mongo field
           var keywords = colls_arr[i].extract.body_text[2];
-          keywords = keywords.replace(/\"/gi, '');
-          keywords = keywords.replace(/\'/gi, '');
+          keywords = keywords.replace(/\"/gi, ''); //removing " from string because " causes MySQL error on insertion
+          keywords = keywords.replace(/\'/gi, '');  //removing ' from string
           var link = colls_arr[i].pageURL;
           var title = colls_arr[i].extract.title[2];
+          title = title.replace(/\"/gi, '');
+          title = title.replace(/\'/gi, '');
           var description = keywords.substring(0, 35) + '...';
           var image;
           if (colls_arr[i].extract.image[2] === '' || colls_arr[i].extract.image[2] === undefined || colls_arr[i].extract.image[2] === null) {

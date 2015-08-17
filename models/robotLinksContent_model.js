@@ -24,10 +24,24 @@ module.exports.insertNewLink = function (linkqueueCollection, insLinkqueueDoc) {
   MongoClient.connect(dbName, function (err, db) {
     if (err) { logg.byWinston('error', __filename + ':73 ' + err); }
 
-    db.collection(linkqueueCollection).find({"link.href": insLinkqueueDoc.link.href}).toArray(function (err, moLink_arr) { //check if link already exists
+    //remove backslash and hash at the end
+    if (insLinkqueueDoc.link.href !== undefined) {
+      insLinkqueueDoc.link.href = insLinkqueueDoc.link.href.replace(/\/$/, ''); // http://luzz.tv/ -> http://luzz.tv
+      insLinkqueueDoc.link.href = insLinkqueueDoc.link.href.replace(/\/\#$/, ''); // http://luzz.tv/# -> http://luzz.tv
+    }
+
+    var condition = {"link.href": insLinkqueueDoc.link.href};
+    // var condition = {$or: [
+    //   {"link.href": insLinkqueueDoc.link.href},
+    //   {"link.href": insLinkqueueDoc.link.href + '/'},
+    //   {"link.href": insLinkqueueDoc.link.href + '/#'}
+    // ]};
+
+    db.collection(linkqueueCollection).find(condition).toArray(function (err, moLink_arr) { //check if link already exists
       if (err) { logg.byWinston('error', __filename + ':25 ' + err); }
 
       var moLink = moLink_arr[0];
+      // console.log(JSON.stringify(moLink, null, 2));
 
       if (moLink === undefined) {//if link doesn't exist in database
 
@@ -41,10 +55,14 @@ module.exports.insertNewLink = function (linkqueueCollection, insLinkqueueDoc) {
             insLinkqueueDoc.lid = 0;
           }
 
-          db.collection(linkqueueCollection).insert(insLinkqueueDoc, function (err) { //insert new link into robot_linkqueue_*
-            if (err) { logg.byWinston('error', __filename + ':45 ' + err); }
-            db.close();
-          });
+          //insert link only if it has 'http://' . Will not insert: javascript:void()
+          if (insLinkqueueDoc.link.href !== undefined && insLinkqueueDoc.link.href.indexOf('http://') !== -1) {
+            db.collection(linkqueueCollection).insert(insLinkqueueDoc, function (err) { //insert new link into robot_linkqueue_*
+              if (err) { logg.byWinston('error', __filename + ':45 ' + err); }
+              db.close();
+            });
+          }
+          
 
         });
 
