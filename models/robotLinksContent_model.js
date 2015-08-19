@@ -41,7 +41,6 @@ module.exports.insertNewLink = function (linkqueueCollection, insLinkqueueDoc) {
       if (err) { logg.byWinston('error', __filename + ':25 ' + err); }
 
       var moLink = moLink_arr[0];
-      // console.log(JSON.stringify(moLink, null, 2));
 
       if (moLink === undefined) {//if link doesn't exist in database
 
@@ -55,14 +54,14 @@ module.exports.insertNewLink = function (linkqueueCollection, insLinkqueueDoc) {
             insLinkqueueDoc.lid = 0;
           }
 
-          //insert link only if it has 'http://' . Will not insert: javascript:void()
-          if (insLinkqueueDoc.link.href !== undefined && insLinkqueueDoc.link.href.indexOf('http://') !== -1) {
+          //insert link only if it has 'http' . Will not insert: javascript:void()
+          if (insLinkqueueDoc.link.href !== undefined && insLinkqueueDoc.link.href.indexOf('http') !== -1) {
             db.collection(linkqueueCollection).insert(insLinkqueueDoc, function (err) { //insert new link into robot_linkqueue_*
               if (err) { logg.byWinston('error', __filename + ':45 ' + err); }
               db.close();
             });
           }
-          
+
 
         });
 
