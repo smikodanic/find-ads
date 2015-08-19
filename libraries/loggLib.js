@@ -81,7 +81,7 @@ module.exports.craw = function (erase, fileName, message) {
   if (erase) { fs.truncate(filePath, 0, cb_null); }
 
   //message with current time
-  message = '[' + tm.nowSQL() + '] ' + message + '\n';
+  message = '\n[' + tm.nowSQL() + '] ' + message + '\n';
 
 
   if (logMode === 'dev') { //development mode: logging to console and file
@@ -109,7 +109,7 @@ process.on('uncaughtException', function (err) {
 
   if (err) {
 
-    var errMsg = '[' + tm.nowSQL() + ']\n' + err.stack + '\n\n';
+    var errMsg = '\n[' + tm.nowSQL() + ']\n' + err.stack + '\n\n';
     fs.appendFile(exceptFile, errMsg, cb_null);
   }
 
