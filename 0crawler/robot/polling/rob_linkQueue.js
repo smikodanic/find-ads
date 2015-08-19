@@ -41,7 +41,9 @@ module.exports.start = function (task_id, cb_outResults) {
 
       /* Get link by link from robot_linkqueu_* and extracting new links and content. 
         new links goes into robot_linkqueue_* and content goes into robot_content. */
-      var intID = setInterval(function () {
+      var maxDepth, seedURL_hostname, regExpSeedDomainOnly, linkSelector, moLink, httpClient, msg_end;
+
+      intID = setInterval(function () {
 
         /* get links from robot_linkqueue_* collection */
         MongoClient.connect(dbName, function (err, db) {
@@ -55,41 +57,39 @@ module.exports.start = function (task_id, cb_outResults) {
               - select only links which are not deeper then defined in robot_linkqueue_*.crawlDepth
               - if "seedDomainOnly":"yes" then crawl and follow only web pages inside seed domain
            */
-          var maxDepth = parseInt(moTask.crawlDepth, 10);
-          var seedURL_hostname = urlmod.getHostname(moTask.seedURL);
+          maxDepth = parseInt(moTask.crawlDepth, 10);
+          seedURL_hostname = urlmod.getHostname(moTask.seedURL);
 
-          var regExpSeedDomainOnly;
           if (moTask.seedDomainOnly === "yes") {
-            regExpSeedDomainOnly = new RegExp('.*' + seedURL_hostname + '.*');
+            regExpSeedDomainOnly = new RegExp('.*' + seedURL_hostname + '.*', 'i');
           } else {
-            regExpSeedDomainOnly = new RegExp('.*');
+            regExpSeedDomainOnly = new RegExp('.*', 'i');
           }
+          
 
-          var linkSelector = {
+          linkSelector = {
             "crawlStatus": "pending",
             "crawlDepth": {$lt: maxDepth},
             "link.href": {$regex: regExpSeedDomainOnly}
           };
-
-
 
           //get link to be crawled
           db.collection(moTask.linkqueueCollection).find(linkSelector).sort({lid: 1}).toArray(function (err, moLink_arr) { //robot_linkqueue_* docs
             if (err) { logg.byWinston('error', __filename + ':77 ' + err); }
 
 
-            var moLink = moLink_arr[0];
+            moLink = moLink_arr[0];
 
             if (moLink !== undefined) {
 
               /***** HTTP client *****/
-              var httpClient = require('0crawler/robot/httpclient/' + moTask.httpclientScript);
+              httpClient = require('0crawler/robot/httpclient/' + moTask.httpclientScript);
               httpClient.runURL(moTask, moLink, cb_outResults);
 
             } else {
               clearInterval(intID);
 
-              var msg_end = 'All pending links crawled in ' + moTask.linkqueueCollection + ' at ' + timeLib.nowLocale();
+              msg_end = 'All pending links crawled in ' + moTask.linkqueueCollection + ' at ' + timeLib.nowLocale();
               cb_outResults.send(msg_end);
               cb_outResults.end();
               logg.craw(false, moTask.loggFileName, msg_end);

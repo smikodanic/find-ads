@@ -82,7 +82,8 @@ module.exports.extractLinks = function ($, pageURL, moTask, moLink, cb_outResult
   /**
    * Extract links from pageURL and insert into robot_linkqueu_*
    */
-  var n = 1, href, tekst, insLinkqueueDoc_arr = [];
+  var n = 1, href, tekst, href_arr = [], insLinkqueueDoc_arr = [];
+
   $('a').each(function () { //jQuery each function
 
     // tekst = $(this).children().remove().end().text(); //get text from A tag without children tag texts
@@ -110,8 +111,15 @@ module.exports.extractLinks = function ($, pageURL, moTask, moLink, cb_outResult
       "crawlDepth" : moLink.crawlDepth + 1
     };
 
-    //push elements into array
-    insLinkqueueDoc_arr.push(insLinkqueueDoc);
+    //push elements into array 
+    //- only elements which has 'http' in link.href
+    //- only if 'href' dont already exists (prevent duplicated hrefs)
+    if (insLinkqueueDoc.link.href.indexOf('http') !== -1 && href_arr.indexOf(href) === -1) {
+      insLinkqueueDoc_arr.push(insLinkqueueDoc);
+    }
+
+    //href_arr: array of 'href' values which is needed to prevent duplicated hrefs
+    href_arr.push(href);
 
     //message hrefs
     var msg_href = '----- ' + n + '. ' + href + ' --- ' + tekst;
@@ -135,7 +143,7 @@ module.exports.extractLinks = function ($, pageURL, moTask, moLink, cb_outResult
     if (key === insLinkqueueDoc_arr.length) {
       clearInterval(intINSID);
     }
-  }, 80); //mongo insertion delay in ms
+  }, 130); //mongo insertion delay in ms
 
 
 
