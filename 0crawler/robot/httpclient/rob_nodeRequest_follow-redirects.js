@@ -67,8 +67,8 @@ module.exports.runURL = function (moTask, moLink, cb_outResults) {
       res2.on('end', function () {
 
         //messaging page URL
-        var msg_rez = '+ URL in httpClient: ' + pageURL + ' - response:' + res2.statusCode;
-        cb_outResults.send(msg_rez + '\n');
+        var msg_rez = '\n' + '+ URL in httpClient: ' + pageURL + ' - response:' + res2.statusCode;
+        cb_outResults.send(msg_rez);
         logg.craw(false, moTask.loggFileName, msg_rez);
 
         //***** update crawlStatus from 'pending' to 'crawled' or 'error'
