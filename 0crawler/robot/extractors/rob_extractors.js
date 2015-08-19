@@ -136,7 +136,10 @@ module.exports.extractLinks = function ($, pageURL, moTask, moLink, cb_outResult
   var key = 0;
   var intINSID = setInterval(function () {
     lc_model.insertNewLink(moTask.linkqueueCollection, insLinkqueueDoc_arr[key]);
-    console.log('InsLinkqueue: ' + insLinkqueueDoc_arr[key].link.href);
+    if (insLinkqueueDoc_arr[key] && insLinkqueueDoc_arr[key].link) {// not undefined
+      console.log('InsLinkqueue: ' + insLinkqueueDoc_arr[key].link.href);
+    }
+
     key++;
 
     //stop iteration
