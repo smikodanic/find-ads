@@ -114,7 +114,7 @@ module.exports.extractLinks = function ($, pageURL, moTask, moLink, cb_outResult
     //push elements into array 
     //- only elements which has 'http' in link.href
     //- only if 'href' dont already exists (prevent duplicated hrefs)
-    if (insLinkqueueDoc.link.href.indexOf('http') !== -1 && href_arr.indexOf(href) === -1) {
+    if (insLinkqueueDoc.link.href !== undefined && insLinkqueueDoc.link.href.indexOf('http') !== -1 && href_arr.indexOf(href) === -1) {
       insLinkqueueDoc_arr.push(insLinkqueueDoc);
     }
 
