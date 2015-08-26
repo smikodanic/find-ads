@@ -135,8 +135,8 @@ module.exports.extractLinks = function ($, pageURL, moTask, moLink, cb_outResult
   // jQuery's .each() function is to fast for inserting into monog db
   var key = 0;
   var intINSID = setInterval(function () {
-    
-    if (insLinkqueueDoc_arr[key] && insLinkqueueDoc_arr[key].link) {// not undefined
+
+    if (moTask.linkqueueCollection && insLinkqueueDoc_arr[key] && insLinkqueueDoc_arr[key].link) {// not undefined
       lc_model.insertNewLink(moTask.linkqueueCollection, insLinkqueueDoc_arr[key]);
       console.log('InsLinkqueue: ' + insLinkqueueDoc_arr[key].link.href);
     }
@@ -147,7 +147,7 @@ module.exports.extractLinks = function ($, pageURL, moTask, moLink, cb_outResult
     if (key === insLinkqueueDoc_arr.length) {
       clearInterval(intINSID);
     }
-  }, 130); //mongo insertion delay in ms
+  }, 300); //mongo insertion delay in ms
 
 
 
