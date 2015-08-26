@@ -188,7 +188,7 @@
                         <div class="form-group">
                           <label for="pollInterval" class="col-sm-3 control-label" title="Set the poll interval between two crawlings in miliseconds. It's crawling speed.">Polling Interval:</label>
                           <div class="col-sm-2">
-                            <input type="text" name="pollInterval" id="pollInterval" value="<%= (task.pollInterval != undefined) ?  task.pollInterval : '15000' %>" class="form-control" required>
+                            <input type="text" name="pollInterval" id="pollInterval" value="<%= (task.pollInterval != undefined) ?  task.pollInterval : '35000' %>" class="form-control" required>
                           </div>
                           <label class="control-label">ms</label>
                         </div>
@@ -249,7 +249,7 @@
                         <div class="form-group">
                           <label for="cron" class="col-sm-3  control-label" title="Cron job schedule. Example: 0 17 ? * 0,4-6">Cron:</label>
                           <div class="col-sm-4">
-                            <input type="text" name="cron" id="cron" value="<%= (task.cron !== undefined) ? task.cron : '* 50 20 * * 1' %>" class="form-control" required>
+                            <input type="text" name="cron" id="cron" value="<%= (task.cron !== undefined) ? task.cron : '00 50 20 * * 1' %>" class="form-control" required>
                           </div>
                         </div>
 
