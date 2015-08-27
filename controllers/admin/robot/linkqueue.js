@@ -4,9 +4,9 @@ var router = express.Router();
 var login = require('libraries/accountLoginLib.js');
 var robot_linkqueue_model = require('models/robot_linkqueue_model');
 
-var cb_list_Render = function (res, task_id, moTasksDocs_arr, moQueueDocs_arr, pagination_obj) {
+var cb_list_Render = function (res, currentTaskDoc_arr, moTasksDocs_arr, moQueueDocs_arr, pagination_obj) {
   var vdata = {
-    task_id: task_id,
+    currentTask: currentTaskDoc_arr[0],
     tasks: moTasksDocs_arr,
     queue: moQueueDocs_arr,
     pagination: pagination_obj

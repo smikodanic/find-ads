@@ -27,10 +27,6 @@ module.exports.listLinks = function (req, res, cb_list) {
     task_id = (req.body.task_id === undefined) ? '' : req.body.task_id;
   }
 
-  if (task_id === undefined || task_id === '') {
-    task_id = 0;
-  }
-
 
   //define db query
   var queryDB;
@@ -44,27 +40,41 @@ module.exports.listLinks = function (req, res, cb_list) {
   }
 
   MongoClient.connect(dbName, function (err, db) {
-    if (err) { logg.byWinston('error', __filename + ':42 ' + err); }
+    if (err) { logg.byWinston('error', __filename + ':43 ' + err); }
 
     db.collection(collName_tasks).find({}).sort({id: 1}).toArray(function (err, moTasksDocs_arr) { //all tasks to fill SELECT tag
-      if (err) { logg.byWinston('error', __filename + ':45 ' + err); }
+      if (err) { logg.byWinston('error', __filename + ':46 ' + err); }
 
-      /* define linkQueue collection: 'robot_linkqueue_*' */
-      var collName_linkQueue = moTasksDocs_arr[task_id].linkqueueCollection;
+      //set task_id on undefined
+      if (task_id === undefined || task_id === '') { //set id from the first task
+        task_id = moTasksDocs_arr[0].id;
+      }
 
-      db.collection(collName_linkQueue).count(queryDB, function (err, countNum) { // gets data from 'robot_linkqueue_*'
-        if (err) { logg.byWinston('error', __filename + ':51 ' + err); }
+      //convert task_id into integer, otherwise {id: task_id} will not work
+      task_id = parseInt(task_id, 10);
 
-        /* create pagination object which is sent to view file */
-        var pagesPreURI = '/admin/robot/linkqueue/?q=' + q + '&task_id=' + task_id + '&currentPage=';
-        var perPage = 15; //show results per page
-        var spanNum = 4; //show pagination numbers. Must be even number (paran broj)
-        var pagination_obj = pagination.paginator(req, countNum, pagesPreURI, perPage, spanNum);
+      db.collection(collName_tasks).find({id: task_id}).toArray(function (err, currentTaskDoc_arr) { //get current task
+        if (err) { logg.byWinston('error', __filename + ':49 ' + err); }
 
-        db.collection(collName_linkQueue).find(queryDB).sort({lid: 1}).skip(pagination_obj.skipNum).limit(pagination_obj.perPage).toArray(function (err, moQueueDocs_arr) {
-          if (err) { logg.byWinston('error', __filename + ':103 ' + err); }
+        //get collection name
+        console.log(JSON.stringify(currentTaskDoc_arr, null, 2));
+        var collName_linkQueue = currentTaskDoc_arr[0].linkqueueCollection;
 
-          cb_list(res, task_id, moTasksDocs_arr, moQueueDocs_arr, pagination_obj);
+        db.collection(collName_linkQueue).count(queryDB, function (err, countNum) { // gets data from 'robot_linkqueue_*'
+          if (err) { logg.byWinston('error', __filename + ':55 ' + err); }
+
+          /* create pagination object which is sent to view file */
+          var pagesPreURI = '/admin/robot/linkqueue/?q=' + q + '&task_id=' + task_id + '&currentPage=';
+          var perPage = 15; //show results per page
+          var spanNum = 4; //show pagination numbers. Must be even number (paran broj)
+          var pagination_obj = pagination.paginator(req, countNum, pagesPreURI, perPage, spanNum);
+
+          db.collection(collName_linkQueue).find(queryDB).sort({lid: 1}).skip(pagination_obj.skipNum).limit(pagination_obj.perPage).toArray(function (err, moQueueDocs_arr) {
+            if (err) { logg.byWinston('error', __filename + ':64 ' + err); }
+
+            cb_list(res, currentTaskDoc_arr, moTasksDocs_arr, moQueueDocs_arr, pagination_obj);
+          });
+
         });
 
       });

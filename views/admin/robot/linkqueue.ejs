@@ -79,8 +79,8 @@
                 <div class="row">
                     <div class="well">
                         <p>
-                          Task name (id): <b><%= tasks[task_id].name %> (<%= tasks[task_id].id %>)</b> |
-                          Linkqueue collection: <b><%= tasks[task_id].linkqueueCollection %></b> |
+                          Task name (id): <b><%= currentTask.name %> (<%= currentTask.id %>)</b> |
+                          Linkqueue collection: <b><%= currentTask.linkqueueCollection %></b> |
                           Search results: <b><%= pagination.countNum %></b>
                         </p>
 
@@ -103,7 +103,7 @@
                                   </span>
                                 </a>
 
-                                <a href="/admin/robot/linkqueue/delete/<%= tasks[task_id].linkqueueCollection %>/<%= elem.lid %>/<%= tasks[task_id].id %>/"><span style="float:right;color:red;" class="fa fa-times"></span></a>
+                                <a href="/admin/robot/linkqueue/delete/<%= currentTask.linkqueueCollection %>/<%= elem.lid %>/<%= currentTask.id %>/"><span style="float:right;color:red;" class="fa fa-times"></span></a>
                               </h4>
                             </div>
                             <div id="collapse<%= i %>" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading<%= i %>">
@@ -156,7 +156,7 @@
                     </div>
                 </div>
 
-                <a href="/admin/robot/linkqueue/delete/<%= tasks[task_id].linkqueueCollection %>/all/<%= tasks[task_id].id %>/" class="btn btn-lg btn-danger">Delete All Links in linkqueue</a>
+                <a href="/admin/robot/linkqueue/delete/<%= currentTask.linkqueueCollection %>/all/<%= currentTask.id %>/" class="btn btn-lg btn-danger">Delete All Links in linkqueue</a>
 
             </div>
             <!-- /.container-fluid -->
