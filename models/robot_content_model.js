@@ -163,7 +163,7 @@ module.exports.getContentCollections = function (req, res, cb_render) {
  * @param  {Function} cb_render - callback view function
  * @return null
  */
-module.exports.exportMysqlSmartsearch = function (req, res, cb_render) {
+module.exports.exportMysqlSmartsearch = function (req, res) {
 
   //input
   var contentcol = req.body.contentcol;
@@ -183,7 +183,6 @@ module.exports.exportMysqlSmartsearch = function (req, res, cb_render) {
       if (err) { logg.byWinston('error', __filename + ':182 ' + err); }
 
       res.write('========= Export Started ===========');
-      
 
       //connection to MySQL server
       var myDB = mysql.createConnection({
@@ -225,7 +224,7 @@ module.exports.exportMysqlSmartsearch = function (req, res, cb_render) {
           var myVal = '"", 1, 1, "' + keywords + '", "' + link + '", "' + image + '", "' + title + '", "' + description + '", "free", "", ""';
           var myQuery = 'INSERT INTO ' + mytable + ' VALUES (' + myVal + ')';
 
-          myDB.query(myQuery, function (err, rows) { //insertion into MySQL
+          myDB.query(myQuery, function (err) { //insertion into MySQL
             if (err) {
               logg.byWinston('info', __filename + ':217 -MySQL Error: ' + err + '\nNOTEXPORTED:' + link + ' - ' + title);
             } else {
