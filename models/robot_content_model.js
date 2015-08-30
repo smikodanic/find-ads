@@ -113,7 +113,7 @@ module.exports.deleteContent = function (req, res) {
     db.collection(coll).remove(selector, options, function (err) { //delete all docs from collection
       if (err) { logg.byWinston('error', __filename + ':114 ' + err); }
 
-      db.collection(coll).drop(function (err) {
+      db.collection(coll).drop(function (err) {// drop collection 'robot_content_***'
         if (err) { logg.byWinston('error', __filename + ':117 ' + err); }
 
         res.redirect('/admin/robot/content/?currentColl=' + coll);
