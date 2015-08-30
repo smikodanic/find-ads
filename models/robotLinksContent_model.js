@@ -111,25 +111,38 @@ module.exports.updateCrawlStatus = function (linkqueueCollection, lid, crawlStat
 module.exports.insertNewContent = function (contentCollection, insContentDoc) {
 
   MongoClient.connect(dbName, function (err, db) {
-    if (err) { logg.byWinston('error', __filename + ':97 ' + err); }
+    if (err) { logg.byWinston('error', __filename + ':114 ' + err); }
 
-    db.collection(contentCollection).find().sort({cid: -1}).limit(1).toArray(function (err, moMax_arr) { //find max ID
-      if (err) { logg.byWinston('error', __filename + ':100 ' + err); }
+    var condition = {"pageURL": insContentDoc.pageURL};
+    db.collection(contentCollection).find(condition).toArray(function (err, moCont_arr) { //check if pageURL already exists
+      if (err) { logg.byWinston('error', __filename + ':25 ' + err); }
+
+      var moCont = moCont_arr[0];
+
+      if (moCont === undefined) {//if pageURL doesn't exist in 'robot_content'
+
+        db.collection(contentCollection).find().sort({cid: -1}).limit(1).toArray(function (err, moMax_arr) { //find max ID
+          if (err) { logg.byWinston('error', __filename + ':100 ' + err); }
+
+          //set new insContentDoc.id from max id value
+          if (moMax_arr[0] !== undefined) {
+            insContentDoc.cid = moMax_arr[0].cid + 1;
+          } else {
+            insContentDoc.cid = 0;
+          }
 
 
-      //set new insContentDoc.id from max id value
-      if (moMax_arr[0] !== undefined) {
-        insContentDoc.cid = moMax_arr[0].cid + 1;
-      } else {
-        insContentDoc.cid = 0;
-      }
+          db.collection(contentCollection).insert(insContentDoc, function (err) { //insert new content into robot_content
+            if (err) { logg.byWinston('error', __filename + ':103 ' + err); }
 
+            db.close();
+          });
 
-      db.collection(contentCollection).insert(insContentDoc, function (err) { //insert new content into robot_content
-        if (err) { logg.byWinston('error', __filename + ':103 ' + err); }
+        });
 
+      } else { //if page URL already exist in 'robot_content'
         db.close();
-      });
+      }
 
     });
 

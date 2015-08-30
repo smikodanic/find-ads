@@ -105,19 +105,24 @@ module.exports.deleteContent = function (req, res) {
     options = {};
   }
 
-  console.log(JSON.stringify(selector, null, 2));
+  // console.log(JSON.stringify(selector, null, 2));
 
   MongoClient.connect(dbName, function (err, db) {
-    if (err) { logg.byWinston('error', __filename + ':96 ' + err); }
+    if (err) { logg.byWinston('error', __filename + ':111 ' + err); }
 
-    db.collection(coll).remove(selector, options, function (err) {
-      if (err) { logg.byWinston('error', __filename + ':99 ' + err); }
+    db.collection(coll).remove(selector, options, function (err) { //delete all docs from collection
+      if (err) { logg.byWinston('error', __filename + ':114 ' + err); }
 
-      res.redirect('/admin/robot/content/?currentColl=' + coll);
-      console.log(selector);
+      db.collection(coll).drop(function (err) {
+        if (err) { logg.byWinston('error', __filename + ':117 ' + err); }
 
-      // logg.byWinston('info', __filename + ':103 Deleted records:' + status, null);
-      db.close();
+        res.redirect('/admin/robot/content/?currentColl=' + coll);
+        console.log(selector);
+
+        // logg.byWinston('info', __filename + ':103 Deleted records:' + status, null);
+        db.close();
+      });
+
     });
 
   }); //connect
