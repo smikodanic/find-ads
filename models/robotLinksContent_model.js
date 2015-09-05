@@ -84,13 +84,13 @@ module.exports.insertNewLink = function (linkqueueCollection, insLinkqueueDoc) {
  * @param {string} linkHref -- link.href property: 'http://old.adsuu.com/something/file.php'
  * @param  {[type]} crawlStatus         [description]
  */
-module.exports.updateCrawlStatus = function (linkqueueCollection, lid, crawlStatus) {
+module.exports.updateCrawlStatus = function (linkqueueCollection, _id, crawlStatus) {
 
   MongoClient.connect(dbName, function (err, db) {
-    if (err) { logg.byWinston('error', __filename + ':25 ' + err); }
+    if (err) { logg.byWinston('error', __filename + ':90 ' + err); }
 
-    db.collection(linkqueueCollection).update({"lid": lid}, {$set: {"crawlStatus": crawlStatus}}, function (err) {
-      if (err) { logg.byWinston('error', __filename + ':65 ' + err); }
+    db.collection(linkqueueCollection).update({"_id": _id}, {$set: {"crawlStatus": crawlStatus}}, function (err) {
+      if (err) { logg.byWinston('error', __filename + ':93 ' + err); }
 
       db.close();
     });

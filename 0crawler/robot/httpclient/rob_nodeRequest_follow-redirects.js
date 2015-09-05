@@ -72,7 +72,7 @@ module.exports.runURL = function (moTask, moLink, cb_outResults) {
         logg.craw(false, moTask.loggFileName, msg_rez);
 
         //***** update crawlStatus from 'pending' to 'crawled' or 'error'
-        lc_model.updateCrawlStatus(moTask.linkqueueCollection, moLink.lid, crawlStatus);
+        lc_model.updateCrawlStatus(moTask.linkqueueCollection, moLink._id, crawlStatus);
 
         
 
