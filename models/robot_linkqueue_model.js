@@ -34,7 +34,7 @@ module.exports.listLinks = function (req, res, cb_list) {
     queryDB = {};
   } else {
     var reg = new RegExp(q, 'ig'); //creating regular expression
-    queryDB = {$or: [{ "link.tekst": {"$regex": reg} }, { "link.href": {"$regex": reg} }]};
+    queryDB = {$or: [{"lid": {"$regex": reg} }, { "link.tekst": {"$regex": reg} }, { "link.href": {"$regex": reg} }]};
     // queryDB = {"link.tekst": {"$regex": reg}};
     // queryDB = {"link.tekst": reg};
   }

@@ -52,7 +52,7 @@ module.exports.runURL = function (moTask, moLink, cb_outResults) {
       }
 
       //messaging page URL
-      var msg_rez = '\n' + '+ URL in httpClient: ' + pageURL;
+      var msg_rez = '\n' + '+ URL in httpClient: ' + pageURL + ' lid:' + moLink.lid + ' _id' + moLink._id;
       cb_outResults.send(msg_rez);
       logg.craw(false, moTask.loggFileName, msg_rez);
 
