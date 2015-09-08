@@ -30,7 +30,7 @@ var createSelectors = function (req) {
 
       //creating selvalue string to be JSON.parsed later
       var selValue;
-      if (req.body.selectorValue[key].indexOf(',') !== -1) {
+      if (req.body.selectorValue[key].indexOf(',') !== -1 && req.body.selectorType[key] === 'attr') {
         var selValue_arr = req.body.selectorValue[key].split(',');
         selValue = '["' + selValue_arr[0].trim() + '", "' + selValue_arr[1].trim() + '"]';
       } else {
