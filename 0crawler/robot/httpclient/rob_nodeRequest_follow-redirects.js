@@ -67,20 +67,20 @@ module.exports.runURL = function (moTask, moLink, cb_outResults) {
       res2.on('end', function () {
 
         //messaging page URL
-        var msg_rez = '\n' + '+ URL in httpClient: ' + pageURL + ' lid:' + moLink.lid + ' _id' + moLink._id + ' - resp:' + res2.statusCode;
+        var msg_rez = '\n' + '+ URL in httpClient: ' + pageURL + ' lid:' + moLink.lid + ' _id' + moLink._id + ' - resp:' + res2.statusCode + '\n';
         cb_outResults.send(msg_rez);
         logg.craw(false, moTask.loggFileName, msg_rez);
 
         //***** update crawlStatus from 'pending' to 'crawled' or 'error'
         lc_model.updateCrawlStatus(moTask.linkqueueCollection, moLink._id, crawlStatus);
 
-    
+
 
         //load pageURL HTML into cheerio object
         $ = cheerio.load(htmlDoc);
 
         //extract content and insert into 'robot_content'
-        rob.extractContent($, pageURL, moTask, cb_outResults);
+        rob.extractContent($, pageURL, res2.statusCode, moTask, cb_outResults);
 
         // extract links and insert into 'robot_linkqueue_*'
         rob.extractLinks($, pageURL, moTask, moLink, cb_outResults);

@@ -46,7 +46,7 @@ casper.start(pageURL, function (res2) {
     casper.echo('Not Found: ' + pageURL + ' res2.status: ' + res2.status);
   } else {
 
-    var htmlDoc = this.getHTML();
+    var htmlDoc = this.getHTML() + ' --statusCode:' + res2.status + '--'; //html doc with added response code
     casper.echo(htmlDoc);
 
     // var retObj = '{statusCode:' + res2.status + ',htmlDoc: "' + this.getHTML() + '"}';

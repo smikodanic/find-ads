@@ -73,7 +73,7 @@ module.exports.listContent = function (req, res, cb_list) {
 
         db.collection(currentColl).find(queryDB).sort({cid: 1}).skip(pagination_obj.skipNum).limit(pagination_obj.perPage).toArray(function (err, moContentDocs_arr) {
           if (err) { logg.byWinston('error', __filename + ':67 ' + err); }
-
+          db.close();
           cb_list(res, currentColl, contentColls, moContentDocs_arr, pagination_obj);
         });
 

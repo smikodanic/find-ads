@@ -42,7 +42,21 @@ module.exports.runURL = function (moTask, moLink, cb_outResults) {
       logg.byWinston('error', __filename + ':42 ' + err);
     } else {
 
-      var htmlDoc = stdout;
+
+      //statusCode regExp
+      var statusCodeReg = new RegExp('--statusCode:(\\d+)--');
+
+      //get statusCode
+      var statusCodeArr = stdout.match(statusCodeReg);
+      var statusCode;
+      if (statusCodeArr) {
+        statusCode = parseInt(statusCodeArr[1], 10);
+      } else {
+        statusCode = 'notDefinedStatus';
+      }
+
+      var htmlDoc = stdout.replace(statusCodeReg, ''); //delete statusCode info from stdout
+      console.log(htmlDoc);
 
       var crawlStatus;
       if (htmlDoc === '' && htmlDoc === undefined) {
@@ -52,7 +66,7 @@ module.exports.runURL = function (moTask, moLink, cb_outResults) {
       }
 
       //messaging page URL
-      var msg_rez = '\n' + '+ URL in httpClient: ' + pageURL + ' lid:' + moLink.lid + ' _id' + moLink._id;
+      var msg_rez = '\n' + '+ URL in httpClient: ' + pageURL + ' lid:' + moLink.lid + ' _id' + moLink._id + ' - resp:' + statusCode + '\n';
       cb_outResults.send(msg_rez);
       logg.craw(false, moTask.loggFileName, msg_rez);
 
@@ -63,7 +77,7 @@ module.exports.runURL = function (moTask, moLink, cb_outResults) {
       $ = cheerio.load(htmlDoc);
 
       //extract content and insert into 'robot_content'
-      rob.extractContent($, pageURL, moTask, cb_outResults);
+      rob.extractContent($, pageURL, statusCode, moTask, cb_outResults);
 
       // extract links and insert into 'robot_linkqueue_*'
       rob.extractLinks($, pageURL, moTask, moLink, cb_outResults);

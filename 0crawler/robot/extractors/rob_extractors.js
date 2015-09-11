@@ -16,12 +16,14 @@ var dbName = settings.mongo.dbName;
  * Extract content from pageURL and insert into 'robot_content'
  * @param  {object} $ -cheerio object
  */
-module.exports.extractContent = function ($, pageURL, moTask, cb_outResults) {
+module.exports.extractContent = function ($, pageURL, statusCode, moTask, cb_outResults) {
 
   /* doc schema to be inserted into mongoDB */
   var insContentDoc = {
     "cid": undefined,
     "pageURL": pageURL,
+    "statusCode": statusCode,
+    "httpclientScript": moTask.httpclientScript,
     "crawlDateTime": timeLib.nowLocale(),
     "category": parseInt(moTask.category, 10),
     "subcategory": parseInt(moTask.subcategory, 10),
@@ -68,7 +70,11 @@ module.exports.extractContent = function ($, pageURL, moTask, cb_outResults) {
   }); //forEach end
 
   //***** insert into 'robot_content'
-  lc_model.insertNewContent(moTask.contentCollection, insContentDoc);
+  if (statusCode === 200) {
+    lc_model.insertNewContent(moTask.contentCollection, insContentDoc);
+  } else {
+    lc_model.insertNewContent(moTask.contentCollection + '_statusCodeBAD', insContentDoc);
+  }
 
 };//extractContent end
 
