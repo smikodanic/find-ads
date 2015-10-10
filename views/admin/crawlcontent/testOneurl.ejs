@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <%- include('../0partials/01head'); -%>
+</head>
+
+<body>
+
+    <div id="wrapper">
+
+        <!-- Navigation -->
+        <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+            <%- include('../0partials/05top_menu'); -%>
+            <%- include('../0partials/10left_menu'); -%>
+        </nav>
+
+        <div id="page-wrapper">
+
+            <div class="container-fluid">
+
+                <!-- Page Heading -->
+                <div class="row">
+                    <div class="col-lg-12">
+                        
+                        <h1 class="page-header">
+                            Test One URL
+                        </h1>
+
+                        <ol class="breadcrumb">
+                          <li>Crawl Content</li>
+                          <li><a href="/admin/crawlcontent/test/oneurl/">Test one URL</a></li>
+                        </ol>
+
+                        Test one URL from linkQueue_* collection against content task.
+
+                    </div>
+                </div>
+                <!-- Page Heading end -->
+
+                <div class="clearfix">&nbsp;</div>
+
+                <!-- content -->
+                <div class="row">
+                    
+                    <!-- form -->
+                    <form action="/admin/crawlcontent/tasks/test/" method="POST" enctype="application/x-www-form-urlencoded" class="form-horizontal">
+                        
+                        <div class="form-group">
+                          <label for="task_id" class="col-sm-3 control-label" title="Content task id number from contentTasks collection">Content Task ID:</label>
+                          <div class="col-sm-2">
+                            <input type="text" name="task_id" id="task_id" value="<%= task_id %>" class="form-control">
+                          </div>
+                        </div>
+
+                        <div class="form-group">
+                          <label for="url" class="col-sm-3 control-label" title="URL to be tested">URL:</label>
+                          <div class="col-sm-6">
+                            <input type="text" name="url" id="url" value="" class="form-control">
+                          </div>
+                          <label  class="col-sm-3 control-label"><a href="/admin/crawllinks/resultsiteration" style="float:left;" target="_blank" id="linkQju">Find link's URL</a></label>
+                        </div>
+
+
+                        <div class="form-group">
+                          <div class="col-sm-4 col-sm-offset-3">
+                            <input type="submit" value="Crawl URL" class="btn btn-info btn-lg" id="submitBtn">
+                          </div>
+                        </div>
+
+                    </form>
+                    <!-- form end -->
+
+                </div>
+                <!-- content end-->
+
+                <div class="clearfix">&nbsp;</div><br><br>
+
+                <!-- iframe console -->
+                <div class="row">
+                    <div class="col-sm-10 col-sm-offset-1">
+                        <h3>Console output:</h3>
+                        <iframe src="" frameborder="1" class="konzola"></iframe>
+                    </div>
+                </div>
+                <!-- iframe console end -->
+
+            </div>
+            <!-- /.container-fluid -->
+
+        </div>
+        <!-- /#page-wrapper -->
+
+    </div>
+    <!-- /#wrapper -->
+    
+
+
+<script>
+/* Bootstrap tooltip activation */
+$(document).ready(function(){
+   
+   var options = {
+    placement: "right",
+    delay: 200
+   };
+
+   /*
+    * tooltip also will apper on dynamically created elements
+    */
+   $(document).on('mouseover', 'label', function () {
+      $(this).tooltip(options);
+   });
+   
+});
+</script>
+
+<script>
+/* Start test crwaling - fill IFRAME's src attribute*/
+$('#submitBtn').click(function (event) {
+  event.preventDefault(); //prevent executing form
+  
+  //define src value
+  var task_id = $('#task_id').val();
+  var url = $('#url').val();
+  url = encodeURIComponent(url);
+  var srcKonzole = '/admin/crawlcontent/test/oneurl/childprocess/' + task_id + '/' + url; 
+
+  $('.konzola').attr('src', srcKonzole);
+  // console.log(srcKonzole);
+});
+</script>
+
+<script>
+//define link to list linkQueue results
+var task_id = $('#task_id').val();
+
+if (task_id !== undefined) {
+  var linkQueue = '<%= linkQueue %>';
+  var taskName = linkQueue.replace('linkQueue_', '');
+  var hrefQju = '/admin/crawllinks/resultsiteration/?q=&taskName=' + taskName + '&currentPage=1'
+  $('#linkQju').attr('href', hrefQju);
+}
+
+
+</script>
+
+</body>
+
+</html>

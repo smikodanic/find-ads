@@ -1,0 +1,100 @@
+body {
+	background-color: #fff !important;
+	padding-bottom: 50px;
+}
+
+table tr > th {
+	background-color:#777777;
+	color: #f0f0f0;
+	text-align: center;
+}
+
+a.fa {
+	color: #FC7F07;
+	margin-left:10px;
+}
+a.fa:hover {
+	color: #028504;
+}
+
+
+/* lightbox */
+.lightbox {
+	background-color: rgba(100,100,100,0.95);
+  border: 5px solid #E0DEDC;
+  z-index: 20000;
+  padding: 20px !important;
+  margin-top: 50px;
+  padding: 20px;
+}
+.lightbox .close {
+	font-size: 24px;
+	color: #f0f0f0;
+	float: right;
+}
+.lightbox .close:hover {
+	color: #eee;
+}
+.lightbox form label:not(.remSel) {
+	color: #f0f0f0;
+	opacity: 1;
+}
+.lightbox #linkResults > a {
+	color: #6FC5FF;
+	opacity: 1;
+	margin-top: 5px;
+}
+.lightbox #linkResults > a:hover {
+	color: #C8E8FF;
+}
+.lightbox iframe {
+	width: 70%;
+	height: 500px;
+	display:block;
+	margin-left: auto;
+	margin-right: auto;
+	background-color: #ccc;
+	color: #f0f0f0;
+	border: 5px solid #E0DEDC;
+	overflow: scroll;
+}
+.lightbox h3,h4 {
+	opacity: 1;
+	color: #222;
+}
+.lightbox h4>small, h3>small {
+	opacity: 1;
+	color: #ddd;
+}
+
+
+/* remove selector's name=value pair */
+.remSel {
+	color: #FD5D5D;
+	cursor: pointer;
+}
+.remSel:hover {
+	color: #FF0B0B;
+}
+
+.konzola {
+	width: 100%;
+	height: 400px;
+	background-color: #ccc;
+	border: 5px solid #E0DEDC;
+	overflow: scroll;
+}
+
+
+ul.nav-sublinks > li {
+	list-style:none;
+	padding-left:10px;
+	margin-top:5px;
+}
+ul.nav-sublinks > li > a {
+	color: #f0f0f0;
+	text-decoration: none;
+}
+ul.nav-sublinks > li > a:hover {
+	color: #FE8D1B;
+}

@@ -1,0 +1,48 @@
+<!DOCTYPE HTML>
+<html lang="hr">
+<head>
+<meta charset="UTF-8">
+<title><%= title %></title>
+<meta name="description" content="<%= desc %>">
+<meta name="keywords" content="<%= keywords %>">
+<meta name="author" content="AdAm">
+<meta name="robots" content="index,follow">
+<meta name="googlebot" content="index,follow">
+
+<style>
+	div.advert {
+		margin-left:25px;
+		margin-right:25px;
+		padding:15px;
+		border: 1px solid Silver;
+		background-color: #f0f0f0;
+	}
+	h1 {
+		color: Gray;
+	}
+	span {
+		margin-left:25px;
+		font:12px Verdana;
+	}
+	a {
+		color:#1B94F4;
+		text-decoration: none;
+	}
+	a:hover {
+		color: #1958EE;
+		text-decoration: underline;
+	}
+</style>
+</head>
+
+<body>
+
+<div class="advert">
+	<h1><a href="<%= pageURL %>"><%= title %></a></h1>
+	<%= p %>
+</div>
+
+<span>Advertiser's contact details see <a href="<%= pageURL %>">here</a>.</span>
+
+</body>
+</html>

@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <%- include('../0partials/01head'); -%>
+</head>
+
+<body>
+
+    <div id="wrapper">
+
+        <!-- Navigation -->
+        <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+            <%- include('../0partials/05top_menu'); -%>
+            <%- include('../0partials/10left_menu'); -%>
+        </nav>
+
+        <div id="page-wrapper">
+
+            <div class="container-fluid">
+
+                <!-- Page Heading -->
+                <div class="row">
+                    <div class="col-lg-12">
+                        
+                        <h1 class="page-header">
+                            Iterate Pagination
+                        </h1>
+
+                        <ol class="breadcrumb">
+                          <li>Crawl Links</li>
+                          <li><a href="/admin/crawllinks/tasks">Crawling Tasks</a></li>
+                          <li><a href="/admin/crawllinks/tasksiteration">Iterate Pagination</a></li>
+                        </ol>
+
+                        This method is using iteration through pagination links to extract content links.
+                        <br>Create new tasks, delete, edit, test or start strawling here.
+
+                    </div>
+                </div>
+                <!-- /.row -->
+
+                <div class="clearfix">&nbsp;</div>
+                
+                <!-- table -->
+                <div class="row">
+
+                <div class="col-lg-12">
+                    <table class="table table-stripped table-hover table-condensed table-bordered">
+                        
+                      <tr>
+                          <th>id</th>
+                          <th>name</th>
+                          <th>iteratingURL</th>
+                          <th>from-to</th>
+                          <th>cron</th>
+                          <th>status</th>
+                          <th>int.(ms)</th>
+                          <th style="width:130px">action</th>
+                      </tr>
+                        
+                      <% tasks.forEach(function (elem) { %>
+                      <tr style="font-size:smaller">
+                        <td><%= elem.id %></td>
+                        <td><%= elem.name %></td>
+                        <td><%= elem.iteratingurl %></td>
+                        <td><%= elem.from$1 %> - <%= elem.to$1 %></td>
+                        <td><%= elem.cron %></td>
+                        <td><%= elem.cronStatus %></td>
+                        <td><%= elem.crawlInterval %></td>
+                        <td>
+                          
+                          <a href="/admin/crawllinks/tasksiteration/delete/<%= elem.id %>" class="fa fa-trash deleteTask" title="delete"></a>
+                          <a href="/admin/crawllinks/tasksiteration/edit/<%= elem.id %>" class="fa fa-pencil-square-o"title="edit"></a>
+                          <a href="/admin/crawllinks/tasksiteration/start/<%= elem.id %>" class="fa fa-play crawl-start crawlStart" title="crawl now" data-taskid="<%= elem.id %>"></a>
+                          <a href="/admin/crawllinks/resultsiteration/?q=&taskName=<%= elem.name %>&currentPage=1" class="fa fa-eye" title="see results" data-taskid="<%= elem.id %>"></a>
+                        
+                        </td>
+                      </tr>
+                      <% }); %>
+                        
+                    </table>
+
+                    <div class="clearfix">&nbsp;</div> 
+
+                    <div>                     
+                      <a href="/admin/crawllinks/tasksiteration/delete/all" class="btn btn-danger btn-sm" id="deleteAll">Delete All</a>
+                      <a href="/admin/crawllinks/tasksiteration/disable" class="btn btn-info btn-sm">Disable All</a>
+                      <a href="/admin/crawllinks/tasksiteration" class="btn btn-info btn-sm" id="insertTask">Insert New</a>
+                    </div>
+
+                </div><!-- row end -->
+                <!-- table end-->
+
+                <!-- insert/update form -->
+                <div class="row">
+
+                    <div class="col-sm-10 col-sm-offset-1 lightbox" id="lightbox-form">
+
+                        <span class="fa fa-times-circle close lightbox-close"></span>
+
+                        <!-- form -->
+                        <% //define form action value
+                          var act;
+                          if (task.id !== undefined) {
+                            act = '/admin/crawllinks/tasksiteration/update/' + task.id;
+                          } else {
+                            act = '/admin/crawllinks/tasksiteration/insert';
+                          }
+                        %>
+
+                        <form action="<%= act %>" method="POST" enctype="application/x-www-form-urlencoded" class="form-horizontal">
+                            
+                        <div class="form-group">
+                          <label for="id" class="col-sm-3  control-label" title="Readonly value">ID:</label>
+                          <div class="col-sm-3">
+                            <input type="text" name="id" id="id" value="<%= task.id %>" class="form-control" readonly>
+                          </div>
+                        </div>
+
+                        <div class="form-group">
+                          <label for="name" class="col-sm-3  control-label" title="This will be MongoDB collection name. Dont use empty spaces. Example: adsuu_com_business">Name:</label>
+                          <div class="col-sm-8">
+                            <input type="text" name="name" id="name" value="<%= task.name %>" class="form-control" required>
+                          </div>
+                        </div>
+
+                        <div class="form-group">
+                          <label class="col-sm-3 control-label" for="description" title="Short description of this task. Example: Grab content links from adsuu.com in business category - pagination from 1 to 25.">Description:</label>
+                          <div class="col-sm-7">
+                            <textarea name="description" id="description" class="form-control" rows="2" required><%= task.description %></textarea>
+                          </div>
+                        </div>
+
+
+                        <div class="form-group">
+                          <label class="col-sm-3 control-label" for="aselector" title="CSS selector which point to content link. Content link has final content URL. Example: div > p > a.something">aSelector:</label>
+                          <div class="col-sm-9">
+                            <textarea name="aselector" id="aselector" class="form-control" rows="2" required><%= task.aselector %></textarea>
+                          </div>
+                        </div>
+
+                        <div class="form-group">
+                          <label for="firsturl" class="col-sm-3  control-label" title="This URL will not pass through FOR javascript loop. Example: http://www.adsuu.com/business-offer/">firstURL:</label>
+                          <div class="col-sm-9">
+                            <input type="text" name="firsturl" id="firsturl" value="<%= task.firsturl %>" class="form-control" style="font-size:smaller;" required>
+                          </div>
+                        </div>
+
+                        <div class="form-group">
+                          <label for="iteratingurl" class="col-sm-3  control-label" title="Iterating URL. This URL will pass through FOR javascript loop iterating $1 variable. Example: http://www.adsuu.com/business-offer-$1/">iteratingURL:</label>
+                          <div class="col-sm-9">
+                            <input type="text" name="iteratingurl" id="iteratingurl" value="<%= task.iteratingurl %>" class="form-control" style="font-size:smaller;" required>
+                          </div>
+                        </div>
+
+                        <div class="form-group">
+                          <label for="from$1" class="col-sm-3  control-label" title="Start value of $1 iterating, loop variable. Example: 1">from$1:</label>
+                          <div class="col-sm-2">
+                            <input type="text" name="from$1" id="from$1" value="<%= (task.id !== undefined) ? task.from$1 : 0; %>" class="form-control" required>
+                          </div>
+                        </div>
+
+                        <div class="form-group">
+                          <label for="to$1" class="col-sm-3  control-label" title="End value of $1 iterating, loop variable. Example: 25">to$1:</label>
+                          <div class="col-sm-2">
+                            <input type="text" name="to$1" id="to$1" value="<%= (task.id !== undefined) ? task.to$1 : 25; %>" class="form-control" required>
+                          </div>
+                        </div>
+
+                        <div class="form-group">
+                          <label for="cron" class="col-sm-3  control-label" title="Cron job schedule. Example: 0 17 ? * 0,4-6">Cron:</label>
+                          <div class="col-sm-9">
+                            <input type="text" name="cron" id="cron" value="<%= task.cron %>" class="form-control" required>
+                          </div>
+                        </div>
+
+                        <div class="form-group">
+                          <label for="cronStatus" class="col-sm-3 control-label" title="If you want cron job to become active select 'on'. Otherwise select 'off'.">Cron status:</label>
+                          <div class="col-sm-2">
+                            <select name="cronStatus" id="cronStatus" class="form-control">
+                                <option value="on" <%= (task.id !== undefined && task.cronStatus == 'on' ) ? 'selected' : ''; %>>on</option>
+                                <option value="off" <%= (task.id !== undefined && task.cronStatus == 'off' ) ? 'selected' : ''; %>>off</option>
+                            </select>
+                          </div>
+                        </div>
+
+                        <div class="form-group">
+                          <label for="crawlInterval" class="col-sm-3  control-label" title="Set the crawling interval between two crawlings in miliseconds. It's crawling speed.">crawlInterval:</label>
+                          <div class="col-sm-2">
+                            <input type="text" name="crawlInterval" id="crawlInterval" value="<%= (task.id !== undefined) ? task.crawlInterval : 3000; %>" class="form-control" required>
+                          </div>
+                          <label class="control-label">ms</label>
+                        </div>
+
+                        <div class="form-group">
+                          <label for="httpclientScript" class="col-sm-3 control-label" title="Select script where HTTP Client is defined.">HTTP Client Script:</label>
+                          <div class="col-sm-4">
+                            <select name="httpclientScript" id="httpclientScript" class="form-control">
+
+                                <% httpclientFiles.forEach(function(elem){ %>
+                                <option value="<%= elem %>" <%= (task.httpclientScript == elem ) ? 'selected' : ''; %> ><%= elem %></option>
+                                <% }); %>
+
+                            </select>
+                          </div>
+                        </div>                        
+
+                        <p class="clearfix">&nbsp;</p>
+
+                        <div class="form-group">
+                          <label class="col-sm-3 control-label"></label>
+                          <div class="col-sm-4 form-group">
+                            <input type="submit" value="<%= (task.id !== undefined) ? 'Update' : 'Insert'; %>" class="btn btn-info btn-lg">
+                          </div>
+
+                          <% if (task.id !== undefined) { %>
+                          <div class="col-sm-4 form-group">
+                            <input type="submit" value="Insert Simmilar" class="btn btn-info btn-lg" formaction="/admin/crawllinks/tasksiteration/insert">
+                          </div>
+                          <% } %>
+
+                        </div>
+
+                        </form>
+                    <!--  form end -->
+
+                    </div>
+
+                </div> <!-- row end -->
+                <!-- insert/update form end -->
+
+
+                <!-- delete task -->
+                <div class="row">
+                  <div class="col-sm-4 col-sm-offset-4 lightbox" id="lightbox-delete">
+                    <span class="fa fa-times-circle close lightbox-close"></span>
+                    <p>Do you want to delete this task?</p>
+                    <br>
+                    <a href="" id="deleteTaskYes" class="btn btn-danger">Yes</a>
+                    <button id="deleteTaskNo" class="btn btn-warning lightbox-close">No, thanks</button>
+                  </div>
+                </div> <!-- row end -->
+                <!-- delete task end -->
+
+
+                <!-- lightbox crawling console -->
+                <div class="row">
+                  <div class="col-sm-12 lightbox" id="lightbox-console">
+                    <span class="fa fa-times-circle close lightbox-close"></span>
+                    <h3>Crawling links results</h3>
+                    <a href="/admin/crawllinks/tasksiteration/stop" class="btn btn-danger btn-lg">STOP crawling</a>
+                    <iframe src="" frameborder="1"></iframe>
+                  </div>
+                </div>
+                <!-- lightbox crawling console end-->
+
+
+
+
+            </div>
+            <!-- /.container-fluid -->
+
+        </div>
+        <!-- /#page-wrapper -->
+
+    </div>
+    <!-- /#wrapper -->
+    
+
+
+
+
+
+
+
+
+<script>
+/* Bootstrap tooltip activation */
+  $(document).ready(function(){
+   // $("#id").focus();
+   var options = {
+    placement: "right",
+    delay: 800
+   };
+   $("label, a.fa").tooltip(options);
+  });
+</script>
+
+
+<script>
+/*LIGHTBOX*/
+
+//lightbox function
+var lightbox = function (sel) {
+  
+  //width and height of browser's window
+  var bw = $(window).width();
+  var bh = $(window).height();
+
+  //CSS options
+  var cssOpt = {
+    "width": bw + "px !important",
+    "height": bh + 'px !important',
+    "position": "absolute",
+    "top": "0px",
+    "left": "0px"
+  }
+
+  $(sel).fadeIn(1000).css(cssOpt);
+};
+
+
+$(document).ready(function () {
+  
+  /* Show form for inserting task */
+  var sel1 = "#lightbox-form"; //selector to be affected by lightbox function
+  $(sel1).hide();
+  $('#insertTask').click(function (event) {
+    event.preventDefault(); //prevent A tag behaviour
+    lightbox(sel1);
+  });
+
+
+  /* Show delete one task buttons */
+  var sel2 = "#lightbox-delete"; //selector to be affected by lightbox function
+  $(sel2).hide();
+  $('.deleteTask').click(function (event) {
+    event.preventDefault(); //prevent A tag behaviour
+    
+    var href = $(this).attr('href');
+    $('#deleteTaskYes').attr('href', href);
+    
+    lightbox(sel2);
+  });
+
+
+  /* Show delete all tasks buttons */
+  var sel2 = "#lightbox-delete"; //selector to be affected by lightbox function
+  $(sel2).hide();
+  $('#deleteAll').click(function (event) {
+    event.preventDefault(); //prevent A tag behaviour
+    
+    var href = $(this).attr('href');
+    $('#deleteTaskYes').attr('href', href);
+
+    $(sel2 + '>p').text('Do you want to delete all tasks?');
+    
+    lightbox(sel2);
+  });
+
+
+  /* Show form for editing/updating task */
+  //change URL
+  $('.editTask').click(function (event) {
+    event.preventDefault(); //prevent A tag behaviour
+    var href = $(this).attr('href');
+    window.location.href = href;
+  });
+  //show form in lightbox if URL contains word 'edit'
+  if (window.location.href.indexOf('edit') !== -1 ) { 
+    lightbox(sel1);
+  }
+
+  /* Show crawl console */
+  var sel3 = '#lightbox-console';
+  $(sel3).hide();
+  $('.crawlStart').click(function (event) {
+    event.preventDefault(); //prevent A tag behaviour
+    
+    lightbox(sel3);
+
+    //start crawling by adding URL into iframe's SRC attribute
+    var taskHref = $(this).attr('href');
+    $('.lightbox > iframe').attr('src', taskHref);
+  });
+
+
+
+  /* hide lightbox */
+  $('.lightbox-close').on('click', function () {
+    $(this).parent().fadeOut();
+    window.location.href = '/admin/crawllinks/tasksiteration'; //reset URL
+  });
+
+});
+
+</script>
+
+
+
+
+
+</body>
+</html>

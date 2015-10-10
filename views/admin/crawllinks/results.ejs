@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <%- include('../0partials/01head'); -%>
+</head>
+
+<body>
+
+    <div id="wrapper">
+
+        <!-- Navigation -->
+        <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+            <%- include('../0partials/05top_menu'); -%>
+            <%- include('../0partials/10left_menu'); -%>
+        </nav>
+
+        <div id="page-wrapper">
+
+            <div class="container-fluid">
+
+                <!-- Page Heading -->
+                <div class="row">
+                    <div class="col-lg-12">
+                        <h1 class="page-header">
+                            Crawling Results <small>Links</small>
+                        </h1>
+                        
+                        <ol class="breadcrumb">
+                          <li>Crawl Links</li>
+                          <li><a href="/admin/crawllinks/results">Crawling Results</a></li>
+                        </ol>
+
+                        <br><br>
+                        List content links by crawling method:
+                        <ol>
+                            <li><a href="/admin/crawllinks/resultsiteration">Iterate Pagination Results</a> - list results from iterate-pagination method</li>
+                            <li><a href="/admin/crawllinks/resultsclick">Click Pagination Results</a> - list results from click-pagination method</li>
+                            <li><a href="/admin/tasks/links/custom">Custom Scripts (plugins) Results</a> - list results from custom scripts</li>
+                        </ol>
+
+                    </div>
+                </div>
+                <!-- /.row -->
+
+
+            </div>
+            <!-- /.container-fluid -->
+
+        </div>
+        <!-- /#page-wrapper -->
+
+    </div>
+    <!-- /#wrapper -->
+    
+
+
+<script>
+
+$(document).ready(function(){
+ //$("input[name='first_name']").focus();
+ $("*").tooltip();
+
+});
+</script>
+</body>
+
+</html>

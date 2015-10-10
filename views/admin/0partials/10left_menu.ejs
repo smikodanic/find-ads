@@ -1,0 +1,166 @@
+<!-- Sidebar Menu Items - These collapse to the responsive navigation menu on small screens -->
+            <div class="collapse navbar-collapse navbar-ex1-collapse">
+                <ul class="nav navbar-nav side-nav">
+                    
+                    <li>
+                        <a href="/admin/dashboard"><i class="fa fa-fw fa-dashboard"></i> Dashboard</a>
+                    </li>
+
+                    <li>
+                        <a href="/admin/categories"><i class="fa fa-fw fa-folder-open-o"></i> Categories</a>
+                    </li>
+
+                    <li>
+                        <a href="javascript:;" data-toggle="collapse" data-target="#web_robot">
+                            <i class="fa fa-android"></i> Web Robot <i class="fa fa-fw fa-caret-down"></i>
+                        </a>
+                        <ul id="web_robot" class="collapse">
+                            <li>
+                                <a href="/admin/robot/tasks/">Robot Tasks</a>
+                            </li>
+                            <li>
+                                <a href="/admin/robot/linkqueue/">Link Queue</a>
+                            </li>
+                            <li>
+                                <a href="/admin/robot/content/">Crawled Content</a>
+                            </li>
+                            <li>
+                                <a href="javascript:;" data-toggle="collapse" data-target="#exporter">Exporter <i class="fa fa-fw fa-caret-down"></i></a>
+                                <ul id="exporter" class="collapse nav-sublinks">
+                                    <li>
+                                        <a href="/admin/robot/exporter/mysql/">MySQL</a>
+                                    </li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </li>
+
+
+                    <li>
+                        <a href="javascript:;" data-toggle="collapse" data-target="#tasks"><i class="fa fa-fw fa-clock-o"></i> Crawl Links<i class="fa fa-fw fa-caret-down"></i></a>
+                        <ul id="tasks" class="collapse">
+                            <li>
+                                <a href="/admin/crawllinks/tasks">Link Tasks</a>
+                            </li>
+                            <li>
+                                <a href="/admin/crawllinks/results">link Results</a>
+                            </li>
+                        </ul>
+                    </li>
+
+                    <li>
+                        <a href="javascript:;" data-toggle="collapse" data-target="#crawl_links"><i class="fa fa-fw fa-cogs"></i> Crawl Content<i class="fa fa-fw fa-caret-down"></i></a>
+                        <ul id="crawl_links" class="collapse">
+                            <li>
+                                <a href="/admin/crawlcontent/tasks/">Content Tasks</a>
+                            </li>
+                            <li>
+                                <a href="/admin/crawlcontent/results/">Content Results</a>
+                            </li>
+                            <li>
+                                <a href="/admin/crawlcontent/test/oneurl/">Test One URL</a>
+                            </li>
+                        </ul>
+                    </li>
+
+                    <li>
+                        <a href="javascript:;" data-toggle="collapse" data-target="#tests"><i class="fa fa-fw fa-binoculars"></i> Tests<i class="fa fa-fw fa-caret-down"></i></a>
+                        <ul id="tests" class="collapse">
+                            <li>
+                                <a href="/admin/tests/httpclient"> Test HTTP client</a>
+                            </li>
+                        </ul>
+                    </li>
+
+                    <li>
+                        <a href="javascript:;" data-toggle="collapse" data-target="#skripte"><i class="fa fa-fw fa-edit"></i> Crawling Scripts<i class="fa fa-fw fa-caret-down"></i></a>
+                        <ul id="skripte" class="collapse">
+                            <li>
+                                <a href="/admin/scripts/pooling/">Pooling Scripts</a>
+                            </li>
+                            <li>
+                                <a href="/admin/scripts/httpclient">HTTP Client Scripts</a>
+                            </li>
+                            <li>
+                                <a href="/admin/scripts/filters">Crawling Filters</a>
+                            </li>
+                            <li>
+                                <a href="/admin/scripts/replacers">String Replacers</a>
+                            </li>
+                            <li>
+                                <a href="/admin/scripts/help">Help</a>
+                            </li>
+                        </ul>
+                    </li>
+
+                    <li>
+                        <a href="javascript:;" data-toggle="collapse" data-target="#slogovi"><i class="fa fa-fw fa-file"></i> Logs<i class="fa fa-fw fa-caret-down"></i></a>
+                        <ul id="slogovi" class="collapse">
+                            <li>
+                                <a href="/admin/logs/crawler">Crawl Logs</a>
+                            </li>
+                            <li>
+                                <a href="/admin/logs/winston">Winston Logs</a>
+                            </li>
+                            <li>
+                                <a href="/admin/logs/visits">Visits</a>
+                            </li>
+                            <li>
+                                <a href="/admin/logs/misc">Misc Logs</a>
+                            </li>
+                        </ul>
+                    </li>
+
+                    <li>
+                        <a href="javascript:;" data-toggle="collapse" data-target="#ads"><i class="fa fa-fw fa-table"></i> Content by categories<i class="fa fa-fw fa-caret-down"></i></a>
+                        <ul id="ads" class="collapse">
+                            <li>
+                                <a href="/admin/ads/all/1">All</a>
+                            </li>
+                            <li>
+                                <a href="/admin/ads/auto/1">Auto</a>
+                            </li>
+                            <li>
+                                <a href="/admin/ads/jobs/1">Jobs</a>
+                            </li>
+                        </ul>
+                    </li>
+
+
+                    <li>
+                        <a href="javascript:;" data-toggle="collapse" data-target="#out"><i class="fa fa-fw fa-table"></i> Output<i class="fa fa-fw fa-caret-down"></i></a>
+                        <ul id="out" class="collapse">
+                            <li>
+                                <a href="/admin/output/json">JSON</a>
+                            </li>
+                            <li>
+                                <a href="/admin/output/xml">XML</a>
+                            </li>
+                            <li>
+                                <a href="/admin/output/csv">CSV</a>
+                            </li>
+                        </ul>
+                    </li>
+
+                    <li>
+                        <a href="charts.html"><i class="fa fa-fw fa-bar-chart-o"></i> Stats</a>
+                    </li>
+
+                    <li>
+                        <a href="javascript:void();" data-toggle="collapse" data-target="#settings"><i class="fa fa-fw fa-cog"></i> Settings<i class="fa fa-fw fa-caret-down"></i></a>
+                        <ul id="settings" class="collapse">
+                            <li>
+                                <a href="/admin/settings/cron">Cron jobs</a>
+                            </li>
+                            <li>
+                                <a href="/admin/settings/files">Settings files</a>
+                            </li>
+                            <li>
+                                <a href="/admin/settings/proc">Process Manager</a>
+                            </li>
+                        </ul>
+                    </li>
+
+                </ul>
+            </div>
+            <!-- /.navbar-collapse -->

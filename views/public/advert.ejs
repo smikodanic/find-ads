@@ -1,0 +1,152 @@
+<!doctype html> 
+<html lang="en"> 
+<head>
+    <%- include('0partials/01head'); -%>
+
+    <!-- fonts -->
+    <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
+</head>
+<body>
+
+    <%- include('0partials/05header'); -%>
+
+
+<div class="clearfix">&nbsp;</div><br><br>
+
+
+<main class="container" id="listings-page">
+
+<div class="row">
+  <div class="col-sm-7">
+  <ol class="breadcrumb">
+    
+    <li>
+      <a class="link-info" href="/" id="goback">
+        <i class="fa fa-chevron-left"></i>
+        Back to results
+      </a>
+    </li>
+    
+    <li><a href="/">Home</a></li>
+
+    <% //category
+      var cat = GLOBfindads.categories[content.category].category;
+    %>
+    <li><a href="/browse/<%= cat.replace(/\s/g, '-') %>-id<%= content.category %>/"><%= cat %></a></li>
+    
+
+    <% //subcategory
+      if (!isNaN(content.subcategory)) {
+        var subcat = GLOBfindads.categories[content.category].subcats[content.subcategory];
+    %>
+    <li><a href="/browse/<%= cat.replace(/\s/g, '-') %>-id<%= content.category %>/<%= subcat.replace(/\s/g, '-') %>-key<%= content.subcategory %>/"><%= subcat %></a></li>
+    <% } %>
+
+  </ol>
+  </div>
+</div>
+
+
+<div class="row">
+
+  <div class="col-sm-9">  
+    <h1><%= title %></h1>
+    <p>Country: <%= (content.country !== undefined) ? content.country : 'not defined' %></p>
+  </div>
+
+  <div class="col-sm-3">
+    <% //define price
+      var price;
+      if (content.extract.price !== undefined) {
+          price = content.extract.price;
+      } else {
+          price = '<strike>no price</strike>';
+      }
+    %>
+    <p class="price" style><%- price %></p>
+  </div>
+
+</div>
+
+<hr>
+
+<div class="row">
+  <div class="col-sm-8">
+    
+    <!-- ad description -->
+    <%= content.extract.description[2] %>
+
+    <br><br>
+
+    <!-- ad data -->
+    <div class="row">
+      <p class="col-sm-12"><b>cid:</b> <%= content.cid %></p>
+      <p class="col-sm-12"><b>country:</b> <%= (content.country !== undefined) ? content.country : 'not defined' %></p>
+      <p class="col-sm-12"><b>city:</b> <%= (content.city !== undefined) ? content.city : 'not defined' %></p>
+      <p class="col-sm-12"><b>crawled:</b> <%= content.crawlDateTime %></p>
+      <p class="col-sm-12"><b>url:</b> <%= content.pageURL %></p>
+    </div>
+
+  
+    <!-- some links -->
+    <hr>
+
+    <p>
+    <span class="classified_links ">
+      <a class="link-info" href="#"><i class="fa fa-share"> </i>Share</a> &nbsp;
+      <a class="link-info kontakt" href="#"><i class="fa fa-envelope-o"> </i>Contact</a> &nbsp;
+      <a class="link-info fancybox-media" href="http://maps.google.com" target="_blank"><i class="fa fa-map-marker"> </i>Map</a>
+    </span>
+    </p>
+
+  </div>
+
+  <div class="col-sm-4">
+
+    <!-- ad image -->
+    <% if (content.extract.image === undefined || content.extract.image[2] === null) { %>
+        <img alt="No Image" src="/images/noimage.jpg">
+    <% } else { %>
+        <img alt="<%= content.extract.title[2] %>" src="<%= content.extract.image[2] %>">
+    <% } %>
+
+
+    <div class="clearfix">&nbsp;</div><br><br>
+
+    <!-- contact button -->
+    <button class="btn btn-warning btn-lg kontakt"><span class="fa fa-envelope-o"></span> Contact</button>
+
+  </div>
+
+</div> 
+
+
+
+
+
+</main>
+
+
+<%- include('0partials/20footer'); -%>
+
+
+<script>
+  $(document).ready(function () {
+    
+    //click on goback link
+    $('#goback').click(function (ev) {
+      ev.preventDefault();
+      window.history.go(-1);
+    });
+
+    //click on contact button
+    $('.kontakt').click(function (ev) {
+      var x = window.open("<%= content.pageURL %>", "Contact");
+      x.focus();
+    });
+
+  });
+</script>
+
+</body>
+</html>

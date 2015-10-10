@@ -1,0 +1,48 @@
+<!doctype html> 
+<html lang="en"> 
+<head>
+    <%- include('0partials/01head'); -%>
+
+    <!-- fonts -->
+    <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
+</head>
+<body>
+
+    <%- include('0partials/05header'); -%>
+
+
+<div class="clearfix">&nbsp;</div><br><br>
+
+<main class="container">
+
+<section class="row">
+  <div class="col-sm-10 col-sm-push-1">
+    <div class="searchTerms_box">
+      
+      <h3>Latest search terms:</h3>
+
+      <% 
+        searchTerms.forEach(function (elem) {
+
+          //generate random font-size
+          var fontSize = Math.random()*50;
+          if (fontSize < 12) {
+            fontSize = 12;
+          } else if (fontSize > 35) {
+            fontSize = 35;
+          }
+      %>
+        <a href="<%= elem.url %>" style="font-size:<%= fontSize %>px; margin-left:10px;"><%= elem.term %>(<%= elem.results %>)</a>
+      <% }) %>
+
+    </div>
+  </div>
+</section>		
+
+</main>
+
+
+<%- include('0partials/20footer'); -%>
+
+</body>
+</html>

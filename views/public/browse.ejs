@@ -1,0 +1,213 @@
+<!doctype html> 
+<html lang="en"> 
+<head>
+    <%- include('0partials/01head'); -%>
+
+    <!-- fonts -->
+    <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
+</head>
+<body>
+
+    <%- include('0partials/05header'); -%>
+
+<div class="clearfix">&nbsp;</div>
+<br><br><br>
+
+<main class="container">
+
+<!-- breadcrumb -->
+<div class="row">
+    <div class="col-sm-12">
+        <ol class="breadcrumb">
+            <li><a href="/">Home</a></li>
+            
+            <li><a href="/browse/<%= inputParams.cat %>-id<%= inputParams.catId %>/"><%= cat_title %></a></li>
+            
+            <% if (subcat_title !== '') { %>
+            <li><a href="/browse/<%= inputParams.cat %>-id<%= inputParams.catId %>/<%= inputParams.subcat %>-key<%= inputParams.subcatKey %>/"><%= subcat_title %></a></li>
+            <% } %>
+
+            <li class="active" style="color:#999"><%= pagination.countNum %> results</li>
+        </ol>
+    </div>
+</div>
+<!-- breadcrumb end -->
+
+
+<%- include('0partials/08featured'); -%>
+
+<!-- row -->
+<div class="row">
+    <section class="col-sm-8 listings">
+
+        <!-- listing info -->
+        <div class="row listing-row" style="margin-top: -10px;">
+            <div class="pull-left">
+                <strong>Browsing ads in "<%= cat_title %>" category</strong>
+            </div>
+            <div class="pull-right">
+                <span style="">Sort by:&nbsp;&nbsp;&nbsp;</span>   
+                <a href="#"  data-toggle="tooltip" data-placement="top" title="Sort from newest to oldest"> Date <i class="fa fa-chevron-up"></i></a>
+                <a href="#" data-toggle="tooltip" data-placement="top" title="Sort from lowest price to highest price"> Price <i class="fa fa-chevron-down"></i></a>
+            </div>
+        </div>
+        <!-- listing info end -->
+
+        <!-- ad -->
+        <% for(var i=0; i<contentDocs.length; i++) { %>
+        
+        <div class="row  listing-row">
+
+            <div class="col-sm-2">
+                <a href="/<%= urlmod.strToURI(contentDocs[i].extract.title[2]) %>/cid<%= contentDocs[i].cid %>" class="thumbnail" >
+                    <!-- ad image -->
+                    <% if (contentDocs[i].extract.image === undefined || contentDocs[i].extract.image[2] === null) { %>
+                        <img alt="No Image" src="/images/noimage.jpg">
+                    <% } else { %>
+                        <img alt="" src="<%= contentDocs[i].extract.image[2] %>">
+                    <% } %>
+                </a>
+            </div>
+
+            <div class="col-sm-10">
+                
+                <h3>
+                    <small><%= i+1+pagination.perPage*(pagination.currentPage-1) %>. </small>
+                    <a href="/<%= urlmod.strToURI(contentDocs[i].extract.title[2]) %>/cid<%= contentDocs[i].cid %>">
+                        <%= contentDocs[i].extract.title[2].substring(0, 50) %>
+                    </a>
+                    <a href="<%= contentDocs[i].pageURL %>" target="_blank" class="lnk-orange"><sup class="fa fa-link"></sup></a>
+                    
+                    <% //define price
+                        var price;
+                        if (contentDocs[i].extract.price !== undefined) {
+                            price = contentDocs[i].extract.price;
+                        } else {
+                            price = '';
+                        }
+                    %>
+                    &nbsp; <strong><%= price %></strong>
+
+                </h3>
+
+                <% //location
+                    var location;
+                    if (contentDocs[i].extract.location !== undefined) {
+                        location = contentDocs[i].extract.location;
+                %>
+                        <p class="muted">Location <strong><%= location %></strong></p>
+                <% } %>
+                
+                <p class="muted">
+                    Crawled <%= contentDocs[i].crawlDateTime.substring(4,16) %> 
+                    <%= contentDocs[i].crawlStatus %> to 
+                    
+                    <% //category and subcategory
+                        var cat = GLOBfindads.categories[contentDocs[i].category].category;
+                        var subcat = GLOBfindads.categories[contentDocs[i].category].subcats[contentDocs[i].subcategory];
+                    %>
+
+                    <a href="/browse/<%= cat.replace(/\s/g, '-') %>-id<%= contentDocs[i].category %>/" class="underline"><%= cat %></a>
+                    &raquo;
+                    <% if (subcat !== undefined) { %>
+                    <a href="/browse/<%= cat.replace(/\s/g, '-') %>-id<%= contentDocs[i].category %>/<%= subcat.replace(/\s/g, '-') %>-key<%= contentDocs[i].subcategory %>/"  class="underline"><%= subcat %></a>
+                    <% } %>
+
+                </p>
+                
+                <%//decrease description
+                var desc = contentDocs[i].extract.description[2];
+                var descLength = 250;
+
+                if (desc.length > descLength) {
+                  desc = desc.substring(0, descLength) + ' ...';
+                }
+                %>
+                <p><%= desc %></p>
+                <p class="ad-description">
+                    <strong style="color:Green"><%= contentDocs[i].pageURL.substring(contentDocs[i].pageURL.lastIndexOf("//")+2, contentDocs[i].pageURL.lastIndexOf("/")) %></strong>                
+                </p>
+
+            </div>
+
+        </div>
+
+        <% } %>
+        <!-- ad end -->
+
+        
+
+
+        <!-- pagination -->
+        <div >
+            <ul class="pagination pull-left">
+                <li><a href="<%= pagination.pagesPreURI + '1' %>">First</a></li>
+                
+                <% 
+                    pagination.currentPage = parseInt(pagination.currentPage); //convert string into number
+                    
+                    pagination.pages_arr.forEach(function(elem){
+                      var hclass;
+                      if (elem === pagination.currentPage) {
+                        hclass = 'class="active"';
+                      } else {
+                        hclass = '';
+                      }
+                %>
+
+                <li <%- hclass %>><a href="<%= pagination.pagesPreURI + elem %>"><%= elem %></a></li>
+                    
+                <% }); %>
+
+                <li><a href="<%= pagination.pagesPreURI + pagination.pagesTotal %>">Last</a></li>
+            </ul>
+        </div>
+        <!-- pagination end -->
+
+
+    </section>
+
+
+    <br><br>
+
+
+
+    <aside class="col-sm-4 hidden-xs">
+
+        <!-- category filter -->
+        <div class="panel panel-default">
+            <div class="panel-heading">Refine category</div>
+            
+            <div class="panel-body">
+                <ul class="nav nav-category">
+                    <li>
+                        <ul>
+                            <li><a href="/browse/<%= inputParams.cat %>-id<%= inputParams.catId %>/"><%= cat_title %></a></li>
+                            <ul>
+                                <% 
+                                    GLOBfindads.categories[inputParams.catId].subcats.forEach(function (elem, key) { 
+                                    var elemDashed = elem.replace(/\s/g, '-');
+                                %>
+                                <li><a href="/browse/<%= inputParams.cat %>-id<%= inputParams.catId %>/<%= elemDashed%>-key<%= key %>/"><%= elem %></a></li>
+                                <% }) %>
+                            </ul>
+                                </li>
+                        </ul>
+                    </li>
+                </ul>               
+            </div>
+        </div>
+        <!-- category filter end -->
+
+
+    </aside>
+
+</div> 
+<!-- row end -->			
+
+</main>
+
+<%- include('0partials/20footer'); -%>
+
+</body>
+</html>

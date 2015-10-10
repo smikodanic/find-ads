@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <%- include('../0partials/01head'); -%>
+</head>
+
+<body>
+
+    <div id="wrapper">
+
+        <!-- Navigation -->
+        <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+            <%- include('../0partials/05top_menu'); -%>
+            <%- include('../0partials/10left_menu'); -%>
+        </nav>
+
+        <div id="page-wrapper">
+
+            <div class="container-fluid">
+
+                <!-- Page Heading -->
+                <div class="row">
+                    <div class="col-lg-12">
+                        <h1 class="page-header">
+                            Crawled Content
+                        </h1>
+                        
+                        <ol class="breadcrumb">
+                          <li>Web Robot</li>
+                          <li><a href="/admin/robot/content/">Crawled Content</a></li>
+                        </ol>
+                        This is a list of content (web pages)  crawled by robot and stored in content MongoDB collection.
+                        In most cases it is 'robot_content' MongoDB collection.
+                        <br>Filter results by search query e.g. a string which is contained in Title or Body.
+                    </div>
+                </div>
+
+                <div class="clearfix">&nbsp;</div>
+                <br><br>
+
+                <div class="row">
+                    <div class="col-sm-12">
+
+                            <!-- FORM -->
+                            <form action="/admin/robot/content/" method="POST" enctype="application/<x-www->    </x-www->form-urlencoded" class="form-horizontal">
+
+                                <div class="form-group">
+                                    <label for="q" class="col-sm-2  control-label" >Filter results:</label>
+                                    
+                                    <div class="col-sm-5">
+                                      <input type="text" name="q" id="q" value="" class="form-control" title="Insert search term to filter results">
+                                    </div>
+
+                                    <div class="col-sm-2">
+                                        <select name="currentColl" id="currentColl" class="form-control" title="Select content collection">
+                                            <option value="">SELECT Collection</option>
+                                            <% contentColls.forEach(function (elem) { %>
+                                                <option value="<%= elem.name %>"><%= elem.name %></option>
+                                            <% }); %>
+                                        </select>
+                                    </div>
+
+                                    <div class="col-sm-2">
+                                        <input type="submit" value="Search" class="btn btn-default">
+                                    </div>
+
+                                </div>
+    
+                            </form>
+                            <!-- FORM end -->
+
+                    </div>
+                </div>
+
+
+                <div class="row">
+                    <div class="well">
+                        <p>
+                          Content collection: <b><%= currentColl %></b> |
+                          Search results: <b><%= pagination.countNum %></b>
+                        </p>
+
+                        <!-- results displayed in Bootstrap Accordition -->
+                        <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+                          
+                        <%
+                          var i = 0;
+                          if (contents !== undefined) {
+                            contents.forEach(function (elem) { 
+                        %>
+                          <div class="panel panel-default">
+                            <div class="panel-heading" role="tab" id="heading<%= i %>">
+                              <h4 class="panel-title">
+                                <a data-toggle="collapse" data-parent="#accordion" href="#collapse<%= i %>" aria-expanded="true" aria-controls="collapse<%= i %>">
+                                  <%= i+1+pagination.perPage*(pagination.currentPage-1) %>. <%= elem.extract.title[2] %>
+                                  <span style="font-size: 10px; color:#8D8D8D;">
+                                    <br><a href="<%= elem.pageURL %>" target="_blank" style="color:Silver;font-size:smaller"><%= elem.pageURL %></a>
+                                  </span>
+                                </a>
+
+                                <!-- <a href="/admin/robot/content/edit/<%= currentColl %>/<%= elem.cid %>/"><span style="float:right;color:orange;" class="fa fa-fw fa-edit"></span></a> -->
+                                <a href="/admin/robot/content/delete/<%= currentColl %>/<%= elem.cid %>/"><span style="float:right;color:red;" class="fa fa-times"></span></a>
+                              </h4>
+                            </div>
+                            <div id="collapse<%= i %>" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading<%= i %>">
+                              <div class="panel-body">
+                                
+                                <pre>
+                                <%-
+                                  JSON.stringify(elem, null, 2);
+                                %>
+                                </pre>
+
+                                
+                                  <%= elem.extract.body_text[2] %>
+                                
+                        
+                              </div>
+                            </div>
+                          </div>
+                        
+                        <% 
+                             i++;
+                             }); //forEach end
+                          } //if end
+                        %>
+                        
+                        </div>
+                        <!-- results displayed in Bootstrap Accordition END -->
+
+                        <!-- Pagination -->
+                        <nav>
+                          <ul class="pagination">
+                            <li><a href="<%= pagination.pagesPreURI + '1' %>"> &laquo;</a></li>
+        
+                            <% 
+                            pagination.currentPage = parseInt(pagination.currentPage); //convert string into number
+                            
+                            pagination.pages_arr.forEach(function(elem){
+                              var hclass;
+                              if (elem === pagination.currentPage) {
+                                hclass = 'class="active"';
+                              } else {
+                                hclass = '';
+                              }
+                            %>
+        
+                              <li <%- hclass %>><a href="<%= pagination.pagesPreURI + elem %>"><%= elem %></a></li>
+                            
+                            <% }); %>
+        
+                            <li><a href="<%= pagination.pagesPreURI + pagination.pagesTotal %>"> &raquo;</a></li>
+                          </ul>
+                        </nav>
+                        <!-- Pagination END -->
+
+                    </div>
+                </div>
+
+                <a href="/admin/robot/content/delete/<%= currentColl %>/all/" class="btn btn-lg btn-danger">Delete All content docs in collection</a>
+
+            </div>
+            <!-- /.container-fluid -->
+
+        </div>
+        <!-- /#page-wrapper -->
+
+    </div>
+    <!-- /#wrapper -->
+
+
+    
+
+
+<script>
+
+$(document).ready(function(){
+ //$("input[name='first_name']").focus();
+ $("*").tooltip();
+
+});
+</script>
+</body>
+
+</html>
