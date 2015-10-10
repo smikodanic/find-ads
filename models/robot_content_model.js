@@ -197,6 +197,8 @@ module.exports.exportMysqlSmartsearch = function (req, res) {
         database : mydb
       });
 
+      console.log(JSON.stringify(myDB, null, 2));
+
       myDB.connect(function (err) {
         if (err) {
           logg.byWinston('error', __filename + ':195 -MySQL Error: ' + err);
