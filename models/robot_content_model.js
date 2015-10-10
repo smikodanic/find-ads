@@ -190,14 +190,17 @@ module.exports.exportMysqlSmartsearch = function (req, res) {
       res.write('========= Export Started ===========');
 
       //connection to MySQL server
-      var myDB = mysql.createConnection({
+      var loginData = {
         host     : myhost,
         user     : myuser,
         password : mypass,
         database : mydb
-      });
+      };
+      var myDB = mysql.createConnection(loginData);
 
-      console.log(JSON.stringify(myDB, null, 2));
+      console.log(JSON.stringify(loginData, null, 2));
+
+
 
       myDB.connect(function (err) {
         if (err) {
