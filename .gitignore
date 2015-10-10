@@ -5,3 +5,4 @@ tmp/logs/crawler/*
 tmp/logs/winston/*
 exceptions.log
 npm-debug.log
+node_modules/*

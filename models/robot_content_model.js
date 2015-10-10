@@ -161,8 +161,8 @@ module.exports.getContentCollections = function (req, res, cb_render) {
 
 
 /**
- * ========== https://www.smartsearch.tv , https://www.smartsearch.tv/admin/users , http://192.99.18.15/phpmyadmin/
- * Exporter to MySQL databse: 'smartsearch.links' ; crawler_user; mycr321;
+ * ========== https://www.smartsearch.tv , https://www.smartsearch.tv/admin/users , http://62.210.74.195/phpmyadmin/
+ * Exporter to MySQL databse: 'smartsearch.links' ; crawler_user:mycr321;
  * @param  {Object} req     - request
  * @param  {Object} res     - response
  * @param  {Function} cb_render - callback view function
@@ -210,21 +210,34 @@ module.exports.exportMysqlSmartsearch = function (req, res) {
 
         if (i < colls_arr.length) {
 
-          //MAPING DATA: MySQL filed = Mongo field
+          /*
+            MAPING DATA: MySQL filed = Mongo field
+            // required mongo fileds: title, image, body_text
+            // MySQl fields which will be populated: keywords, link, image, title, description
+           */
           var keywords = colls_arr[i].extract.body_text[2];
           keywords = keywords.replace(/\"/gi, ''); //removing " from string because " causes MySQL error on insertion
           keywords = keywords.replace(/\'/gi, '');  //removing ' from string
+
           var link = colls_arr[i].pageURL;
+
           var title = colls_arr[i].extract.title[2];
           title = title.replace(/\"/gi, '');
           title = title.replace(/\'/gi, '');
+
           var description = keywords.substring(0, 35) + '...';
+
           var image;
           if (colls_arr[i].extract.image[2] === '' || colls_arr[i].extract.image[2] === undefined || colls_arr[i].extract.image[2] === null) {
             image = '';
           } else {
             image = colls_arr[i].extract.image[2];
           }
+
+
+
+
+
 
           var myVal = '"", 1, 1, "' + keywords + '", "' + link + '", "' + image + '", "' + title + '", "' + description + '", "free", "", ""';
           var myQuery = 'INSERT INTO ' + mytable + ' VALUES (' + myVal + ')';
