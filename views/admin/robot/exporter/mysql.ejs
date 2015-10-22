@@ -57,7 +57,7 @@
                             <select name="contentcol" id="contentcol" class="form-control">
 
                                 <% contentcolls.forEach(function(elem){ %>
-                                <option value="<%= elem.name %>"><%= elem.name %></option>
+                                <option value="<%= elem.name %>" <%= (elem.name === 'robot_content') ? 'selected' : '' %> ><%= elem.name %></option>
                                 <% }); %>
 
                             </select>
