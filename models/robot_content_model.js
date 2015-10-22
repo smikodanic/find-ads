@@ -117,7 +117,7 @@ module.exports.deleteContent = function (req, res) {
         if (err) { logg.byWinston('error', __filename + ':117 ' + err); }
 
         res.redirect('/admin/robot/content/?currentColl=' + coll);
-        console.log(selector);
+        // console.log(selector);
 
         // logg.byWinston('info', __filename + ':103 Deleted records:' + status, null);
         db.close();
@@ -198,7 +198,7 @@ module.exports.exportMysqlSmartsearch = function (req, res) {
       };
       var myDB = mysql.createConnection(loginData);
 
-      console.log(JSON.stringify(loginData, null, 2));
+      // console.log(JSON.stringify(colls_arr, null, 2));
 
 
 
@@ -245,7 +245,7 @@ module.exports.exportMysqlSmartsearch = function (req, res) {
 
 
 
-          var myVal = '"", 1, 1, "' + keywords + '", "' + link + '", "' + image + '", "' + title + '", "' + description + '", "free", "", ""';
+          var myVal = '"", 1, 1, "' + keywords + '", "' + link + '", "' + image + '", "' + title + '", "' + description + '", "free", NULL, NULL';
           var myQuery = 'INSERT INTO ' + mytable + ' VALUES (' + myVal + ')';
 
           myDB.query(myQuery, function (err) { //insertion into MySQL
@@ -262,19 +262,23 @@ module.exports.exportMysqlSmartsearch = function (req, res) {
               if (deldoc === 'yes' && colls_arr[i] !== undefined) {
                 var cid = colls_arr[i].cid;
                 db.collection(contentcol).remove({cid: cid}, function (err, removed) { //remove doc from 'robot_content'
+
                   if (err) {
                     logg.byWinston('info', __filename + ':182 NOTREMOVED: ' + err);
                   } else {
                     logg.byWinston('info', __filename + ':182 REMOVED: ' + removed);
                   }
+
                 });
               } //if end
+
+              //go to next iteration
+              i++;
 
             } //else end
 
           });
 
-          i++;
 
         } else {
           clearInterval(intExpID); //stop iteration
