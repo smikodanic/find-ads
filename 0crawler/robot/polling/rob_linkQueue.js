@@ -69,7 +69,7 @@ module.exports.start = function (task_id, cb_outResults) {
 
           linkSelector = {
             "crawlStatus": "pending",
-            "crawlDepth": {$lt: maxDepth},
+            "crawlDepth": {$lte: maxDepth}, //$lte - less then equal
             "link.href": {$regex: regExpSeedDomainOnly}
           };
 
