@@ -20,20 +20,27 @@ var collName_tasksCnt = settings.mongo.dbColl_robotTasks;
 /* start polling links from robot_linkQueue_* collection */
 module.exports.start = function (task_id, cb_outResults) {
 
+  'use strict';
+
   MongoClient.connect(dbName, function (err, db) { //mongoDB connection
     if (err) { logg.byWinston('error', __filename + ':22 ' + err); }
 
     db.collection(collName_tasksCnt).find({"id": task_id}).toArray(function (err, moTask_arr) { //get task data using 'task_id' from 'contentTasks'
       if (err) { logg.byWinston('error', __filename + ':25 ' + err); }
 
+      //define vars
+      var moTask, msg_start,
+        doCrawling, maxDepth, seedURL_hostname, regExpSeedDomainOnly,
+        linkSelector, moLink, httpClient, msg_end, intID;
+
       //MongoDB doc object
-      var moTask = moTask_arr[0];
+      moTask = moTask_arr[0];
 
       //define logg file name and put in moTask object
       moTask.loggFileName = 'robot_dump';
 
       //log crawling start
-      var msg_start = '--------- ROBOT STARTED by rob_linkQueue.js \ntask ID: ' + collName_tasksCnt + '.' + moTask.id + '\nFROM ' + moTask.linkqueueCollection + ' TO ' + moTask.contentCollection + '; \npollScript=' + moTask.pollScript + '; \nhttpclientScript=' + moTask.httpclientScript;
+      msg_start = '--------- ROBOT STARTED by rob_linkQueue.js \ntask ID: ' + collName_tasksCnt + '.' + moTask.id + '\nFROM ' + moTask.linkqueueCollection + ' TO ' + moTask.contentCollection + '; \npollScript=' + moTask.pollScript + '; \nhttpclientScript=' + moTask.httpclientScript;
       logg.craw(false, moTask.loggFileName, msg_start);
       // logg.craw(false, 'cronList', msg_start);
 
@@ -41,9 +48,7 @@ module.exports.start = function (task_id, cb_outResults) {
 
       /* Get link by link from robot_linkqueu_* and extracting new links and content. 
         new links goes into robot_linkqueue_* and content goes into robot_content. */
-      var maxDepth, seedURL_hostname, regExpSeedDomainOnly, linkSelector, moLink, httpClient, msg_end;
-
-      intID = setInterval(function () {
+      doCrawling = function () {
 
         /* get links from robot_linkqueue_* collection */
         MongoClient.connect(dbName, function (err, db) {
@@ -61,17 +66,20 @@ module.exports.start = function (task_id, cb_outResults) {
           seedURL_hostname = urlmod.getHostname(moTask.seedURL);
 
           if (moTask.seedDomainOnly === "yes") {
-            regExpSeedDomainOnly = new RegExp('.*' + seedURL_hostname + '.*', 'i');
+            regExpSeedDomainOnly = new RegExp('http(s)?://' + seedURL_hostname + '.*', 'i');
           } else {
             regExpSeedDomainOnly = new RegExp('.*', 'i');
           }
-          
 
           linkSelector = {
             "crawlStatus": "pending",
             "crawlDepth": {$lte: maxDepth}, //$lte - less then equal
             "link.href": {$regex: regExpSeedDomainOnly}
           };
+
+          var reg = new RegExp('rega');
+          console.log(JSON.stringify(reg, null, 2));
+          console.log(regExpSeedDomainOnly);
 
           //get link to be crawled
           db.collection(moTask.linkqueueCollection).find(linkSelector).sort({lid: 1}).toArray(function (err, moLink_arr) { //robot_linkqueue_* docs
@@ -101,7 +109,11 @@ module.exports.start = function (task_id, cb_outResults) {
 
         });
 
-      }, moTask.pollInterval);
+      };
+
+
+      doCrawling(); //crawl immediatelly
+      intID = setInterval(doCrawling, moTask.pollInterval); //crawl with intervals
 
       //send intID to global scope to be accessible with /stop controller
       global.intId = intID;
