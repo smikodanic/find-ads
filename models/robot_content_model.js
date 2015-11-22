@@ -221,18 +221,24 @@ module.exports.exportMysqlSmartsearch = function (req, res) {
             // required mongo fileds: title, image, body_text
             // MySQl fields which will be populated: keywords, link, image, title, description
            */
-          var keywords = colls_arr[i].extract.body_text[2];
-          keywords = keywords.replace(/\"/gi, ''); //removing " from string because " causes MySQL error on insertion
-          keywords = keywords.replace(/\'/gi, '');  //removing ' from string
 
+          //*** keywords
+          var keywords = colls_arr[i].extract.keywords[2];
+          
+          //*** link
           var link = colls_arr[i].pageURL;
 
+          //*** title
           var title = colls_arr[i].extract.title[2];
           title = title.replace(/\"/gi, '');
           title = title.replace(/\'/gi, '');
 
-          var description = keywords.substring(0, 35) + '...';
+          //*** description
+          var description = colls_arr[i].extract.body_text[2];
+          description = description.replace(/\"/gi, ''); //removing " from string because " causes MySQL error on insertion
+          description = description.replace(/\'/gi, '');  //removing ' from string
 
+          //*** image
           var image;
           if (colls_arr[i].extract.image[2] === '' || colls_arr[i].extract.image[2] === undefined || colls_arr[i].extract.image[2] === null) {
             image = '';
