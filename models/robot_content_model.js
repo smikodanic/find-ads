@@ -240,8 +240,11 @@ module.exports.exportMysqlSmartsearch = function (req, res) {
 
           //*** description
           var description = colls_arr[i].extract.body_text[2];
-          description = description.replace(/\"/gi, ''); //removing " from string because " causes MySQL error on insertion
-          description = description.replace(/\'/gi, '');  //removing ' from string
+          if (description) {
+            description = description.replace(/\"/gi, ''); //removing " from string because " causes MySQL error on insertion
+            description = description.replace(/\'/gi, '');  //removing ' from string
+          }
+          
 
           //*** image
           var image;
