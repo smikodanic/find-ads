@@ -223,7 +223,12 @@ module.exports.exportMysqlSmartsearch = function (req, res) {
            */
 
           //*** keywords
-          var keywords = colls_arr[i].extract.keywords[2];
+          var keywords
+          if (colls_arr[i].extract.keywords) {
+            keywords = colls_arr[i].extract.keywords[2];
+          } else {
+            keywords = '';
+          }
           
           //*** link
           var link = colls_arr[i].pageURL;
